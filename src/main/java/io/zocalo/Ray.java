@@ -1,13 +1,15 @@
 package io.zocalo;
 
+import java.util.Arrays;
+
 import static io.zocalo.Tuple.add;
 import static io.zocalo.Tuple.multiply;
 
 public record Ray(float[] origin, float[] direction) {
 
     public Ray {
-        if (!Tuple.isPoint(origin)) throw new IllegalStateException("Not a valid origin: " + origin);
-        if (!Tuple.isVector(direction)) throw new IllegalStateException("Not a valid direction: " + direction);
+        if (!Tuple.isPoint(origin)) throw new IllegalStateException("Not a valid origin: " + Arrays.toString(origin));
+        if (!Tuple.isVector(direction)) throw new IllegalStateException("Not a valid direction: " + Arrays.toString(direction));
     }
 
     public Tuple position(float t) {
