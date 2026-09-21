@@ -1,5 +1,9 @@
 package io.zocalo;
 
+import io.zocalo.scene.Color;
+import io.zocalo.scene.Light;
+import io.zocalo.scene.Sphere;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;

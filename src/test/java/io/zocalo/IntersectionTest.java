@@ -1,5 +1,6 @@
 package io.zocalo;
 
+import io.zocalo.scene.Shape;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,5 +80,40 @@ class IntersectionTest {
 
         assertTrue(i.isPresent());
         assertEquals(i4, i.get());
+    }
+
+    @Test
+    void precomputing_state_of_intersection() {
+        var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
+        var shape = Shape.sphere();
+        var i = new Intersection(4, shape);
+        var comps = i.prepareComputations(r);
+        assertEquals(i.t(), comps.t());
+        assertEquals(i.object(), comps.object());
+        assertEquals(Tuple.point(0, 0, -1), comps.point());
+        assertEquals(Tuple.vector(0, 0, -1), comps.eyev());
+        assertEquals(Tuple.vector(0, 0, -1), comps.normalv());
+    }
+
+    @Test
+    void the_hit_when_intersection_occurs_on_the_outside() {
+        var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
+        var shape = Shape.sphere();
+        var i = new Intersection(4, shape);
+        var comps = i.prepareComputations(r);
+        assertFalse(comps.inside());
+    }
+
+    @Test
+    void the_hit_when_intersection_occurs_on_the_inside() {
+        var r = Ray.create(Tuple.point(0, 0, 0), Tuple.vector(0, 0, 1));
+        var shape = Shape.sphere();
+        var i = new Intersection(1, shape);
+        var comps = i.prepareComputations(r);
+        assertEquals(Tuple.point(0, 0, 1), comps.point());
+        assertEquals(Tuple.vector(0, 0, -1), comps.eyev());
+        assertTrue(comps.inside());
+        // normal would have been (0, 0, 1), but is inverted!
+        assertEquals(Tuple.vector(0, 0, -1), comps.normalv());
     }
 }

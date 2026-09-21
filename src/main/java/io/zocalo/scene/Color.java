@@ -1,4 +1,6 @@
-package io.zocalo;
+package io.zocalo.scene;
+
+import io.zocalo.Utils;
 
 import static io.zocalo.Utils.unpack255;
 

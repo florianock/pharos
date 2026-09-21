@@ -1,5 +1,7 @@
 package io.zocalo;
 
+import io.zocalo.scene.Color;
+import io.zocalo.scene.Light;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

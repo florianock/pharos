@@ -28,6 +28,10 @@ public class IntersectionList {
         return intersections.size();
     }
 
+    public ArrayList<Intersection> getIntersections() {
+        return intersections;
+    }
+
     public Intersection get(int index) {
         if (index < 0 || intersections.size() <= index) throw new IndexOutOfBoundsException();
 

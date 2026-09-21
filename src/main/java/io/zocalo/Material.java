@@ -1,5 +1,8 @@
 package io.zocalo;
 
+import io.zocalo.scene.Color;
+import io.zocalo.scene.Light;
+
 public record Material(Color color, float ambient, float diffuse, float specular, int shininess) {
 
     public Material() {
@@ -86,9 +89,10 @@ public record Material(Color color, float ambient, float diffuse, float specular
             return new Material();
         }
 
-
         public Material build() {
             return new Material(this);
         }
+
+
     }
 }

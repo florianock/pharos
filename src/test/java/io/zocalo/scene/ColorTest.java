@@ -1,8 +1,8 @@
-package io.zocalo;
+package io.zocalo.scene;
 
+import io.zocalo.Utils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class ColorTest {
 
@@ -62,6 +62,6 @@ class ColorTest {
     }
 
     private static void assertEqualEnough(float a, float b) {
-        assertTrue(Utils.equalEnough(a, b));
+        Assertions.assertTrue(Utils.equalEnough(a, b));
     }
 }

@@ -1,4 +1,5 @@
 import io.zocalo.*;
+import io.zocalo.scene.Color;
 
 void main() throws IOException {
     var start = Tuple.point(0, 1, 0);

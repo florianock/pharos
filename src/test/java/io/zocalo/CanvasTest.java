@@ -1,5 +1,6 @@
 package io.zocalo;
 
+import io.zocalo.scene.Color;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

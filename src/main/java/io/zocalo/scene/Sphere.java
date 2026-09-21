@@ -1,4 +1,8 @@
-package io.zocalo;
+package io.zocalo.scene;
+
+import io.zocalo.*;
+
+import java.util.Arrays;
 
 public class Sphere implements Shape {
 
@@ -30,6 +34,7 @@ public class Sphere implements Shape {
 
     public Matrix4x4 transform() { return transform; }
 
+    @Override
     public IntersectionList intersect(Ray r) {
         var r2 = r.transform(transform.invert());
         var sphereToRay = Tuple.subtract(r2.origin(), new float[] { 0, 0, 0, 1 });
@@ -88,5 +93,19 @@ public class Sphere implements Shape {
         public Sphere build() {
             return new Sphere(this);
         }
+    }
+
+    @Override
+    public int hashCode() {
+        return material.hashCode() + transform.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other)
+            return true;
+        if (!(other instanceof final Sphere m2))
+            return false;
+        return material.equals(m2.material()) && transform.equals(m2.transform());
     }
 }

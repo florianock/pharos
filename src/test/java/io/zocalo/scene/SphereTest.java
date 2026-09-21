@@ -1,5 +1,7 @@
-package io.zocalo;
+package io.zocalo.scene;
 
+import io.zocalo.*;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -79,7 +81,7 @@ class SphereTest {
     void default_transform_is_identity_matrix() {
         var s = Shape.sphere();
 
-        assertEquals(Matrix4x4.identity(), s.transform());
+        Assertions.assertEquals(Matrix4x4.identity(), s.transform());
     }
 
     @Test
