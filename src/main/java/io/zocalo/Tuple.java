@@ -186,4 +186,23 @@ public class Tuple {
     public String toString() {
         return Arrays.toString(values);
     }
+
+    public Matrix4x4 viewTransform(Tuple to, Tuple up) {
+        return Tuple.viewTransform(values, to.values(), up.values());
+    }
+
+    public static Matrix4x4 viewTransform(float[] from, float[] to, float[] up) {
+        var forward = Tuple.normalize(Tuple.subtract(to, from));
+        var upn = Tuple.normalize(up);
+        var left = Tuple.cross(forward, upn);
+        var trueUp = Tuple.cross(left, forward);
+        var orientation = new Matrix4x4(new float[] {
+                    left[0],         left[1],         left[2], 0,
+                  trueUp[0],       trueUp[1],       trueUp[2], 0,
+            -1 * forward[0], -1 * forward[1], -1 * forward[2], 0,
+                          0,               0,               0, 1
+        });
+
+        return orientation.multiply(Matrix4x4.translation(-1 * from[0], -1 * from[1], -1 * from[2]));
+    }
 }

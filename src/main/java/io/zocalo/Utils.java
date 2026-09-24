@@ -3,8 +3,8 @@ package io.zocalo;
 import io.zocalo.scene.Color;
 
 public class Utils {
-    private static final float EPSILON = 1e-4f;
-    static final float HALF_PI = 1.570796326794897f;
+    public static final float EPSILON = 1e-4f;
+    public static final float HALF_PI = 1.570796326794897f;
     public static final float PI      = 3.141592653589793f;
 
     private Utils() {

@@ -7,6 +7,6 @@ import io.zocalo.scene.Shape;
 public record Computations(float t, Shape object, Tuple point, Tuple eyev, Tuple normalv, boolean inside) {
 
     public Color shadeHit(Light light) {
-        return object.material().lighting(light, point, eyev, normalv);
+        return object.lighting(light, point, eyev, normalv);
     }
 }

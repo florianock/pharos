@@ -159,6 +159,50 @@ class TupleTest {
         assertEquals(Tuple.vector(1, 0, 0), r);
     }
 
+    // TRANSFORMATIONS
+
+    @Test
+    void the_transformation_matrix_for_the_default_orientation() {
+        var from = Tuple.point(0, 0, 0);
+        var to = Tuple.point(0, 0, -1);
+        var up = Tuple.vector(0, 1, 0);
+        var t = from.viewTransform(to, up);
+        assertEquals(Matrix4x4.identity(), t);
+    }
+
+    @Test
+    void a_view_transformation_matrix_looking_in_positive_z_direction() {
+        var from = Tuple.point(0, 0, 0);
+        var to = Tuple.point(0, 0, 1);
+        var up = Tuple.vector(0, 1, 0);
+        var t = from.viewTransform(to, up);
+        assertEquals(Matrix4x4.scaling(-1, 1, -1), t);
+    }
+
+    @Test
+    void the_view_transformation_moves_the_world() {
+        var from = Tuple.point(0, 0, 8);
+        var to = Tuple.point(0, 0, 0);
+        var up = Tuple.vector(0, 1, 0);
+        var t = from.viewTransform(to, up);
+        assertEquals(Matrix4x4.translation(0, 0, -8), t);
+    }
+
+    @Test
+    void an_arbitrary_view_transformation() {
+        var from = Tuple.point(1, 3, 2);
+        var to = Tuple.point(4, -2, 8);
+        var up = Tuple.vector(1, 1, 0);
+        var t = from.viewTransform(to, up);
+        var expected = new Matrix4x4(new float[]{
+                -0.50709f, 0.50709f,  0.67612f, -2.36642f,
+                 0.76772f, 0.60609f,  0.12122f, -2.82843f,
+                -0.35857f, 0.59761f, -0.71714f,  0.00000f,
+                 0.00000f, 0.00000f,  0.00000f,  1.00000f
+        });
+        assertEquals(expected, t);
+    }
+
     private static void assertEqualEnough(float a, float b) {
         assertTrue(Utils.equalEnough(a, b));
     }

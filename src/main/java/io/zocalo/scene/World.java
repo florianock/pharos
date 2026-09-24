@@ -58,4 +58,16 @@ public record World(Shape[] objects, Light light) {
         var hit = xs.hit();
         return hit.map(i -> shadeHit(i.prepareComputations(r))).orElse(Color.BLACK);
     }
+
+    public Canvas render(Camera c, World w) {
+        var image = new Canvas(c.hsize(), c.vsize());
+        for (int y = 0; y < c.vsize(); y++) {
+            for (int x = 0; x < c.hsize(); x++) {
+                var ray = c.rayForPixel(x, y);
+                var color = w.colorAt(ray);
+                image.writePixel(x, y, color);
+            }
+        }
+        return image;
+    }
 }

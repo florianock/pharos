@@ -10,6 +10,10 @@ public interface Shape {
 
     Material material();
 
+    default Color lighting(final Light light, final Tuple point, final Tuple eyev, final Tuple normalv) {
+        return material().lighting(light, point, eyev, normalv);
+    }
+
     static Sphere sphere() {
         return new Sphere();
     }
