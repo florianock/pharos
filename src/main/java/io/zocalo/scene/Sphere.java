@@ -2,8 +2,6 @@ package io.zocalo.scene;
 
 import io.zocalo.*;
 
-import java.util.Arrays;
-
 public class Sphere implements Shape {
 
     private final Material material;
@@ -34,8 +32,7 @@ public class Sphere implements Shape {
 
     public Matrix4x4 transform() { return transform; }
 
-    @Override
-    public IntersectionList intersect(Ray r) {
+    public Intersections intersect(Ray r) {
         var r2 = r.transform(transform.invert());
         var sphereToRay = Tuple.subtract(r2.origin(), new float[] { 0, 0, 0, 1 });
 
@@ -46,9 +43,9 @@ public class Sphere implements Shape {
 
         var discriminant = (b * b) - (4 * a * c);
 
-        if (discriminant < 0) return new IntersectionList();
+        if (discriminant < 0) return new Intersections();
 
-        return new IntersectionList(
+        return new Intersections(
                 new Intersection((-b - (float)Math.sqrt(discriminant)) / (2 * a), this),
                 new Intersection((-b + (float)Math.sqrt(discriminant)) / (2 * a), this)
         );
@@ -96,16 +93,16 @@ public class Sphere implements Shape {
     }
 
     @Override
-    public int hashCode() {
-        return material.hashCode() + transform.hashCode();
+    public final boolean equals(Object o) {
+        if (!(o instanceof Sphere sphere)) return false;
+
+        return material.equals(sphere.material) && transform.equals(sphere.transform);
     }
 
     @Override
-    public boolean equals(Object other) {
-        if (this == other)
-            return true;
-        if (!(other instanceof final Sphere m2))
-            return false;
-        return material.equals(m2.material()) && transform.equals(m2.transform());
+    public int hashCode() {
+        int result = material.hashCode();
+        result = 31 * result + transform.hashCode();
+        return result;
     }
 }

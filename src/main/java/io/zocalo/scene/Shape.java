@@ -1,12 +1,14 @@
 package io.zocalo.scene;
 
-import io.zocalo.IntersectionList;
-import io.zocalo.Matrix4x4;
-import io.zocalo.Ray;
+import io.zocalo.*;
 
 public interface Shape {
 
-    IntersectionList intersect(Ray r);
+    Intersections intersect(Ray r);
+
+    Tuple normalAt(Tuple worldPoint);
+
+    Material material();
 
     static Sphere sphere() {
         return new Sphere();

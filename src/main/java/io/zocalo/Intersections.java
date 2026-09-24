@@ -2,24 +2,24 @@ package io.zocalo;
 
 import java.util.*;
 
-public class IntersectionList {
+public class Intersections {
 
     private final ArrayList<Intersection> intersections;
 
-    public IntersectionList(List<Intersection> is) {
+    public Intersections(List<Intersection> is) {
         this.intersections = new ArrayList<>(is);
     }
 
-    public IntersectionList(Intersection... is) {
+    public Intersections(Intersection... is) {
         this(new ArrayList<>(Arrays.asList(is)));
     }
 
-    public IntersectionList add(Intersection i) {
+    public Intersections add(Intersection i) {
         intersections.add(i);
         return this;
     }
 
-    public IntersectionList addAll(Intersection... is) {
+    public Intersections addAll(Intersection... is) {
         intersections.addAll(List.of(is));
         return this;
     }
@@ -28,7 +28,7 @@ public class IntersectionList {
         return intersections.size();
     }
 
-    public ArrayList<Intersection> getIntersections() {
+    public ArrayList<Intersection> intersections() {
         return intersections;
     }
 

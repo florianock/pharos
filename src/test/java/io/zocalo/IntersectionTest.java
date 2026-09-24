@@ -22,7 +22,7 @@ class IntersectionTest {
         var i1 = new Intersection(1, s);
         var i2 = new Intersection(2, s);
 
-        var xs = new IntersectionList(i1, i2);
+        var xs = new Intersections(i1, i2);
 
         assertEquals(2, xs.count());
         assertEquals(s, xs.get(0).object());
@@ -34,7 +34,7 @@ class IntersectionTest {
         var s = Shape.sphere();
         var i1 = new Intersection(1, s);
         var i2 = new Intersection(2, s);
-        var xs = new IntersectionList(i2, i1);
+        var xs = new Intersections(i2, i1);
 
         var i = xs.hit();
 
@@ -47,7 +47,7 @@ class IntersectionTest {
         var s = Shape.sphere();
         var i1 = new Intersection(-1, s);
         var i2 = new Intersection(1, s);
-        var xs = new IntersectionList(i2, i1);
+        var xs = new Intersections(i2, i1);
 
         var i = xs.hit();
 
@@ -60,7 +60,7 @@ class IntersectionTest {
         var s = Shape.sphere();
         var i1 = new Intersection(-2, s);
         var i2 = new Intersection(-1, s);
-        var xs = new IntersectionList(i2, i1);
+        var xs = new Intersections(i2, i1);
 
         var i = xs.hit();
 
@@ -74,7 +74,7 @@ class IntersectionTest {
         var i2 = new Intersection(7, s);
         var i3 = new Intersection(-3, s);
         var i4 = new Intersection(2, s);
-        var xs = new IntersectionList(i1, i2, i3, i4);
+        var xs = new Intersections(i1, i2, i3, i4);
 
         var i = xs.hit();
 

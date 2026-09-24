@@ -40,9 +40,18 @@ public record Color(float red, float green, float blue) {
     public static Color WHITE = Color.create(1, 1, 1);
 
     @Override
-    public boolean equals(Object other) {
-        if (this == other) return true;
-        if (!(other instanceof Color(float red1, float green1, float blue1))) return false;
-        return (Utils.equalEnough(red1, this.red()) && Utils.equalEnough(green1, this.green()) && Utils.equalEnough(blue1, this.blue()));
+    public boolean equals(Object o) {
+        if (!(o instanceof Color color)) return false;
+
+        return Utils.equalEnough(red, color.red) && Utils.equalEnough(blue, color.blue) &&
+                Utils.equalEnough(green, color.green);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Float.hashCode(red);
+        result = 31 * result + Float.hashCode(green);
+        result = 31 * result + Float.hashCode(blue);
+        return result;
     }
 }

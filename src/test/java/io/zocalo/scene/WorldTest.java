@@ -39,11 +39,61 @@ class WorldTest {
     void intersectWorldWithRay() {
         var w = World.defaultWorld();
         var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
-        IntersectionList xs = w.intersect(r);
+        Intersections xs = w.intersect(r);
         assertEquals(4, xs.count());
         assertEquals(4, xs.get(0).t());
         assertEquals(4.5, xs.get(1).t());
         assertEquals(5.5, xs.get(2).t());
         assertEquals(6, xs.get(3).t());
+    }
+
+    @Test
+    void shadingAnIntersection() {
+        var w = World.defaultWorld();
+        var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
+        var shape = (w.objects())[0];
+        var i = new Intersection(4, shape);
+        var comps = i.prepareComputations(r);
+        var c = w.shadeHit(comps);
+        assertEquals(Color.create(0.38066f, 0.47583f, 0.2855f), c);
+    }
+
+    @Test
+    void shadingAnIntersectionFromInside() {
+        var w = new World(Light.pointLight(Tuple.point(0, 0.25f, 0), Color.WHITE));
+        var r = Ray.create(Tuple.point(0, 0, 0), Tuple.vector(0, 0, 1));
+        var shape = (w.objects())[1];
+        var i = new Intersection(0.5f, shape);
+        var comps = i.prepareComputations(r);
+        var c =  w.shadeHit(comps);
+        assertEquals(Color.create(0.90498f, 0.90498f, 0.90498f), c);
+    }
+
+    @Test
+    void colorWhenARayMisses() {
+        var w = World.defaultWorld();
+        var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 1, 0));
+        var c = w.colorAt(r);
+        assertEquals(Color.BLACK, c);
+    }
+
+    @Test
+    void colorWhenARayHits() {
+        var w =  World.defaultWorld();
+        var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
+        var c = w.colorAt(r);
+        assertEquals(Color.create(0.38066f, 0.47583f, 0.2855f), c);
+    }
+
+    @Test
+    void colorWithAnIntersectionBehindTheRay() {
+        var w =  World.defaultWorld();
+        var outer = (w.objects())[0];
+        outer.material().ambient(1);
+        var inner = (w.objects())[1];
+        inner.material().ambient(1);
+        var r = Ray.create(Tuple.point(0, 0, 0.75f), Tuple.vector(0, 0, -1));
+        var c = w.colorAt(r);
+        assertEquals(inner.material().color(), c);
     }
 }

@@ -3,7 +3,21 @@ package io.zocalo;
 import io.zocalo.scene.Color;
 import io.zocalo.scene.Light;
 
-public record Material(Color color, float ambient, float diffuse, float specular, int shininess) {
+import java.util.Objects;
+
+public class Material {
+
+    private Color color;
+    private float ambient, diffuse, specular;
+    private int shininess;
+
+    public Material(Color color, float ambient, float diffuse, float specular, int shininess) {
+        this.color = color;
+        this.ambient = ambient;
+        this.diffuse = diffuse;
+        this.specular = specular;
+        this.shininess = shininess;
+    }
 
     public Material() {
         this(Color.WHITE, 0.1f, 0.9f, 0.9f, 200);
@@ -11,6 +25,46 @@ public record Material(Color color, float ambient, float diffuse, float specular
 
     public Material(Builder builder) {
         this(builder.color, builder.ambient, builder.diffuse, builder.specular, builder.shininess);
+    }
+
+    public Color color() {
+        return color;
+    }
+
+    public void color(Color color) {
+        this.color = color;
+    }
+
+    public float ambient() {
+        return ambient;
+    }
+
+    public void ambient(float ambient) {
+        this.ambient = ambient;
+    }
+
+    public float diffuse() {
+        return diffuse;
+    }
+
+    public void diffuse(float diffuse) {
+        this.diffuse = diffuse;
+    }
+
+    public float specular() {
+        return specular;
+    }
+
+    public void specular(float specular) {
+        this.specular = specular;
+    }
+
+    public int shininess() {
+        return shininess;
+    }
+
+    public void shininess(int shininess) {
+        this.shininess = shininess;
     }
 
     public Color lighting(final Light light, final Tuple point, final Tuple eyev, final Tuple normalv) {
@@ -53,6 +107,19 @@ public record Material(Color color, float ambient, float diffuse, float specular
         return new Material();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Material material)) return false;
+        return Float.compare(ambient, material.ambient) == 0 && Float.compare(diffuse, material.diffuse) == 0 &&
+                Float.compare(specular, material.specular) == 0 && shininess == material.shininess &&
+                Objects.equals(color, material.color);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(color, ambient, diffuse, specular, shininess);
+    }
+
     public static class Builder {
         private Color color = Color.WHITE;
         private float ambient = 0.1f;
@@ -92,7 +159,5 @@ public record Material(Color color, float ambient, float diffuse, float specular
         public Material build() {
             return new Material(this);
         }
-
-
     }
 }
