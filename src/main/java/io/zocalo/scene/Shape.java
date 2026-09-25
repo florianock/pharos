@@ -21,4 +21,8 @@ public interface Shape {
     static Sphere sphere(Matrix4x4 t) {
         return new Sphere(t);
     }
+
+    static Sphere sphere(Matrix4x4 t, Material m) {
+        return new Sphere(t, m);
+    }
 }

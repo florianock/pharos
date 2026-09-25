@@ -196,13 +196,14 @@ public class Tuple {
         var upn = Tuple.normalize(up);
         var left = Tuple.cross(forward, upn);
         var trueUp = Tuple.cross(left, forward);
+
         var orientation = new Matrix4x4(new float[] {
                     left[0],         left[1],         left[2], 0,
                   trueUp[0],       trueUp[1],       trueUp[2], 0,
-            -1 * forward[0], -1 * forward[1], -1 * forward[2], 0,
+                -forward[0],     -forward[1],     -forward[2], 0,
                           0,               0,               0, 1
         });
 
-        return orientation.multiply(Matrix4x4.translation(-1 * from[0], -1 * from[1], -1 * from[2]));
+        return orientation.multiply(Matrix4x4.translation(-from[0], -from[1], -from[2]));
     }
 }

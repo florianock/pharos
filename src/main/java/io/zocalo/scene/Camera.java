@@ -1,23 +1,28 @@
 package io.zocalo.scene;
 
+import io.zocalo.Canvas;
 import io.zocalo.Matrix4x4;
 import io.zocalo.Ray;
 import io.zocalo.Tuple;
 
 public class Camera {
 
+    private static final float[] ORIGIN = new float[] {0, 0, 0, 1};
+
     private final int hsize, vsize;
     private final float fov;
     private final Matrix4x4 transform;
-    private float halfWidth;
-    private float halfHeight;
-    private float pixelSize;
+    private final Matrix4x4 inverseTransform;
+    private final float halfWidth;
+    private final float halfHeight;
+    private final float pixelSize;
 
     public Camera(int hsize, int vsize, float fov, Matrix4x4 transform) {
         this.hsize = hsize;
         this.vsize = vsize;
         this.fov = fov;
         this.transform = transform;
+        this.inverseTransform = transform.invert();
         var halfView = (float)Math.tan(fov / 2);
         var aspect = (float)hsize / (float)vsize;
         if (aspect >= 1) {
@@ -54,24 +59,41 @@ public class Camera {
         return pixelSize;
     }
 
-    // TODO make faster
-    public Ray rayForPixel(int px, int py) {
+    public Ray rayForPixel(int px, int py, float[] arr) {
         // the offset from the edge of the canvas to the pixel's center
-        var xOffset = (px + 0.5f) * pixelSize;
-        var yOffset = (py + 0.5f) * pixelSize;
+        float xOffset = (px + 0.5f) * pixelSize;
+        float yOffset = (py + 0.5f) * pixelSize;
 
         // the untransformed coordinates of hte pixel in world space.
         // (remember that the camera looks toward -z, so +x is to the *left*
-        var worldX = halfWidth - xOffset;
-        var worldY = halfHeight - yOffset;
+        float worldX = halfWidth - xOffset;
+        float worldY = halfHeight - yOffset;
+
+        arr[0] = worldX;
+        arr[1] = worldY;
+        arr[2] = -1;
+        arr[3] = 1;
 
         // using the camera matrix, transform the canvas point and the origin,
         // and then compute the ray's direction vector.
         // (remember that the canvas is at z=-1)
-        var pixel = transform.invert().multiply(Tuple.point(worldX, worldY, -1));
-        var origin = transform.invert().multiply(Tuple.point(0, 0, 0));
-        var direction = pixel.subtract(origin).normalize();
+        float[] pixel = inverseTransform.multiply(arr);
+        float[] origin = inverseTransform.multiply(ORIGIN);
+        float[] direction = Tuple.normalize(Tuple.subtract(pixel, origin));
 
         return Ray.create(origin, direction);
+    }
+
+    public Canvas render(World w) {
+        var image = new Canvas(hsize, vsize);
+        var arr = new float[4];
+        for (var y = 0; y < vsize; y++) {
+            for (var x = 0; x < hsize; x++) {
+                var ray = rayForPixel(x, y, arr);
+                var color = w.colorAt(ray);
+                image.writePixel(x, y, color);
+            }
+        }
+        return image;
     }
 }

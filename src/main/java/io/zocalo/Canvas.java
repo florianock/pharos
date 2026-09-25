@@ -49,7 +49,7 @@ public class Canvas {
         if (x < 0 || width < x) throw new IndexOutOfBoundsException(x);
         if (y < 0 || height < y) throw new IndexOutOfBoundsException(y);
 
-        return pixels[x * height + y];
+        return pixels[y * width + x];
     }
 
     public void writePixel(int x, int y, Color color) {
@@ -63,7 +63,7 @@ public class Canvas {
         if (x < 0 || width < x) throw new IndexOutOfBoundsException(x);
         if (y < 0 || height < y) throw new IndexOutOfBoundsException(y);
 
-        pixels[x * height + y] = value;
+        pixels[y * width + x] = value;
     }
 
     public void renderParallel(final Tuple rayOrigin, final Tuple lightPosition, final float wallZ, final float wallSize) {

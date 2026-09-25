@@ -10,11 +10,11 @@ void main() throws IOException {
     System.out.println("          " + ((end - start) / 1_000_000) + " milliseconds");
     System.out.println("          " + ((end - start) / 1_000_000_000) + " seconds");
 
-    var path = Paths.get(System.getProperty("user.home"),"Pictures/piraeus/sphere.png");
+    var path = Paths.get(System.getProperty("user.home"),"Pictures/pharos/sphereCh6.png");
     if (Files.notExists(path.getParent())) {
         Files.createDirectories(path.getParent());
     }
 
     canvas.toPNG(path);
-//    canvas.toPPM(Paths.get(path.getParent().toString(), "sphere.ppm"));
+    canvas.toPPM(Paths.get(path.getParent().toString(), "sphereCh6.ppm"));
 }

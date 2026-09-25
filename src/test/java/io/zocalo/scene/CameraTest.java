@@ -38,7 +38,7 @@ class CameraTest {
     @Test
     void constructingARayThroughTheCenterOfTheCanvas() {
         var c = new Camera(201, 101,  HALF_PI);
-        var r = c.rayForPixel(100, 50);
+        var r = c.rayForPixel(100, 50, new float[4]);
         assertArrayEquals(new float[] {0, 0,  0, 1}, r.origin(), EPSILON);
         assertArrayEquals(new float[] {0, 0, -1, 0}, r.direction(), EPSILON);
     }
@@ -46,7 +46,7 @@ class CameraTest {
     @Test
     void constructingARayThroughACornerOfTheCanvas() {
         var c = new Camera(201, 101, HALF_PI);
-        var r = c.rayForPixel(0, 0);
+        var r = c.rayForPixel(0, 0, new float[4]);
         assertArrayEquals(new float[] {0, 0, 0, 1}, r.origin(), EPSILON);
         assertArrayEquals(new float[] {0.66519f, 0.33259f, -0.66851f, 0}, r.direction(), EPSILON);
     }
@@ -55,7 +55,7 @@ class CameraTest {
     void constructingARayWhenTheCameraIsTransformed() {
         var t = Matrix4x4.rotationOnY(Utils.PI / 4).multiply(Matrix4x4.translation(0, -2, 5));
         var c = new Camera(201, 101,  Utils.HALF_PI, t);
-        var r = c.rayForPixel(100, 50);
+        var r = c.rayForPixel(100, 50, new float[4]);
         assertArrayEquals(new float[] {0, 2, -5, 1}, r.origin(), EPSILON);
         assertArrayEquals(new float[] {(float)Math.sqrt(2)/2f, 0, -1f * (float)Math.sqrt(2)/2f, 0}, r.direction(), EPSILON);
     }
@@ -67,7 +67,7 @@ class CameraTest {
         var to = Tuple.point(0, 0, 0);
         var up = Tuple.vector(0, 1, 0);
         var c = new Camera(11, 11, HALF_PI, from.viewTransform(to, up));
-        Canvas image = w.render(c, w);
+        Canvas image = c.render(w);
         var expected = Utils.pack255(Color.create(0.38066f, 0.47583f, 0.2855f));
         assertEquals(expected, image.pixelAt(5, 5));
     }

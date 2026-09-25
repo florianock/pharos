@@ -21,7 +21,7 @@ void main() throws IOException {
 
     var ppm = c.toPPM();
 
-    var path = Paths.get(System.getProperty("user.home"),"Pictures/piraeus/projectile.ppm");
+    var path = Paths.get(System.getProperty("user.home"),"Pictures/pharos/projectile.ppm");
     if (Files.notExists(path.getParent())) {
         Files.createDirectories(path.getParent());
     }

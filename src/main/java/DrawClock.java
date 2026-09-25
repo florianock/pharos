@@ -25,7 +25,7 @@ void main() throws IOException {
 
     var ppm = canvas.toPPM();
 
-    var path = Paths.get(System.getProperty("user.home"),"Pictures/piraeus/clock.ppm");
+    var path = Paths.get(System.getProperty("user.home"),"Pictures/pharos/clock.ppm");
     if (Files.notExists(path.getParent())) {
         Files.createDirectories(path.getParent());
     }
