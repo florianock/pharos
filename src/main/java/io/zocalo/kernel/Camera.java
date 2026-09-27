@@ -58,13 +58,13 @@ public class Camera {
 
     public Ray rayForPixel(int px, int py, float[] arr) {
         // the offset from the edge of the canvas to the pixel's center
-        float xOffset = (px + 0.5f) * pixelSize;
-        float yOffset = (py + 0.5f) * pixelSize;
+        var xOffset = (px + 0.5f) * pixelSize;
+        var yOffset = (py + 0.5f) * pixelSize;
 
         // the untransformed coordinates of hte pixel in world space.
         // (remember that the camera looks toward -z, so +x is to the *left*
-        float worldX = halfWidth - xOffset;
-        float worldY = halfHeight - yOffset;
+        var worldX = halfWidth - xOffset;
+        var worldY = halfHeight - yOffset;
 
         arr[0] = worldX;
         arr[1] = worldY;
@@ -74,15 +74,17 @@ public class Camera {
         // using the camera matrix, transform the canvas point and the origin,
         // and then compute the ray's direction vector.
         // (remember that the canvas is at z=-1)
-        float[] pixel = inverseTransform.multiply(arr);
-        float[] origin = inverseTransform.multiply(ORIGIN);
-        float[] direction = Tuple.normalize(Tuple.subtract(pixel, origin));
+        var pixel = inverseTransform.multiply(arr);
+        var origin = inverseTransform.multiply(ORIGIN);
+        var direction = Tuple.normalize(Tuple.subtract(pixel, origin));
 
+        // TODO get rid of this create. Re-use a Ray or something similar
         return Ray.create(origin, direction);
     }
 
     public Canvas render(World w) {
         var image = new Canvas(hsize, vsize);
+        image.setupGui();
         var arr = new float[4];
         for (var y = 0; y < vsize; y++) {
             for (var x = 0; x < hsize; x++) {
@@ -90,6 +92,7 @@ public class Camera {
                 var color = w.colorAt(ray);
                 image.writePixel(x, y, color);
             }
+            image.repaint();
         }
         return image;
     }

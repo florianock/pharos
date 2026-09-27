@@ -6,6 +6,7 @@ import io.zocalo.scene.Material;
 import io.zocalo.scene.Sphere;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class Canvas {
     private final int height;
     private final BufferedImage image;
     private final int[] pixels;
+    private JLabel label;
 
     public Canvas(int width, int height) {
         this.width = width;
@@ -194,5 +196,26 @@ public class Canvas {
             Files.createDirectories(path.getParent());
         }
         ImageIO.write(image, "png", Files.newOutputStream(path));
+    }
+
+    /**
+     * Setup a JPanel in a window to see the image progress.
+     */
+    public void setupGui() {
+        JFrame frame = new JFrame("Ray Tracer Preview");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        label = new JLabel(new ImageIcon(image));
+        frame.add(label);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    /**
+     * Repaint the JPanel with the image
+     */
+    public void repaint() {
+        label.repaint();
     }
 }
