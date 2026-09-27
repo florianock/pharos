@@ -2,12 +2,14 @@ package io.zocalo.kernel;
 
 import io.zocalo.scene.Shape;
 
-public record Intersection(float t, Shape object) {
+import static io.zocalo.Utils.SHADOW_OFFSET;
+
+public record Intersection(float t, Shape shape) {
 
     public Computations prepareComputations(Ray r) {
         var point = r.position(t);
         var eyev = new Tuple(Tuple.negate(r.direction()));
-        var normalv = object.normalAt(point);
+        var normalv = shape.normalAt(point);
         var inside = false;
 
         if (normalv.dot(eyev) < 0) {
@@ -15,6 +17,8 @@ public record Intersection(float t, Shape object) {
             normalv = normalv.negate();
         }
 
-        return new Computations(t, object, point, eyev, normalv, inside);
+        var overPoint = point.add(normalv.multiply(SHADOW_OFFSET));
+
+        return new Computations(t, shape, point, eyev, normalv, inside, overPoint);
     }
 }

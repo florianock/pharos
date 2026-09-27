@@ -1,9 +1,6 @@
 package io.zocalo;
 
-import io.zocalo.kernel.Intersection;
-import io.zocalo.kernel.Intersections;
-import io.zocalo.kernel.Ray;
-import io.zocalo.kernel.Tuple;
+import io.zocalo.kernel.*;
 import io.zocalo.scene.Shape;
 import org.junit.jupiter.api.Test;
 
@@ -17,7 +14,7 @@ class IntersectionTest {
         var i = new Intersection(3.5f, s);
 
         assertEquals(3.5f, i.t());
-        assertEquals(s, i.object());
+        assertEquals(s, i.shape());
     }
 
     @Test
@@ -29,8 +26,8 @@ class IntersectionTest {
         var xs = new Intersections(i1, i2);
 
         assertEquals(2, xs.count());
-        assertEquals(s, xs.get(0).object());
-        assertEquals(s, xs.get(1).object());
+        assertEquals(s, xs.get(0).shape());
+        assertEquals(s, xs.get(1).shape());
     }
 
     @Test
@@ -93,7 +90,7 @@ class IntersectionTest {
         var i = new Intersection(4, shape);
         var comps = i.prepareComputations(r);
         assertEquals(i.t(), comps.t());
-        assertEquals(i.object(), comps.object());
+        assertEquals(i.shape(), comps.object());
         assertEquals(Tuple.point(0, 0, -1), comps.point());
         assertEquals(Tuple.vector(0, 0, -1), comps.eyev());
         assertEquals(Tuple.vector(0, 0, -1), comps.normalv());
@@ -119,5 +116,15 @@ class IntersectionTest {
         assertTrue(comps.inside());
         // normal would have been (0, 0, 1), but is inverted!
         assertEquals(Tuple.vector(0, 0, -1), comps.normalv());
+    }
+
+    @Test
+    void the_hit_should_offset_the_point() {
+        var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
+        var shape = Shape.sphere(Matrix4x4.translation(0, 0, 1));
+        var i = new Intersection(5, shape);
+        var comps = i.prepareComputations(r);
+        assertTrue(comps.overPoint().z() < -Utils.EPSILON/2);
+        assertTrue(comps.point().z() > comps.overPoint().z());
     }
 }

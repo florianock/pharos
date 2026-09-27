@@ -3,9 +3,10 @@ package io.zocalo;
 import io.zocalo.scene.Color;
 
 public class Utils {
-    public static final float EPSILON = 1e-4f;
-    public static final float HALF_PI = 1.570796326794897f;
-    public static final float PI      = 3.141592653589793f;
+    public static final float EPSILON       = 1e-4f;
+    public static final float SHADOW_OFFSET = EPSILON * 16; // see https://forum.raytracerchallenge.com/thread/278/ch-8-get-acne
+    public static final float HALF_PI       = 1.570796326794897f;
+    public static final float PI            = 3.141592653589793f;
 
     private Utils() {
         /* This utility class should not be instantiated */

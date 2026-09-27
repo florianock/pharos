@@ -67,7 +67,8 @@ public class Material {
         this.shininess = shininess;
     }
 
-    public Color lighting(final Light light, final Tuple point, final Tuple eyev, final Tuple normalv) {
+    public Color lighting(Light light, Tuple point, Tuple eyev, Tuple normalv, boolean shadowed) {
+
         // combine the surface color with the light's color / intensity
         var effectiveColor = color.multiply(light.intensity());
 
@@ -76,6 +77,8 @@ public class Material {
 
         // compute the ambient contribution
         var ambient = effectiveColor.multiply(this.ambient);
+
+        if (shadowed) return ambient;
 
         // lightDotNormal represents the cosine of the angle between the
         // light vector and the normal vector. A negative number means the

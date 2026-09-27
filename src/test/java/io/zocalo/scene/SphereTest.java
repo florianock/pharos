@@ -76,8 +76,8 @@ class SphereTest {
         var xs = s.intersect(r);
 
         assertEquals(2, xs.count());
-        assertEquals(s, xs.get(0).object());
-        assertEquals(s, xs.get(1).object());
+        assertEquals(s, xs.get(0).shape());
+        assertEquals(s, xs.get(1).shape());
     }
 
     @Test

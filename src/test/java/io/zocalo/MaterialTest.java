@@ -35,7 +35,7 @@ class MaterialTest {
         var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
 
-        var result = m.lighting(light, position, eyev, normalv);
+        var result = m.lighting(light, position, eyev, normalv, false);
         assertEquals(Color.create(1.9f, 1.9f, 1.9f), result);
     }
 
@@ -45,7 +45,7 @@ class MaterialTest {
         var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
 
-        var result = m.lighting(light, position, eyev, normalv);
+        var result = m.lighting(light, position, eyev, normalv, false);
         assertEquals(Color.create(1.0f, 1.0f, 1.0f), result);
     }
 
@@ -55,7 +55,7 @@ class MaterialTest {
         var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 10, -10), Color.WHITE);
 
-        var result = m.lighting(light, position, eyev, normalv);
+        var result = m.lighting(light, position, eyev, normalv, false);
         assertEquals(Color.create(0.7364f, 0.7364f, 0.7364f), result);
     }
 
@@ -65,7 +65,7 @@ class MaterialTest {
         var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 10, -10), Color.WHITE);
 
-        var result = m.lighting(light, position, eyev, normalv);
+        var result = m.lighting(light, position, eyev, normalv, false);
         assertEquals(Color.create(1.63639f, 1.63639f, 1.63639f), result);
     }
 
@@ -75,7 +75,18 @@ class MaterialTest {
         var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 0, 10), Color.WHITE);
 
-        var result = m.lighting(light, position, eyev, normalv);
+        var result = m.lighting(light, position, eyev, normalv, false);
+        assertEquals(Color.create(0.1f, 0.1f, 0.1f), result);
+    }
+
+    @Test
+    void lighting_with_surface_in_shadow() {
+        var eyev = Tuple.vector(0, 0, -1);
+        var normalv = Tuple.vector(0, 0, -1);
+        var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
+        var inShadow = true;
+
+        var result = m.lighting(light, position, eyev, normalv, inShadow);
         assertEquals(Color.create(0.1f, 0.1f, 0.1f), result);
     }
 }

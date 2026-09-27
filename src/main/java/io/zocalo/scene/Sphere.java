@@ -33,7 +33,7 @@ public class Sphere implements Shape {
     public Matrix4x4 transform() { return transform; }
 
     public Intersections intersect(Ray r) {
-        var r2 = r.transform(transform.invert());
+        var r2 = r.transform(inverseTransform);
         var sphereToRay = Tuple.subtract(r2.origin(), new float[] { 0, 0, 0, 1 });
 
         var direction = r2.direction();

@@ -13,8 +13,8 @@ public interface Shape {
 
     Material material();
 
-    default Color lighting(final Light light, final Tuple point, final Tuple eyev, final Tuple normalv) {
-        return material().lighting(light, point, eyev, normalv);
+    default Color lighting(Light light, Tuple point, Tuple eyev, Tuple normalv, boolean shadowed) {
+        return material().lighting(light, point, eyev, normalv, shadowed);
     }
 
     static Sphere sphere() {

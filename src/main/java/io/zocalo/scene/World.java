@@ -50,7 +50,7 @@ public record World(Shape[] objects, Light light) {
 
     public Color shadeHit(Computations comps) {
         // TODO: for multiple light sources, call comps.shadeHit() for each of them and add colors
-        return comps.shadeHit(light);
+        return comps.shadeHit(light, isShadowed(comps.overPoint()));
     }
 
     public Color colorAt(Ray r) {
@@ -95,5 +95,16 @@ public record World(Shape[] objects, Light light) {
         var blue = normal.z() * 0.5f + 0.5f;
 
         return Color.create(red, green, blue);
+    }
+
+    public boolean isShadowed(Tuple point) {
+        var v = light.position().subtract(point);
+        var distance = v.magnitude();
+        var direction = v.normalize();
+
+        var r = Ray.create(point, direction);
+        var xs = intersect(r);
+
+        return xs.hit().map(i -> i.t() < distance).orElse(false);
     }
 }
