@@ -70,7 +70,7 @@ void main() throws IOException {
             new float[] { 0,    1,  0, 0 }
     ));
 
-    var canvas = camera.render(world);
+    var canvas = camera.renderParallel(world);
     canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh7.png"));
     canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh7.ppm"));
 }

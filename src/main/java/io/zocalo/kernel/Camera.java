@@ -2,10 +2,13 @@ package io.zocalo.kernel;
 
 import io.zocalo.scene.World;
 
+import java.util.concurrent.Executors;
+
 public class Camera {
 
-    private static final float[] ORIGIN = new float[] {0, 0, 0, 1};
+    private static final float[] ORIGIN = new float[] { 0, 0, 0, 1 };
 
+    private static final boolean showPreview = false;
     private final int hsize, vsize;
     private final float fov;
     private final Matrix4x4 transform;
@@ -84,7 +87,8 @@ public class Camera {
 
     public Canvas render(World w) {
         var image = new Canvas(hsize, vsize);
-        image.setupGui();
+        if (showPreview) image.setupGui();
+        var start = System.nanoTime();
         var arr = new float[4];
         for (var y = 0; y < vsize; y++) {
             for (var x = 0; x < hsize; x++) {
@@ -92,8 +96,53 @@ public class Camera {
                 var color = w.colorAt(ray, RenderMode.SHADE);
                 image.writePixel(x, y, color);
             }
-            image.repaint();
+            if (showPreview) image.repaint();
         }
+        var end = System.nanoTime();
+        System.out.println("Duration: " + (end - start) + " nanoseconds");
+        System.out.println("          " + ((end - start) / 1_000_000) + " milliseconds");
+        System.out.println("          " + ((end - start) / 1_000_000_000) + " seconds");
+
+        return image;
+    }
+
+    public Canvas renderParallel(World w) {
+        var image = new Canvas(hsize, vsize);
+
+        var tileSize = 32;
+        var numTilesX = (hsize + tileSize - 1) / tileSize;
+        var numTilesY = (vsize + tileSize - 1) / tileSize;
+
+        if (showPreview) image.setupGui();
+        var start = System.nanoTime();
+
+        try (var executor = Executors.newWorkStealingPool()) {
+            for (var ty = 0; ty < numTilesY; ty++) {
+                for (var tx = 0; tx < numTilesX; tx++) {
+                    var xStart = tx * tileSize;
+                    var yStart = ty * tileSize;
+                    var xEnd = Math.min(hsize, xStart + tileSize);
+                    var yEnd = Math.min(vsize, yStart + tileSize);
+                    executor.submit(() -> {
+                        var arr = new float[4];
+                        for (var y = yStart; y < yEnd; y++) {
+                            for (var x = xStart; x < xEnd; x++) {
+                                var ray = rayForPixel(x, y, arr);
+                                var color = w.colorAt(ray, RenderMode.SHADE);
+                                image.writePixel(x, y, color);
+                            }
+                        }
+                        if (showPreview) image.repaint();
+                    });
+                }
+            }
+        }
+
+        var end = System.nanoTime();
+        IO.println("Duration: " + (end - start) + " nanoseconds");
+        IO.println("          " + ((end - start) / 1_000_000) + " milliseconds");
+        IO.println("          " + ((end - start) / 1_000_000_000) + " seconds");
+
         return image;
     }
 }
