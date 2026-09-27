@@ -1,7 +1,7 @@
-package io.zocalo;
+package io.zocalo.scene;
 
-import io.zocalo.scene.Color;
-import io.zocalo.scene.Light;
+import io.zocalo.kernel.Tuple;
+import io.zocalo.Utils;
 
 import java.util.Objects;
 

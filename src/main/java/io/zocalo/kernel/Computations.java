@@ -1,4 +1,4 @@
-package io.zocalo;
+package io.zocalo.kernel;
 
 import io.zocalo.scene.Color;
 import io.zocalo.scene.Light;

@@ -1,7 +1,8 @@
-package io.zocalo;
+package io.zocalo.kernel;
 
 import io.zocalo.scene.Color;
 import io.zocalo.scene.Light;
+import io.zocalo.scene.Material;
 import io.zocalo.scene.Sphere;
 
 import javax.imageio.ImageIO;

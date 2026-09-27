@@ -1,4 +1,5 @@
-import io.zocalo.*;
+import io.zocalo.kernel.Canvas;
+import io.zocalo.kernel.Tuple;
 
 void main() throws IOException {
     var canvasPixels = 1080;

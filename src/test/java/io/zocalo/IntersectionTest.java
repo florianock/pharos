@@ -1,5 +1,9 @@
 package io.zocalo;
 
+import io.zocalo.kernel.Intersection;
+import io.zocalo.kernel.Intersections;
+import io.zocalo.kernel.Ray;
+import io.zocalo.kernel.Tuple;
 import io.zocalo.scene.Shape;
 import org.junit.jupiter.api.Test;
 

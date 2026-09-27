@@ -1,6 +1,6 @@
 package io.zocalo.scene;
 
-import io.zocalo.Tuple;
+import io.zocalo.kernel.Tuple;
 
 public record Light(Tuple position, Color intensity) {
 

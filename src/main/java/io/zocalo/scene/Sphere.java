@@ -1,6 +1,6 @@
 package io.zocalo.scene;
 
-import io.zocalo.*;
+import io.zocalo.kernel.*;
 
 public class Sphere implements Shape {
 

@@ -1,9 +1,9 @@
-package io.zocalo;
+package io.zocalo.kernel;
 
 import java.util.Arrays;
 
-import static io.zocalo.Tuple.add;
-import static io.zocalo.Tuple.multiply;
+import static io.zocalo.kernel.Tuple.add;
+import static io.zocalo.kernel.Tuple.multiply;
 
 public record Ray(float[] origin, float[] direction) {
 

@@ -1,6 +1,6 @@
 package io.zocalo.scene;
 
-import io.zocalo.Tuple;
+import io.zocalo.kernel.Tuple;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

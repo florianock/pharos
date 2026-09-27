@@ -1,6 +1,6 @@
 package io.zocalo.scene;
 
-import io.zocalo.*;
+import io.zocalo.kernel.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;

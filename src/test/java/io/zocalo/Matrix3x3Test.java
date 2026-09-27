@@ -1,5 +1,7 @@
 package io.zocalo;
 
+import io.zocalo.kernel.Matrix2x2;
+import io.zocalo.kernel.Matrix3x3;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

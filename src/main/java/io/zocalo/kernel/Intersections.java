@@ -1,4 +1,4 @@
-package io.zocalo;
+package io.zocalo.kernel;
 
 import java.util.*;
 

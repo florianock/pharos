@@ -1,9 +1,6 @@
-package io.zocalo.scene;
+package io.zocalo.kernel;
 
-import io.zocalo.Canvas;
-import io.zocalo.Matrix4x4;
-import io.zocalo.Ray;
-import io.zocalo.Tuple;
+import io.zocalo.scene.World;
 
 public class Camera {
 
