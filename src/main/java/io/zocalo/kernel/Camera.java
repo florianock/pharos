@@ -89,7 +89,7 @@ public class Camera {
         for (var y = 0; y < vsize; y++) {
             for (var x = 0; x < hsize; x++) {
                 var ray = rayForPixel(x, y, arr);
-                var color = w.colorAt(ray);
+                var color = w.colorAt(ray, RenderMode.SHADE);
                 image.writePixel(x, y, color);
             }
             image.repaint();

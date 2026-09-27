@@ -54,8 +54,55 @@ public record World(Shape[] objects, Light light) {
     }
 
     public Color colorAt(Ray r) {
+        return colorAt(r, RenderMode.SHADE);
+    }
+
+    public Color colorAt(Ray r, RenderMode mode) {
         var xs = intersect(r);
         var hit = xs.hit();
-        return hit.map(i -> shadeHit(i.prepareComputations(r))).orElse(Color.BLACK);
+
+        if (hit.isEmpty()) return Color.BLACK;
+
+        var i = hit.get();
+        return switch (mode) {
+            case DEPTH -> renderDepth(r, i);
+            case NORMALS -> renderNormals(r, i);
+            case SHADE -> computeColor(r, i);
+        };
+    }
+
+    private Color renderDepth(Ray r, Intersection hit) {
+
+        Computations coms = hit.prepareComputations(r);
+        var hitPoint = coms.point().values();
+
+        // Distance from ray origin (camera) to hit point
+        var distance = Tuple.magnitude(Tuple.subtract(hitPoint, r.origin()));
+
+        // Option A: linear normalization (works for bounded scenes)
+        var maxDistance = 10f;  // tune based on your scene scale
+        var normalized = Math.clamp(distance / maxDistance, 0.0f, 1.0f);
+
+        // Option B: logarithmic (better for wide range, handles infinity)
+//        var normalized = (float) (Math.log(distance + 1.0f) / Math.log(maxDistance + 1.0f));
+
+        // Grayscale: white = close, black = far (or invert)
+        return new Color(normalized, normalized, normalized);
+    }
+
+    private Color renderNormals(Ray r, Intersection hit) {
+        Computations comps = hit.prepareComputations(r);
+        Tuple normal = comps.normalv();
+
+        // Remap [-1, +1] → [0, 1]
+        var red = normal.x() * 0.5f + 0.5f;
+        var green = normal.y() * 0.5f + 0.5f;
+        var blue = normal.z() * 0.5f + 0.5f;
+
+        return Color.create(red, green, blue);
+    }
+
+    private Color computeColor(Ray r, Intersection hit) {
+        return shadeHit(hit.prepareComputations(r));
     }
 }
