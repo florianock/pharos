@@ -58,21 +58,18 @@ public record World(Shape[] objects, Light light) {
     }
 
     public Color colorAt(Ray r, RenderMode mode) {
-        var xs = intersect(r);
-        var hit = xs.hit();
-
-        if (hit.isEmpty()) return Color.BLACK;
-
-        var comps = hit.get().prepareComputations(r);
-        return switch (mode) {
-            case DEPTH -> renderDepth(r, comps);
-            case NORMALS -> renderNormals(comps);
-            case SHADE -> shadeHit(comps);
-        };
+        return intersect(r)
+                .hit()
+                .map(i -> i.prepareComputations(r))
+                .map(c -> switch(mode) {
+                    case DEPTH -> renderDepth(r, c);
+                    case NORMALS -> renderNormals(c);
+                    case SHADE -> shadeHit(c);
+                })
+                .orElse(Color.BLACK);
     }
 
     private Color renderDepth(Ray r, Computations comps) {
-
         var hitPoint = comps.point().values();
 
         // Distance from ray origin (camera) to hit point
