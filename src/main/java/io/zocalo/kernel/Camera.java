@@ -8,7 +8,7 @@ public class Camera {
 
     private static final float[] ORIGIN = new float[] { 0, 0, 0, 1 };
 
-    private static final boolean showPreview = false;
+    private static final boolean showPreview = true;
     private final int hsize, vsize;
     private final float fov;
     private final Matrix4x4 transform;
