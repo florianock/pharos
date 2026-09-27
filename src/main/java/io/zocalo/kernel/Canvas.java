@@ -83,6 +83,7 @@ public class Canvas {
         var numTilesX = (width + tileSize - 1) / tileSize;
         var numTilesY = (height + tileSize - 1) / tileSize;
 
+        setupGui();
         var rayOriginValues = rayOrigin.values();
         try (var executor = Executors.newWorkStealingPool()) {
             for (var ty = 0; ty < numTilesY; ty++) {
@@ -96,7 +97,7 @@ public class Canvas {
                         for (var y = yStart; y < yEnd; y++){
                             var worldY = half - pixelSize * y;
 
-                            for (var x = xStart; x < xEnd; x++){
+                            for (var x = xStart; x < xEnd; x++) {
                                 var worldX = -half + pixelSize * x;
 
                                 position[0] = worldX; position[1] = worldY; position[2] = wallZ; position[3] = 1;
@@ -113,6 +114,7 @@ public class Canvas {
                                     writePixel(x, y, color);
                                 }
                             }
+                            repaint();
                         }
                     });
                 }

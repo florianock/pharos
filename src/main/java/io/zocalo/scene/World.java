@@ -63,18 +63,17 @@ public record World(Shape[] objects, Light light) {
 
         if (hit.isEmpty()) return Color.BLACK;
 
-        var i = hit.get();
+        var comps = hit.get().prepareComputations(r);
         return switch (mode) {
-            case DEPTH -> renderDepth(r, i);
-            case NORMALS -> renderNormals(r, i);
-            case SHADE -> computeColor(r, i);
+            case DEPTH -> renderDepth(r, comps);
+            case NORMALS -> renderNormals(comps);
+            case SHADE -> shadeHit(comps);
         };
     }
 
-    private Color renderDepth(Ray r, Intersection hit) {
+    private Color renderDepth(Ray r, Computations comps) {
 
-        Computations coms = hit.prepareComputations(r);
-        var hitPoint = coms.point().values();
+        var hitPoint = comps.point().values();
 
         // Distance from ray origin (camera) to hit point
         var distance = Tuple.magnitude(Tuple.subtract(hitPoint, r.origin()));
@@ -90,9 +89,8 @@ public record World(Shape[] objects, Light light) {
         return new Color(normalized, normalized, normalized);
     }
 
-    private Color renderNormals(Ray r, Intersection hit) {
-        Computations comps = hit.prepareComputations(r);
-        Tuple normal = comps.normalv();
+    private Color renderNormals(Computations comps) {
+        var normal = comps.normalv();
 
         // Remap [-1, +1] → [0, 1]
         var red = normal.x() * 0.5f + 0.5f;
@@ -100,9 +98,5 @@ public record World(Shape[] objects, Light light) {
         var blue = normal.z() * 0.5f + 0.5f;
 
         return Color.create(red, green, blue);
-    }
-
-    private Color computeColor(Ray r, Intersection hit) {
-        return shadeHit(hit.prepareComputations(r));
     }
 }
