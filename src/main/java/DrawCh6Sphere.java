@@ -12,13 +12,13 @@ void main() throws IOException {
     var start = System.nanoTime();
     var rayOrigin = Tuple.point(0, 0, -5);
     var lightPosition = Tuple.point(-10, 10, -10);
-    var wallZ = 10f;
-    var wallSize = 7f;
+    var wallZ = 10d;
+    var wallSize = 7d;
 
-    final float pixelSize = wallSize / canvasPixels;
-    final float half = wallSize / 2f;
-    var m = new Material.Builder().color(Color.create(1f, 0.2f, 1f)).build();
-    final Sphere shape = new Sphere.Builder().material(m).build();
+    final double pixelSize = wallSize / canvasPixels;
+    final double half = wallSize / 2d;
+    var m = new Material.Builder().color(Color.create(1, 0.2, 1)).build();
+    final Sphere shape = new Sphere(m);
     var lightColor = Color.create(1, 1, 1);
     var light = Light.pointLight(lightPosition, lightColor);
 
@@ -36,7 +36,7 @@ void main() throws IOException {
                 final int xEnd = Math.min(canvasPixels, xStart + tileSize);
                 final int yEnd = Math.min(canvasPixels, yStart + tileSize);
                 executor.submit(() -> {
-                    var position = new float[4];
+                    var position = new double[4];
                     for (var y = yStart; y < yEnd; y++){
                         var worldY = half - pixelSize * y;
 
@@ -53,7 +53,7 @@ void main() throws IOException {
                                 var point = r.position(hit.t());
                                 var normal = hit.shape().normalAt(point);
                                 var eye = new Tuple(Tuple.negate(r.direction()));
-                                var color = hit.shape().material().lighting(light, point, eye, normal, false);
+                                var color = hit.shape().getMaterial().lighting(light, point, eye, new Tuple(normal), false);
                                 canvas.writePixel(x, y, color);
                             }
                         }
@@ -69,11 +69,11 @@ void main() throws IOException {
     System.out.println("          " + ((end - start) / 1_000_000) + " milliseconds");
     System.out.println("          " + ((end - start) / 1_000_000_000) + " seconds");
 
-    var path = Paths.get(System.getProperty("user.home"),"Pictures/pharos/sphereCh6.png");
+    var path = Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.png");
     if (Files.notExists(path.getParent())) {
         Files.createDirectories(path.getParent());
     }
 
     canvas.toPNG(path);
-    canvas.toPPM(Paths.get(path.getParent().toString(), "sphereCh6.ppm"));
+    canvas.toPPM(Paths.get(path.getParent().toString(), "test.ppm"));
 }

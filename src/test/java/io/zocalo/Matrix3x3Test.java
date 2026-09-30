@@ -10,7 +10,7 @@ class Matrix3x3Test {
 
     @Test
     void get() {
-        var m = new Matrix3x3(new float[][] {
+        var m = new Matrix3x3(new double[][] {
                 {-3, 5, 0},
                 {1, -2, -7},
                 {0, 1, 1}
@@ -23,13 +23,13 @@ class Matrix3x3Test {
 
     @Test
     void subMatrix() {
-        var a = new Matrix3x3(new float[][] {
+        var a = new Matrix3x3(new double[][] {
                 {1, 5, 0},
                 {-3, 2, 7},
                 {0, 6, -3}
         });
 
-        var expected = new Matrix2x2(new float[][] {
+        var expected = new Matrix2x2(new double[][] {
                 {-3, 2},
                 {0, 6}
         });
@@ -39,15 +39,15 @@ class Matrix3x3Test {
 
     @Test
     void equality() {
-        var a = new Matrix3x3(new float[] { 1, 2, 5, 6, 7, 8, 9, 3, 4 });
-        var b = new Matrix3x3(new float[] { 1.00001f, 2.00001f, 4.99999f, 5.99999f, 7, 8, 9, 3, 4 });
+        var a = new Matrix3x3(new double[] { 1, 2, 5, 6, 7, 8, 9, 3, 4 });
+        var b = new Matrix3x3(new double[] { 1.00001, 2.00001, 4.99999, 5.99999, 7, 8, 9, 3, 4 });
 
         assertEquals(a, b);
     }
 
     @Test
     void minor() {
-        var a = new Matrix3x3(new float[][]{
+        var a = new Matrix3x3(new double[][]{
                 {3, 5, 0},
                 {2, -1, -7},
                 {6, -1, 5}
@@ -60,7 +60,7 @@ class Matrix3x3Test {
 
     @Test
     void cofactor() {
-        var a = new Matrix3x3(new float[][]{
+        var a = new Matrix3x3(new double[][]{
                 {3, 5, 0},
                 {2, -1, -7},
                 {6, -1, 5}
@@ -74,7 +74,7 @@ class Matrix3x3Test {
 
     @Test
     void determinant() {
-        var a = new Matrix3x3(new float[][]{
+        var a = new Matrix3x3(new double[][]{
                 {1, 2, 6},
                 {-5, 8, -4},
                 {2, 6, 4}

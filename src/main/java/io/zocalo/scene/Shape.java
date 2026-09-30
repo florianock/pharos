@@ -5,27 +5,43 @@ import io.zocalo.kernel.Matrix4x4;
 import io.zocalo.kernel.Ray;
 import io.zocalo.kernel.Tuple;
 
-public interface Shape {
+public abstract class Shape {
 
-    Intersections intersect(Ray r);
+    protected Material material;
+    protected Matrix4x4 transform;
+    protected Matrix4x4 inverseTransform;
+    protected Matrix4x4 inverseTransformTranspose;
 
-    Tuple normalAt(Tuple worldPoint);
-
-    Material material();
-
-    default Color lighting(Light light, Tuple point, Tuple eyev, Tuple normalv, boolean shadowed) {
-        return material().lighting(light, point, eyev, normalv, shadowed);
+    public Shape (Matrix4x4 transform, Material material) {
+        this.transform = transform;
+        this.material = material;
+        inverseTransform = transform.invert();
+        inverseTransformTranspose = inverseTransform.transpose();
     }
 
-    static Sphere sphere() {
-        return new Sphere();
+    public abstract Intersections intersect(Ray r);
+
+    public abstract double[] normalAt(Tuple worldPoint);
+
+    public Material getMaterial() {
+        return material;
     }
 
-    static Sphere sphere(Matrix4x4 t) {
-        return new Sphere(t);
+    public Matrix4x4 getTransform() {
+        return transform;
     }
 
-    static Sphere sphere(Matrix4x4 t, Material m) {
-        return new Sphere(t, m);
+    public void setMaterial(Material material) {
+        this.material = material;
+    }
+
+    public void setTransform(Matrix4x4 transform) {
+        this.transform = transform;
+        inverseTransform = transform.invert();
+        inverseTransformTranspose = inverseTransform.transpose();
+    }
+
+    public Color lighting(Light light, Tuple point, Tuple eyev, Tuple normalv, boolean shadowed) {
+        return material.lighting(light, point, eyev, normalv, shadowed);
     }
 }

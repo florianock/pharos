@@ -4,24 +4,25 @@ import io.zocalo.kernel.Matrix4x4;
 import io.zocalo.kernel.Tuple;
 import org.junit.jupiter.api.Test;
 
+import static io.zocalo.TestUtils.assertEqualEnough;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TupleTest {
 
     @Test
     void testPoint() {
-        var a = Tuple.point(4.3f, -4.2f, 3.1f);
+        var a = Tuple.point(4.3, -4.2, 3.1);
 
-        assertEquals(new Tuple(4.3f, -4.2f, 3.1f, 1), a);
+        assertEquals(new Tuple(4.3, -4.2, 3.1, 1), a);
         assertTrue(a.isPoint());
         assertFalse(a.isVector());
     }
 
     @Test
     void testVector() {
-        var a = Tuple.vector(4.3f, -4.2f, 3.1f);
+        var a = Tuple.vector(4.3, -4.2, 3.1);
 
-        assertEquals(new Tuple(4.3f, -4.2f, 3.1f, 0), a);
+        assertEquals(new Tuple(4.3, -4.2, 3.1, 0), a);
         assertFalse(a.isPoint());
         assertTrue(a.isVector());
     }
@@ -46,21 +47,21 @@ class TupleTest {
     void multiplyTupleByScalar() {
         var a = new Tuple(1, -2, 3, -4);
 
-        assertEquals(new Tuple(3.5f, -7, 10.5f, -14), a.multiply(3.5f));
+        assertEquals(new Tuple(3.5, -7, 10.5, -14), a.multiply(3.5));
     }
 
     @Test
     void multiplyTupleByFraction() {
         var a = new Tuple(1, -2, 3, -4);
 
-        assertEquals(new Tuple(0.5f, -1, 1.5f, -2), a.multiply(0.5f));
+        assertEquals(new Tuple(0.5, -1, 1.5, -2), a.multiply(0.5));
     }
 
     @Test
     void divideTupleByScalar() {
         var a = new Tuple(1, -2, 3, -4);
 
-        assertEquals(new Tuple(0.5f, -1, 1.5f, -2), a.divide(2));
+        assertEquals(new Tuple(0.5, -1, 1.5, -2), a.divide(2));
     }
 
     @Test
@@ -93,14 +94,14 @@ class TupleTest {
     void magnitudePositiveVector() {
         var a = Tuple.vector(1, 2, 3);
 
-        assertEqualEnough((float) Math.sqrt(14), a.magnitude());
+        assertEqualEnough(Math.sqrt(14), a.magnitude());
     }
 
     @Test
     void magnitudeNegativeVector() {
         var a = Tuple.vector(-1, -2, -3);
 
-        assertEqualEnough((float) Math.sqrt(14), a.magnitude());
+        assertEqualEnough(Math.sqrt(14), a.magnitude());
     }
 
     @Test
@@ -114,8 +115,8 @@ class TupleTest {
     void normalizeVector2() {
         var a = Tuple.vector(1, 2, 3);
 
-        assertEquals(Tuple.vector((float) (1/Math.sqrt(14)), (float) (2/Math.sqrt(14)), (float) (3/Math.sqrt(14))), a.normalize());
-        assertEquals(Tuple.vector(0.26726f, 0.53452f, 0.80178f), a.normalize());
+        assertEquals(Tuple.vector(1/Math.sqrt(14), 2/Math.sqrt(14), 3/Math.sqrt(14)), a.normalize());
+        assertEquals(Tuple.vector(0.26726, 0.53452, 0.80178), a.normalize());
     }
 
     @Test
@@ -155,7 +156,7 @@ class TupleTest {
     @Test
     void reflecting_vector_off_slanted_surface() {
         var v = Tuple.vector(0, -1, 0);
-        var n = Tuple.vector((float) Math.sqrt(2)/2, (float) Math.sqrt(2)/2, 0);
+        var n = Tuple.vector(Math.sqrt(2) /2, Math.sqrt(2) /2, 0);
         var r = v.reflect(n);
 
         assertEquals(Tuple.vector(1, 0, 0), r);
@@ -196,16 +197,12 @@ class TupleTest {
         var to = Tuple.point(4, -2, 8);
         var up = Tuple.vector(1, 1, 0);
         var t = from.viewTransform(to, up);
-        var expected = new Matrix4x4(new float[]{
-                -0.50709f, 0.50709f,  0.67612f, -2.36642f,
-                 0.76772f, 0.60609f,  0.12122f, -2.82843f,
-                -0.35857f, 0.59761f, -0.71714f,  0.00000f,
-                 0.00000f, 0.00000f,  0.00000f,  1.00000f
+        var expected = new Matrix4x4(new double[]{
+                -0.50709, 0.50709,  0.67612, -2.36642,
+                 0.76772, 0.60609,  0.12122, -2.82843,
+                -0.35857, 0.59761, -0.71714,  0.00000,
+                 0.00000, 0.00000,  0.00000,  1.00000
         });
         assertEquals(expected, t);
-    }
-
-    private static void assertEqualEnough(float a, float b) {
-        assertTrue(Utils.equalEnough(a, b));
     }
 }

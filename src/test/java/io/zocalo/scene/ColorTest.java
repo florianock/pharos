@@ -1,67 +1,63 @@
 package io.zocalo.scene;
 
-import io.zocalo.Utils;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import static io.zocalo.TestUtils.assertEqualEnough;
 
 class ColorTest {
 
     @Test
     void colorTest() {
-        var c = Color.create(-0.5f, 0.4f, 1.7f);
+        var c = Color.create(-0.5, 0.4, 1.7);
 
-        assertEqualEnough(-0.5f, c.red());
-        assertEqualEnough(0.4f, c.green());
-        assertEqualEnough(1.7f, c.blue());
+        assertEqualEnough(-0.5, c.red());
+        assertEqualEnough(0.4, c.green());
+        assertEqualEnough(1.7, c.blue());
     }
     @Test
     void add() {
-        var c1 = Color.create(0.9f, 0.6f, 0.75f);
-        var c2 = Color.create(0.7f, 0.1f, 0.25f);
+        var c1 = Color.create(0.9, 0.6, 0.75);
+        var c2 = Color.create(0.7, 0.1, 0.25);
 
         var result = c1.add(c2);
 
-        assertEqualEnough(1.6f, result.red());
-        assertEqualEnough(0.7f, result.green());
-        assertEqualEnough(1.0f, result.blue());
+        assertEqualEnough(1.6, result.red());
+        assertEqualEnough(0.7, result.green());
+        assertEqualEnough(1.0, result.blue());
     }
 
     @Test
     void subtract() {
-        var c1 = Color.create(0.9f, 0.6f, 0.75f);
-        var c2 = Color.create(0.7f, 0.1f, 0.25f);
+        var c1 = Color.create(0.9, 0.6, 0.75);
+        var c2 = Color.create(0.7, 0.1, 0.25);
 
         var result = c1.subtract(c2);
 
-        assertEqualEnough(0.2f, result.red());
-        assertEqualEnough(0.5f, result.green());
-        assertEqualEnough(0.5f, result.blue());
+        assertEqualEnough(0.2, result.red());
+        assertEqualEnough(0.5, result.green());
+        assertEqualEnough(0.5, result.blue());
     }
 
     @Test
     void multiplyScalar() {
-        var c = Color.create(0.2f, 0.3f, 0.4f);
+        var c = Color.create(0.2, 0.3, 0.4);
 
         var result = c.multiply(2);
 
-        assertEqualEnough(0.4f, result.red());
-        assertEqualEnough(0.6f, result.green());
-        assertEqualEnough(0.8f, result.blue());
+        assertEqualEnough(0.4, result.red());
+        assertEqualEnough(0.6, result.green());
+        assertEqualEnough(0.8, result.blue());
     }
 
     @Test
     void hadamardProduct() {
-        var c1 = Color.create(1, 0.2f, 0.4f);
-        var c2 = Color.create(0.9f, 1, 0.1f);
+        var c1 = Color.create(1, 0.2, 0.4);
+        var c2 = Color.create(0.9, 1, 0.1);
 
         var result = c1.multiply(c2);
 
-        assertEqualEnough(0.9f, result.red());
-        assertEqualEnough(0.2f, result.green());
-        assertEqualEnough(0.04f, result.blue());
-    }
-
-    private static void assertEqualEnough(float a, float b) {
-        Assertions.assertTrue(Utils.equalEnough(a, b));
+        assertEqualEnough(0.9, result.red());
+        assertEqualEnough(0.2, result.green());
+        assertEqualEnough(0.04, result.blue());
     }
 }

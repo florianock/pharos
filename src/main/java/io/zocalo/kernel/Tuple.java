@@ -1,61 +1,61 @@
 package io.zocalo.kernel;
 
-import io.zocalo.Utils;
-
 import java.util.Arrays;
+
+import static io.zocalo.Utils.equalEnough;
 
 public class Tuple {
 
-    private final float[] values;
+    private final double[] values;
 
-    public Tuple(float x, float y, float z, float w) {
-        values = new float[4];
+    public Tuple(double x, double y, double z, double w) {
+        values = new double[4];
         values[0] = x;
         values[1] = y;
         values[2] = z;
         values[3] = w;
     }
 
-    public Tuple(float[] values) {
+    public Tuple(double[] values) {
         if (values.length != 4) throw new IllegalArgumentException();
         this.values = values.clone();
     }
 
-    public float x() {
+    public double x() {
         return values[0];
     }
 
-    public float y() {
+    public double y() {
         return values[1];
     }
 
-    public float z() {
+    public double z() {
         return values[2];
     }
 
-    public float w() {
+    public double w() {
         return values[3];
     }
 
-    public float[] values() { return values; }
+    public double[] values() { return values; }
 
     public boolean isPoint() {
         return isPoint(values);
     }
 
-    public static boolean isPoint(float[] t) { return t[3] == 1;}
+    public static boolean isPoint(double[] t) { return equalEnough(t[3], 1.0);}
 
     public boolean isVector() {
         return isVector(values);
     }
 
-    public static boolean isVector(float[] t) { return t[3] == 0;}
+    public static boolean isVector(double[] t) { return equalEnough(t[3], 0.0);}
 
     public Tuple add(Tuple t) {
         return new Tuple(add(values.clone(), t.values()));
     }
 
-    public static float[] add(float[] a, float[] b) {
+    public static double[] add(double[] a, double[] b) {
         a[0] += b[0];
         a[1] += b[1];
         a[2] += b[2];
@@ -67,7 +67,7 @@ public class Tuple {
         return new Tuple(subtract(values.clone(), t.values()));
     }
 
-    public static float[] subtract(float[] a, float[] b) {
+    public static double[] subtract(double[] a, double[] b) {
         a[0] -= b[0];
         a[1] -= b[1];
         a[2] -= b[2];
@@ -75,11 +75,11 @@ public class Tuple {
         return a;
     }
 
-    public Tuple multiply(float scalar) {
+    public Tuple multiply(double scalar) {
         return new Tuple(multiply(values.clone(), scalar));
     }
 
-    public static float[] multiply(float[] a, float scalar) {
+    public static double[] multiply(double[] a, double scalar) {
         a[0] *= scalar;
         a[1] *= scalar;
         a[2] *= scalar;
@@ -87,11 +87,11 @@ public class Tuple {
         return a;
     }
 
-    public Tuple divide(float scalar) {
+    public Tuple divide(double scalar) {
         return new Tuple(divide(values.clone(), scalar));
     }
 
-    public static float[] divide(float[] a, float scalar) {
+    public static double[] divide(double[] a, double scalar) {
         return multiply(a, 1f / scalar);
     }
 
@@ -99,7 +99,7 @@ public class Tuple {
         return new Tuple(negate(values.clone()));
     }
 
-    public static float[] negate(float[] a) {
+    public static double[] negate(double[] a) {
         a[0] = 0 - a[0];
         a[1] = 0 - a[1];
         a[2] = 0 - a[2];
@@ -107,20 +107,20 @@ public class Tuple {
         return a;
     }
 
-    public float magnitude() {
+    public double magnitude() {
         if (this.isPoint()) throw new IllegalStateException(this.toString());
         return magnitude(values.clone());
     }
 
-    public static float magnitude(float[] a) {
-        return (float) Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2] + a[3] * a[3]);
+    public static double magnitude(double[] a) {
+        return Math.sqrt(a[0] * a[0] + a[1] * a[1] + a[2] * a[2] + a[3] * a[3]);
     }
 
     public Tuple normalize() {
         return new Tuple(normalize(values.clone()));
     }
 
-    public static float[] normalize(float[] a) {
+    public static double[] normalize(double[] a) {
         var magnitude = magnitude(a);
         a[0] /= magnitude;
         a[1] /= magnitude;
@@ -129,14 +129,14 @@ public class Tuple {
         return a;
     }
 
-    public float dot(Tuple t) {
+    public double dot(Tuple t) {
         if (this.isPoint()) throw new IllegalStateException(this.toString());
         if (t.isPoint()) throw new IllegalArgumentException(t.toString());
 
         return dot(values, t.values());
     }
 
-    public static float dot(float[] a, float[] b) {
+    public static double dot(double[] a, double[] b) {
         return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
     }
 
@@ -147,8 +147,8 @@ public class Tuple {
         return new Tuple(cross(values, t.values()));
     }
 
-    public static float[] cross(float[] a, float[] b) {
-        return new float[] {
+    public static double[] cross(double[] a, double[] b) {
+        return new double[] {
                 a[1] * b[2] - a[2] * b[1],
                 a[2] * b[0] - a[0] * b[2],
                 a[0] * b[1] - a[1] * b[0],
@@ -160,15 +160,15 @@ public class Tuple {
         return new Tuple(reflect(values.clone(), n.values()));
     }
 
-    public static float[] reflect(float[] a, float[] b) {
-        return subtract(a, multiply(b, 2f * dot(a, b)));
+    public static double[] reflect(double[] a, double[] b) {
+        return subtract(a, multiply(b, 2 * dot(a, b)));
     }
 
-    public static Tuple point(float x, float y, float z) {
+    public static Tuple point(double x, double y, double z) {
         return new Tuple(x, y, z, 1);
     }
 
-    public static Tuple vector(float x, float y, float z) {
+    public static Tuple vector(double x, double y, double z) {
         return new Tuple(x, y, z, 0);
     }
 
@@ -181,7 +181,7 @@ public class Tuple {
     public boolean equals(Object other) {
         if (this == other) return true;
         if (!(other instanceof final Tuple t1)) return false;
-        return (Utils.equalEnough(t1.x(), this.x()) && Utils.equalEnough(t1.y(), this.y()) && Utils.equalEnough(t1.z(), this.z()) && Utils.equalEnough(t1.w(), this.w()));
+        return (equalEnough(t1.x(), this.x()) && equalEnough(t1.y(), this.y()) && equalEnough(t1.z(), this.z()) && equalEnough(t1.w(), this.w()));
     }
 
     @Override
@@ -193,13 +193,13 @@ public class Tuple {
         return Tuple.viewTransform(values, to.values(), up.values());
     }
 
-    public static Matrix4x4 viewTransform(float[] from, float[] to, float[] up) {
+    public static Matrix4x4 viewTransform(double[] from, double[] to, double[] up) {
         var forward = Tuple.normalize(Tuple.subtract(to, from));
         var upn = Tuple.normalize(up);
         var left = Tuple.cross(forward, upn);
         var trueUp = Tuple.cross(left, forward);
 
-        var orientation = new Matrix4x4(new float[] {
+        var orientation = new Matrix4x4(new double[] {
                     left[0],         left[1],         left[2], 0,
                   trueUp[0],       trueUp[1],       trueUp[2], 0,
                 -forward[0],     -forward[1],     -forward[2], 0,

@@ -3,20 +3,23 @@ package io.zocalo;
 import io.zocalo.scene.Color;
 
 public class Utils {
-    public static final float EPSILON       = 1e-4f;
-    public static final float SHADOW_OFFSET = EPSILON * 16; // see https://forum.raytracerchallenge.com/thread/278/ch-8-get-acne
-    public static final float HALF_PI       = 1.570796326794897f;
-    public static final float PI            = 3.141592653589793f;
+
+    public static final double EPSILON       = 1e-4f;
+    public static final double SHADOW_OFFSET = EPSILON;
+    public static final double PI            = Math.PI;
+    public static final double HALF_PI       = PI / 2;
+    public static final double QTR_PI       = PI / 4;
+    public static final double[] ORIGIN = new double[] { 0, 0, 0, 1 };
 
     private Utils() {
         /* This utility class should not be instantiated */
     }
 
-    public static boolean equalEnough(float a, float b) {
+    public static boolean equalEnough(double a, double b) {
         return Math.abs(a - b) < EPSILON;
     }
 
-    public static int clamp255(float value) {
+    public static int clamp255(double value) {
         if (value < 0) return 0;
         if (value > 1) return 255;
 

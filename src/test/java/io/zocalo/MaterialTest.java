@@ -23,9 +23,9 @@ class MaterialTest {
     @Test
     void default_material() {
         assertEquals(Color.create(1, 1, 1), m.color());
-        assertEquals(0.1f, m.ambient());
-        assertEquals(0.9f, m.diffuse());
-        assertEquals(0.9f, m.specular());
+        assertEquals(0.1, m.ambient());
+        assertEquals(0.9, m.diffuse());
+        assertEquals(0.9, m.specular());
         assertEquals(200, m.shininess());
     }
 
@@ -36,7 +36,7 @@ class MaterialTest {
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
 
         var result = m.lighting(light, position, eyev, normalv, false);
-        assertEquals(Color.create(1.9f, 1.9f, 1.9f), result);
+        assertEquals(Color.create(1.9, 1.9, 1.9), result);
     }
 
     @Test
@@ -46,7 +46,7 @@ class MaterialTest {
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
 
         var result = m.lighting(light, position, eyev, normalv, false);
-        assertEquals(Color.create(1.0f, 1.0f, 1.0f), result);
+        assertEquals(Color.create(1.0, 1.0, 1.0), result);
     }
 
     @Test
@@ -56,7 +56,7 @@ class MaterialTest {
         var light = Light.pointLight(Tuple.point(0, 10, -10), Color.WHITE);
 
         var result = m.lighting(light, position, eyev, normalv, false);
-        assertEquals(Color.create(0.7364f, 0.7364f, 0.7364f), result);
+        assertEquals(Color.create(0.7364, 0.7364, 0.7364), result);
     }
 
     @Test
@@ -66,7 +66,7 @@ class MaterialTest {
         var light = Light.pointLight(Tuple.point(0, 10, -10), Color.WHITE);
 
         var result = m.lighting(light, position, eyev, normalv, false);
-        assertEquals(Color.create(1.63639f, 1.63639f, 1.63639f), result);
+        assertEquals(Color.create(1.63639, 1.63639, 1.63639), result);
     }
 
     @Test
@@ -76,7 +76,7 @@ class MaterialTest {
         var light = Light.pointLight(Tuple.point(0, 0, 10), Color.WHITE);
 
         var result = m.lighting(light, position, eyev, normalv, false);
-        assertEquals(Color.create(0.1f, 0.1f, 0.1f), result);
+        assertEquals(Color.create(0.1, 0.1, 0.1), result);
     }
 
     @Test
@@ -87,6 +87,6 @@ class MaterialTest {
         var inShadow = true;
 
         var result = m.lighting(light, position, eyev, normalv, inShadow);
-        assertEquals(Color.create(0.1f, 0.1f, 0.1f), result);
+        assertEquals(Color.create(0.1, 0.1, 0.1), result);
     }
 }

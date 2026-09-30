@@ -1,7 +1,7 @@
 package io.zocalo;
 
 import io.zocalo.kernel.*;
-import io.zocalo.scene.Shape;
+import io.zocalo.scene.Sphere;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,7 +10,7 @@ class IntersectionTest {
 
     @Test
     void intersection_encapsulates_t_and_object() {
-        var s = Shape.sphere();
+        var s = new Sphere();
         var i = new Intersection(3.5f, s);
 
         assertEquals(3.5f, i.t());
@@ -19,7 +19,7 @@ class IntersectionTest {
 
     @Test
     void aggregating_intersections() {
-        var s = Shape.sphere();
+        var s = new Sphere();
         var i1 = new Intersection(1, s);
         var i2 = new Intersection(2, s);
 
@@ -32,7 +32,7 @@ class IntersectionTest {
 
     @Test
     void hit_when_all_intersections_have_positive_t() {
-        var s = Shape.sphere();
+        var s = new Sphere();
         var i1 = new Intersection(1, s);
         var i2 = new Intersection(2, s);
         var xs = new Intersections(i2, i1);
@@ -45,7 +45,7 @@ class IntersectionTest {
 
     @Test
     void hit_when_some_intersections_have_negative_t() {
-        var s = Shape.sphere();
+        var s = new Sphere();
         var i1 = new Intersection(-1, s);
         var i2 = new Intersection(1, s);
         var xs = new Intersections(i2, i1);
@@ -58,7 +58,7 @@ class IntersectionTest {
 
     @Test
     void hit_when_all_intersections_have_negative_t() {
-        var s = Shape.sphere();
+        var s = new Sphere();
         var i1 = new Intersection(-2, s);
         var i2 = new Intersection(-1, s);
         var xs = new Intersections(i2, i1);
@@ -70,7 +70,7 @@ class IntersectionTest {
 
     @Test
     void hit_is_always_the_lowest_non_negative_intersection() {
-        var s = Shape.sphere();
+        var s = new Sphere();
         var i1 = new Intersection(5, s);
         var i2 = new Intersection(7, s);
         var i3 = new Intersection(-3, s);
@@ -86,9 +86,11 @@ class IntersectionTest {
     @Test
     void precomputing_state_of_intersection() {
         var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
-        var shape = Shape.sphere();
+        var shape = new Sphere();
         var i = new Intersection(4, shape);
+
         var comps = i.prepareComputations(r);
+
         assertEquals(i.t(), comps.t());
         assertEquals(i.shape(), comps.object());
         assertEquals(Tuple.point(0, 0, -1), comps.point());
@@ -99,7 +101,7 @@ class IntersectionTest {
     @Test
     void the_hit_when_intersection_occurs_on_the_outside() {
         var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
-        var shape = Shape.sphere();
+        var shape = new Sphere();
         var i = new Intersection(4, shape);
         var comps = i.prepareComputations(r);
         assertFalse(comps.inside());
@@ -108,7 +110,7 @@ class IntersectionTest {
     @Test
     void the_hit_when_intersection_occurs_on_the_inside() {
         var r = Ray.create(Tuple.point(0, 0, 0), Tuple.vector(0, 0, 1));
-        var shape = Shape.sphere();
+        var shape = new Sphere();
         var i = new Intersection(1, shape);
         var comps = i.prepareComputations(r);
         assertEquals(Tuple.point(0, 0, 1), comps.point());
@@ -121,7 +123,7 @@ class IntersectionTest {
     @Test
     void the_hit_should_offset_the_point() {
         var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
-        var shape = Shape.sphere(Matrix4x4.translation(0, 0, 1));
+        var shape = new Sphere(Matrix4x4.translation(0, 0, 1));
         var i = new Intersection(5, shape);
         var comps = i.prepareComputations(r);
         assertTrue(comps.overPoint().z() < -Utils.EPSILON/2);

@@ -9,7 +9,7 @@ class Matrix2x2Test {
 
     @Test
     void get() {
-        var m = new Matrix2x2(new float[][] {
+        var m = new Matrix2x2(new double[][] {
                 {-3, 5},
                 {1, -2}
         });
@@ -22,15 +22,15 @@ class Matrix2x2Test {
 
     @Test
     void determinant() {
-        var a = new Matrix2x2(new float[] {1, 5, -3, 2});
+        var a = new Matrix2x2(new double[] {1, 5, -3, 2});
 
         assertEquals(17, a.determinant());
     }
 
     @Test
     void equality() {
-        var a = new Matrix2x2(new float[] { 1, 2, 5, 6});
-        var b = new Matrix2x2(new float[] { 1.00001f, 2.00001f, 4.99999f, 5.99999f});
+        var a = new Matrix2x2(new double[] { 1, 2, 5, 6});
+        var b = new Matrix2x2(new double[] { 1.00001, 2.00001, 4.99999, 5.99999});
 
         assertEquals(a, b);
     }

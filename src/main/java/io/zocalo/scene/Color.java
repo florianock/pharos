@@ -4,7 +4,7 @@ import io.zocalo.Utils;
 
 import static io.zocalo.Utils.unpack255;
 
-public record Color(float red, float green, float blue) {
+public record Color(double red, double green, double blue) {
 
     public Color add(Color color) {
         return Color.create(red + color.red(), green + color.green(), blue + color.blue());
@@ -14,7 +14,7 @@ public record Color(float red, float green, float blue) {
         return Color.create(red - color.red(), green - color.green(), blue - color.blue());
     }
 
-    public Color multiply(float scalar) {
+    public Color multiply(double scalar) {
         return Color.create(red * scalar, green * scalar, blue * scalar);
     }
 
@@ -23,7 +23,7 @@ public record Color(float red, float green, float blue) {
         return Color.create(red() * color.red(), green() * color.green(), blue() * color.blue());
     }
 
-    public static Color create(float r, float g, float b) {
+    public static Color create(double r, double g, double b) {
         return new Color(r, g, b);
     }
 
@@ -41,17 +41,17 @@ public record Color(float red, float green, float blue) {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Color color)) return false;
+        if (!(o instanceof Color(double red1, double green1, double blue1))) return false;
 
-        return Utils.equalEnough(red, color.red) && Utils.equalEnough(blue, color.blue) &&
-                Utils.equalEnough(green, color.green);
+        return Utils.equalEnough(red, red1) && Utils.equalEnough(blue, blue1) &&
+                Utils.equalEnough(green, green1);
     }
 
     @Override
     public int hashCode() {
-        int result = Float.hashCode(red);
-        result = 31 * result + Float.hashCode(green);
-        result = 31 * result + Float.hashCode(blue);
+        int result = Double.hashCode(red);
+        result = 31 * result + Double.hashCode(green);
+        result = 31 * result + Double.hashCode(blue);
         return result;
     }
 }

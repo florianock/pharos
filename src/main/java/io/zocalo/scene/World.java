@@ -31,16 +31,16 @@ public record World(Shape[] objects, Light light) {
 
     private static Material getDefaultMaterial() {
         return new Material.Builder()
-                .color(Color.create(0.8f, 1.0f, 0.6f))
-                .diffuse(0.7f)
-                .specular(0.2f)
+                .color(Color.create(0.8, 1.0, 0.6))
+                .diffuse(0.7)
+                .specular(0.2)
                 .build();
     }
 
     private static Shape[] getDefaultObjects() {
         return new Shape[]{
-                new Sphere.Builder().material(getDefaultMaterial()).build(),
-                new Sphere.Builder().transform(Matrix4x4.scaling(0.5f, 0.5f, 0.5f)).build(),
+                new Sphere(getDefaultMaterial()),
+                new Sphere(Matrix4x4.scaling(0.5, 0.5, 0.5)),
         };
     }
 
@@ -48,23 +48,23 @@ public record World(Shape[] objects, Light light) {
         return Light.pointLight(Tuple.point(-10, 10, -10), Color.create(1, 1, 1));
     }
 
-    public Color shadeHit(Computations comps) {
+    public Color shadeHit(Computations comps, boolean shadows) {
         // TODO: for multiple light sources, call comps.shadeHit() for each of them and add colors
-        return comps.shadeHit(light, isShadowed(comps.overPoint()));
+        return comps.shadeHit(light, shadows && isShadowed(comps.overPoint()));
     }
 
     public Color colorAt(Ray r) {
-        return colorAt(r, RenderMode.SHADE);
+        return colorAt(r, RenderMode.SHADE, false);
     }
 
-    public Color colorAt(Ray r, RenderMode mode) {
+    public Color colorAt(Ray r, RenderMode mode, boolean shadows) {
         return intersect(r)
                 .hit()
                 .map(i -> i.prepareComputations(r))
                 .map(c -> switch(mode) {
                     case DEPTH -> renderDepth(r, c);
                     case NORMALS -> renderNormals(c);
-                    case SHADE -> shadeHit(c);
+                    case SHADE -> shadeHit(c, shadows);
                 })
                 .orElse(Color.BLACK);
     }
@@ -76,8 +76,8 @@ public record World(Shape[] objects, Light light) {
         var distance = Tuple.magnitude(Tuple.subtract(hitPoint, r.origin()));
 
         // Option A: linear normalization (works for bounded scenes)
-        var maxDistance = 10f;  // tune based on your scene scale
-        var normalized = Math.clamp(distance / maxDistance, 0.0f, 1.0f);
+        var maxDistance = 10;  // tune based on your scene scale
+        var normalized = Math.clamp(distance / maxDistance, 0.0, 1.0);
 
         // Option B: logarithmic (better for wide range, handles infinity)
 //        var normalized = (float) (Math.log(distance + 1.0f) / Math.log(maxDistance + 1.0f));
@@ -90,9 +90,9 @@ public record World(Shape[] objects, Light light) {
         var normal = comps.normalv();
 
         // Remap [-1, +1] → [0, 1]
-        var red = normal.x() * 0.5f + 0.5f;
-        var green = normal.y() * 0.5f + 0.5f;
-        var blue = normal.z() * 0.5f + 0.5f;
+        var red = normal.x() * 0.5 + 0.5;
+        var green = normal.y() * 0.5 + 0.5;
+        var blue = normal.z() * 0.5 + 0.5;
 
         return Color.create(red, green, blue);
     }

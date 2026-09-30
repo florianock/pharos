@@ -1,30 +1,31 @@
 package io.zocalo.kernel;
 
+import io.zocalo.Utils;
 import io.zocalo.scene.World;
 
 import java.util.concurrent.Executors;
 
 public class Camera {
 
-    private static final float[] ORIGIN = new float[] { 0, 0, 0, 1 };
-
     private static final boolean showPreview = true;
-    private final int hsize, vsize;
-    private final float fov;
-    private final Matrix4x4 transform;
-    private final Matrix4x4 inverseTransform;
-    private final float halfWidth;
-    private final float halfHeight;
-    private final float pixelSize;
+    private static final boolean shadows = true;
 
-    public Camera(int hsize, int vsize, float fov, Matrix4x4 transform) {
+    private final int hsize, vsize;
+    private final double fov;
+    private final Matrix4x4 viewTransform;
+    private final Matrix4x4 inverseViewTransform;
+    private final double halfWidth;
+    private final double halfHeight;
+    private final double pixelSize;
+
+    public Camera(int hsize, int vsize, double fov, Matrix4x4 viewTransform) {
         this.hsize = hsize;
         this.vsize = vsize;
         this.fov = fov;
-        this.transform = transform;
-        this.inverseTransform = transform.invert();
-        var halfView = (float)Math.tan(fov / 2);
-        var aspect = (float)hsize / (float)vsize;
+        this.viewTransform = viewTransform;
+        this.inverseViewTransform = viewTransform.invert();
+        var halfView = Math.tan(fov / 2);
+        var aspect = (double) hsize / vsize;
         if (aspect >= 1) {
             halfWidth = halfView;
             halfHeight = halfView / aspect;
@@ -35,15 +36,15 @@ public class Camera {
         pixelSize = (halfWidth * 2) / hsize;
     }
 
-    public Camera(int hsize, int vsize, float fov) {
+    public Camera(int hsize, int vsize, double fov) {
         this(hsize, vsize, fov, Matrix4x4.identity());
     }
 
     public Matrix4x4 transform() {
-        return transform;
+        return viewTransform;
     }
 
-    public float fov() {
+    public double fov() {
         return fov;
     }
 
@@ -55,14 +56,14 @@ public class Camera {
         return hsize;
     }
 
-    public float pixelSize() {
+    public double pixelSize() {
         return pixelSize;
     }
 
-    public Ray rayForPixel(int px, int py, float[] arr) {
+    public Ray rayForPixel(int px, int py, double[] arr) {
         // the offset from the edge of the canvas to the pixel's center
-        var xOffset = (px + 0.5f) * pixelSize;
-        var yOffset = (py + 0.5f) * pixelSize;
+        var xOffset = (px + 0.5) * pixelSize;
+        var yOffset = (py + 0.5) * pixelSize;
 
         // the untransformed coordinates of hte pixel in world space.
         // (remember that the camera looks toward -z, so +x is to the *left*
@@ -77,8 +78,8 @@ public class Camera {
         // using the camera matrix, transform the canvas point and the origin,
         // and then compute the ray's direction vector.
         // (remember that the canvas is at z=-1)
-        var pixel = inverseTransform.multiply(arr);
-        var origin = inverseTransform.multiply(ORIGIN);
+        var pixel = inverseViewTransform.multiply(arr);
+        var origin = inverseViewTransform.multiply(Utils.ORIGIN);
         var direction = Tuple.normalize(Tuple.subtract(pixel, origin));
 
         // TODO get rid of this create. Re-use a Ray or something similar
@@ -89,11 +90,11 @@ public class Camera {
         var image = new Canvas(hsize, vsize);
         if (showPreview) image.setupGui();
         var start = System.nanoTime();
-        var arr = new float[4];
+        var arr = new double[4];
         for (var y = 0; y < vsize; y++) {
             for (var x = 0; x < hsize; x++) {
                 var ray = rayForPixel(x, y, arr);
-                var color = w.colorAt(ray, RenderMode.SHADE);
+                var color = w.colorAt(ray, RenderMode.SHADE, shadows);
                 image.writePixel(x, y, color);
             }
             if (showPreview) image.repaint();
@@ -124,11 +125,11 @@ public class Camera {
                     var xEnd = Math.min(hsize, xStart + tileSize);
                     var yEnd = Math.min(vsize, yStart + tileSize);
                     executor.submit(() -> {
-                        var arr = new float[4];
+                        var arr = new double[4];
                         for (var y = yStart; y < yEnd; y++) {
                             for (var x = xStart; x < xEnd; x++) {
                                 var ray = rayForPixel(x, y, arr);
-                                var color = w.colorAt(ray, RenderMode.SHADE);
+                                var color = w.colorAt(ray, RenderMode.SHADE, shadows);
                                 image.writePixel(x, y, color);
                             }
                         }

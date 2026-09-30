@@ -1,17 +1,16 @@
 package io.zocalo.scene;
 
 import io.zocalo.kernel.Tuple;
-import io.zocalo.Utils;
 
 import java.util.Objects;
 
 public class Material {
 
     private Color color;
-    private float ambient, diffuse, specular;
+    private double ambient, diffuse, specular;
     private int shininess;
 
-    public Material(Color color, float ambient, float diffuse, float specular, int shininess) {
+    public Material(Color color, double ambient, double diffuse, double specular, int shininess) {
         this.color = color;
         this.ambient = ambient;
         this.diffuse = diffuse;
@@ -20,7 +19,7 @@ public class Material {
     }
 
     public Material() {
-        this(Color.WHITE, 0.1f, 0.9f, 0.9f, 200);
+        this(Color.WHITE, 0.1, 0.9, 0.9, 200);
     }
 
     public Material(Builder builder) {
@@ -35,27 +34,27 @@ public class Material {
         this.color = color;
     }
 
-    public float ambient() {
+    public double ambient() {
         return ambient;
     }
 
-    public void ambient(float ambient) {
+    public void ambient(double ambient) {
         this.ambient = ambient;
     }
 
-    public float diffuse() {
+    public double diffuse() {
         return diffuse;
     }
 
-    public void diffuse(float diffuse) {
+    public void diffuse(double diffuse) {
         this.diffuse = diffuse;
     }
 
-    public float specular() {
+    public double specular() {
         return specular;
     }
 
-    public void specular(float specular) {
+    public void specular(double specular) {
         this.specular = specular;
     }
 
@@ -97,7 +96,7 @@ public class Material {
             var reflectDotEye = reflectv.dot(eyev);
             if (reflectDotEye > 0) {
                 // compute the specular contribution
-                var factor = Utils.pow(reflectDotEye, this.shininess);
+                var factor = Math.pow(reflectDotEye, this.shininess);
                 specular = light.intensity().multiply(this.specular).multiply(factor);
             }
         }
@@ -113,8 +112,8 @@ public class Material {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof Material material)) return false;
-        return Float.compare(ambient, material.ambient) == 0 && Float.compare(diffuse, material.diffuse) == 0 &&
-                Float.compare(specular, material.specular) == 0 && shininess == material.shininess &&
+        return Double.compare(ambient, material.ambient) == 0 && Double.compare(diffuse, material.diffuse) == 0 &&
+                Double.compare(specular, material.specular) == 0 && shininess == material.shininess &&
                 Objects.equals(color, material.color);
     }
 
@@ -125,9 +124,9 @@ public class Material {
 
     public static class Builder {
         private Color color = Color.WHITE;
-        private float ambient = 0.1f;
-        private float diffuse = 0.9f;
-        private float specular = 0.9f;
+        private double ambient = 0.1;
+        private double diffuse = 0.9;
+        private double specular = 0.9;
         private int shininess = 200;
 
         public Builder color(Color color) {
@@ -135,23 +134,32 @@ public class Material {
             return this;
         }
 
-        public Builder ambient(float ambient) {
+        public Builder ambient(double ambient) {
             this.ambient = ambient;
             return this;
         }
 
-        public Builder diffuse(float diffuse) {
+        public Builder diffuse(double diffuse) {
             this.diffuse = diffuse;
             return this;
         }
 
-        public Builder specular(float specular) {
+        public Builder specular(double specular) {
             this.specular = specular;
             return this;
         }
 
         public Builder shininess(int shininess) {
             this.shininess = shininess;
+            return this;
+        }
+
+        public Builder from(Material material) {
+            this.color = material.color;
+            this.ambient = material.ambient;
+            this.diffuse = material.diffuse;
+            this.specular = material.specular;
+            this.shininess = material.shininess;
             return this;
         }
 

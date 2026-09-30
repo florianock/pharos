@@ -11,39 +11,39 @@ class Matrix4x4Test {
 
     @Test
     void construct4x4Matrix_throwsIfNot16values() {
-        assertThrows(IllegalArgumentException.class, () -> new Matrix4x4(new float[][] {
+        assertThrows(IllegalArgumentException.class, () -> new Matrix4x4(new double[][] {
                 { 1, 2, 3, 4 },
-                { 5.5f, 6.5f, 7.5f, 8.5f },
+                { 5.5, 6.5, 7.5, 8.5 },
                 { 9, 10, 11, 12 },
-                { 13.5f, 14.5f, 15.5f }
+                { 13.5, 14.5, 15.5 }
         }));
-        assertThrows(IllegalArgumentException.class, () -> new Matrix4x4(new float[][] {
+        assertThrows(IllegalArgumentException.class, () -> new Matrix4x4(new double[][] {
                 { 1, 2, 3, 4 },
-                { 5.5f, 6.5f, 7.5f, 8.5f },
+                { 5.5, 6.5, 7.5, 8.5 },
                 { 9, 10, 11, 12 },
-                { 13.5f, 14.5f, 15.5f, 16.5f, 17.5f }
+                { 13.5, 14.5, 15.5, 16.5, 17.5 }
         }));
-        assertThrows(IllegalArgumentException.class, () -> new Matrix4x4(new float[][] {
+        assertThrows(IllegalArgumentException.class, () -> new Matrix4x4(new double[][] {
                 { 1, 2, 3, 4 },
-                { 5.5f, 6.5f, 7.5f, 8.5f },
+                { 5.5, 6.5, 7.5, 8.5 },
                 { 9, 10, 11, 12 },
-                { 13.5f, 14.5f, 15.5f, 16.5f },
+                { 13.5, 14.5, 15.5, 16.5 },
                 { 1, 2, 5, 6 }
         }));
-        assertThrows(IllegalArgumentException.class, () -> new Matrix4x4(new float[][] {
+        assertThrows(IllegalArgumentException.class, () -> new Matrix4x4(new double[][] {
                 { 1, 2, 3, 4 },
                 { 9, 10, 11, 12 },
-                { 13.5f, 14.5f, 15.5f, 16.5f, 17.5f }
+                { 13.5, 14.5, 15.5, 16.5, 17.5 }
         }));
     }
 
     @Test
     void getValues() {
-        var m = new Matrix4x4(new float[][] {
+        var m = new Matrix4x4(new double[][] {
                 { 1, 2, 3, 4 },
-                { 5.5f, 6.5f, 7.5f, 8.5f },
+                { 5.5, 6.5, 7.5, 8.5 },
                 { 9, 10, 11, 12 },
-                {13.5f, 14.5f, 15.5f, 16.5f }
+                {13.5, 14.5, 15.5, 16.5 }
         });
 
         assertEquals(1, m.get(0, 0));
@@ -57,11 +57,11 @@ class Matrix4x4Test {
 
     @Test
     void getValue_checksBounds() {
-        var m = new Matrix4x4(new float[][] {
+        var m = new Matrix4x4(new double[][] {
                 { 1, 2, 3, 4 },
-                { 5.5f, 6.5f, 7.5f, 8.5f },
+                { 5.5, 6.5, 7.5, 8.5 },
                 { 9, 10, 11, 12 },
-                { 13.5f, 14.5f, 15.5f, 16.5f }
+                { 13.5, 14.5, 15.5, 16.5 }
         });
 
         assertThrows(IndexOutOfBoundsException.class, () -> m.get(4, 0));
@@ -72,21 +72,21 @@ class Matrix4x4Test {
 
     @Test
     void equality() {
-        var a = new Matrix4x4(new float[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2 });
-        var b = new Matrix4x4(new float[] { 1.00001f, 2.00001f, 2.9999f, 3.9999f, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2 });
+        var a = new Matrix4x4(new double[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2 });
+        var b = new Matrix4x4(new double[] { 1.000001, 2.000001, 2.99999, 3.99999, 5, 6, 7, 8, 9, 8, 7, 6, 5, 4, 3, 2 });
 
         assertEquals(a, b);
     }
 
     @Test
     void inequality() {
-        var a = new Matrix4x4(new float[][] {
+        var a = new Matrix4x4(new double[][] {
                 {1, 2, 3, 4},
                 {5, 6, 7, 8},
                 {9, 8, 7, 6},
                 {5, 4, 3, 2}
         });
-        var b = new Matrix4x4(new float[][] {
+        var b = new Matrix4x4(new double[][] {
                 {2, 3, 4, 5},
                 {6, 7, 8, 9},
                 {8, 7, 6, 5},
@@ -98,13 +98,13 @@ class Matrix4x4Test {
 
     @Test
     void multiplication_matrix() {
-        var a = new Matrix4x4(new float[][] {
+        var a = new Matrix4x4(new double[][] {
                 {1, 2, 3, 4},
                 {5, 6, 7, 8},
                 {9, 8, 7, 6},
                 {5, 4, 3, 2}
         });
-        var b = new Matrix4x4(new float[][] {
+        var b = new Matrix4x4(new double[][] {
                 {-2, 1, 2, 3},
                 {3, 2, 1, -1},
                 {4, 3, 6, 5},
@@ -113,7 +113,7 @@ class Matrix4x4Test {
 
         var result = a.multiply(b);
 
-        var expected = new Matrix4x4(new float[][]{
+        var expected = new Matrix4x4(new double[][]{
                 {20, 22, 50, 48},
                 {44, 54, 114, 108},
                 {40, 58, 110, 102},
@@ -124,7 +124,7 @@ class Matrix4x4Test {
 
     @Test
     void multiplication_tuple() {
-        var a = new Matrix4x4(new float[][] {
+        var a = new Matrix4x4(new double[][] {
                 {1, 2, 3, 4},
                 {2, 4, 4, 2},
                 {8, 6, 4, 1},
@@ -140,7 +140,7 @@ class Matrix4x4Test {
 
     @Test
     void multiplication_identityMatrix() {
-        var a = new Matrix4x4(new float[][] {
+        var a = new Matrix4x4(new double[][] {
                 {0, 1, 2, 4},
                 {1, 2, 4, 8},
                 {2, 4, 8, 16},
@@ -152,7 +152,7 @@ class Matrix4x4Test {
 
     @Test
     void transpose() {
-        var a = new Matrix4x4(new float[][] {
+        var a = new Matrix4x4(new double[][] {
                 { 0, 9, 3, 0 },
                 { 9, 8, 0, 8 },
                 { 1, 8, 5, 3 },
@@ -161,7 +161,7 @@ class Matrix4x4Test {
 
         var result = a.transpose();
 
-        var expected = new Matrix4x4(new float[][] {
+        var expected = new Matrix4x4(new double[][] {
                 { 0, 9, 1, 0 },
                 { 9, 8, 8, 0 },
                 { 3, 0, 5, 5 },
@@ -177,14 +177,14 @@ class Matrix4x4Test {
 
     @Test
     void subMatrix() {
-        var a = new Matrix4x4(new float[][]{
+        var a = new Matrix4x4(new double[][]{
                 {-6, 1, 1, 6},
                 {-8, 5, 8, 6},
                 {-1, 0, 8, 2},
                 {-7, 1, -1, 1}
         });
 
-        var expected = new Matrix3x3(new float[][]{
+        var expected = new Matrix3x3(new double[][]{
                 {-6, 1, 6},
                 {-8, 8, 6},
                 {-7, -1, 1}
@@ -195,7 +195,7 @@ class Matrix4x4Test {
 
     @Test
     void determinant() {
-        var a = new Matrix4x4(new float[][]{
+        var a = new Matrix4x4(new double[][]{
                 {-2, -8, 3, 5},
                 {-3, 1, 7, 3},
                 {1, 2, -9, 6},
@@ -211,7 +211,7 @@ class Matrix4x4Test {
 
     @Test
     void invertibleMatrix() {
-        var a = new Matrix4x4(new float[][]{
+        var a = new Matrix4x4(new double[][]{
                 {6, 4, 4, 4},
                 {5, 5, 7, 6},
                 {4, -9, 3, -7},
@@ -224,7 +224,7 @@ class Matrix4x4Test {
 
     @Test
     void nonInvertibleMatrix() {
-        var a = new Matrix4x4(new float[][]{
+        var a = new Matrix4x4(new double[][]{
                 {-4, 2, -2, -3},
                 {9, 6, 2, 6},
                 {0, -5, 1, -5},
@@ -237,7 +237,7 @@ class Matrix4x4Test {
 
     @Test
     void inverse1() {
-        var a = new Matrix4x4(new float[][]{
+        var a = new Matrix4x4(new double[][]{
                 {-5, 2, 6, -8},
                 {1, -5, 1, 8},
                 {7, 7, -6, -7},
@@ -248,63 +248,63 @@ class Matrix4x4Test {
 
         assertEquals(532, a.determinant());
         assertEquals(-160, a.cofactor(2, 3));
-        assertEquals(-160/532f, b.get(3, 2));
+        assertEquals(-160d/532, b.get(3, 2));
         assertEquals(105, a.cofactor(3, 2));
-        assertEquals(105/532f, b.get(2, 3));
-        var expected = new Matrix4x4(new float[][]{
-                {0.21805f, 0.45113f, 0.24060f, -0.04511f},
-                {-0.80827f, -1.45677f, -0.44361f, 0.52068f},
-                {-0.07895f, -0.22368f, -0.05263f, 0.19737f},
-                {-0.52256f, -0.81391f, -0.30075f, 0.30639f}
+        assertEquals(105d/532, b.get(2, 3));
+        var expected = new Matrix4x4(new double[][]{
+                {0.21805, 0.45113, 0.24060, -0.04511},
+                {-0.80827, -1.45677, -0.44361, 0.52068},
+                {-0.07895, -0.22368, -0.05263, 0.19737},
+                {-0.52256, -0.81391, -0.30075, 0.30639}
         });
         assertEquals(expected, b);
     }
 
     @Test
     void inverse2() {
-        var a = new Matrix4x4(new float[][]{
+        var a = new Matrix4x4(new double[][]{
                 {8, -5, 9, 2},
                 {7, 5, 6, 1},
                 {-6, 0, 9, 6},
                 {-3, 0, -9, -4}
         });
 
-        var expected = new Matrix4x4(new float[][]{
-                {-0.15385f, -0.15385f, -0.28205f, -0.53846f},
-                {-0.07692f, 0.12308f, 0.02564f, 0.03077f},
-                {0.35897f, 0.35897f, 0.43590f, 0.92308f},
-                {-0.69231f, -0.69231f, -0.76923f, -1.92308f}
+        var expected = new Matrix4x4(new double[][]{
+                {-0.15385, -0.15385, -0.28205, -0.53846},
+                {-0.07692, 0.12308, 0.02564, 0.03077},
+                {0.35897, 0.35897, 0.43590, 0.92308},
+                {-0.69231, -0.69231, -0.76923, -1.92308}
         });
         assertEquals(expected, a.invert());
     }
 
     @Test
     void inverse3() {
-        var a = new Matrix4x4(new float[][]{
+        var a = new Matrix4x4(new double[][]{
                 {9, 3, 0, 9},
                 {-5, -2, -6, -3},
                 {-4, 9, 6, 4},
                 {-7, 6, 6, 2}
         });
 
-        var expected = new Matrix4x4(new float[][]{
-                {-0.04074f, -0.07778f, 0.14444f, -0.22222f},
-                {-0.07778f, 0.03333f, 0.36667f, -0.33333f},
-                {-0.02901f, -0.14630f, -0.10926f, 0.12963f},
-                {0.17778f, 0.06667f, -0.26667f, 0.33333f}
+        var expected = new Matrix4x4(new double[][]{
+                {-0.04074, -0.07778, 0.14444, -0.22222},
+                {-0.07778, 0.03333, 0.36667, -0.33333},
+                {-0.02901, -0.14630, -0.10926, 0.12963},
+                {0.17778, 0.06667, -0.26667, 0.33333}
         });
         assertEquals(expected, a.invert());
     }
 
     @Test
     void inverse_reversesMultiplication() {
-        var a = new Matrix4x4(new float[][]{
+        var a = new Matrix4x4(new double[][]{
                 {3, -9, 7, 3},
                 {3, -8, 2, -9},
                 {-4, 4, 4, 1},
                 {-6, 5, -1, 1}
         });
-        var b = new Matrix4x4(new float[][]{
+        var b = new Matrix4x4(new double[][]{
                 {8, 2, 2, 2},
                 {3, -1, 7, 0},
                 {7, 0, 5, 4},
@@ -316,7 +316,7 @@ class Matrix4x4Test {
 
     @Test
     void miscellaneous_tests() {
-        var a = new Matrix4x4(new float[][]{
+        var a = new Matrix4x4(new double[][]{
                 {3, -9, 7, 3},
                 {3, -8, 2, -9},
                 {-4, 4, 4, 1},
@@ -392,38 +392,38 @@ class Matrix4x4Test {
     @Test
     void rotation_on_x_axis() {
         var p = Tuple.point(0, 1, 0);
-        var halfQuarter = Matrix4x4.rotationOnX(Utils.PI / 4);
+        var halfQuarter = Matrix4x4.rotationOnX(Utils.QTR_PI);
         var fullQuarter = Matrix4x4.rotationOnX(Utils.HALF_PI);
 
-        assertEquals(Tuple.point(0, (float) Math.sqrt(2) / 2, (float) Math.sqrt(2) / 2), halfQuarter.multiply(p));
+        assertEquals(Tuple.point(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2), halfQuarter.multiply(p));
         assertEquals(Tuple.point(0, 0, 1), fullQuarter.multiply(p));
     }
 
     @Test
     void rotation_on_x_axis_inverse_rotates_in_opposite_direction() {
         var p = Tuple.point(0, 1, 0);
-        var halfQuarter = Matrix4x4.rotationOnX(Utils.PI / 4);
+        var halfQuarter = Matrix4x4.rotationOnX(Utils.QTR_PI);
 
-        assertEquals(Tuple.point(0, (float) Math.sqrt(2) / 2, (float) -Math.sqrt(2) / 2), halfQuarter.invert().multiply(p));
+        assertEquals(Tuple.point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2), halfQuarter.invert().multiply(p));
     }
 
     @Test
     void rotation_on_y_axis() {
         var p = Tuple.point(0, 0, 1);
-        var halfQuarter = Matrix4x4.rotationOnY(Utils.PI / 4);
+        var halfQuarter = Matrix4x4.rotationOnY(Utils.QTR_PI);
         var fullQuarter = Matrix4x4.rotationOnY(Utils.HALF_PI);
 
-        assertEquals(Tuple.point((float) Math.sqrt(2) / 2, 0, (float) Math.sqrt(2) / 2), halfQuarter.multiply(p));
+        assertEquals(Tuple.point(Math.sqrt(2) / 2, 0, Math.sqrt(2) / 2), halfQuarter.multiply(p));
         assertEquals(Tuple.point(1, 0, 0), fullQuarter.multiply(p));
     }
 
     @Test
     void rotation_on_z_axis() {
         var p = Tuple.point(0, 1, 0);
-        var halfQuarter = Matrix4x4.rotationOnZ(Utils.PI / 4);
+        var halfQuarter = Matrix4x4.rotationOnZ(Utils.QTR_PI);
         var fullQuarter = Matrix4x4.rotationOnZ(Utils.HALF_PI);
 
-        assertEquals(Tuple.point((float) -Math.sqrt(2) / 2, (float) Math.sqrt(2) / 2, 0), halfQuarter.multiply(p));
+        assertEquals(Tuple.point(-Math.sqrt(2) / 2, Math.sqrt(2) / 2, 0), halfQuarter.multiply(p));
         assertEquals(Tuple.point(-1, 0, 0), fullQuarter.multiply(p));
     }
 

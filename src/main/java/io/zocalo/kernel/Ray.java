@@ -5,18 +5,18 @@ import java.util.Arrays;
 import static io.zocalo.kernel.Tuple.add;
 import static io.zocalo.kernel.Tuple.multiply;
 
-public record Ray(float[] origin, float[] direction) {
+public record Ray(double[] origin, double[] direction) {
 
     public Ray {
         if (!Tuple.isPoint(origin)) throw new IllegalStateException("Not a valid origin: " + Arrays.toString(origin));
         if (!Tuple.isVector(direction)) throw new IllegalStateException("Not a valid direction: " + Arrays.toString(direction));
     }
 
-    public Tuple position(float t) {
+    public Tuple position(double t) {
         return new Tuple(position(origin.clone(), direction.clone(), t));
     }
 
-    public static float[] position(float[] o, float[] d, float t) {
+    public static double[] position(double[] o, double[] d, double t) {
         return add(o, multiply(d, t));
     }
 
@@ -28,7 +28,7 @@ public record Ray(float[] origin, float[] direction) {
         return new Ray(origin.values(), direction.values());
     }
 
-    public static Ray create(float[] origin, float[] direction) {
+    public static Ray create(double[] origin, double[] direction) {
         return new Ray(origin, direction);
     }
 }

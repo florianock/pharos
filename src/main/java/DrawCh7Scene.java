@@ -4,34 +4,34 @@ import io.zocalo.kernel.Matrix4x4;
 import io.zocalo.kernel.Tuple;
 import io.zocalo.scene.*;
 
-import static io.zocalo.Utils.PI;
+import static io.zocalo.Utils.*;
 
 void main() throws IOException {
 
-    var floor = Shape.sphere(Matrix4x4.scaling(10,0.01f, 10),
+    var floor = new Sphere(Matrix4x4.scaling(10,0.01f, 10),
             new Material.Builder()
                     .color(Color.create(1, 0.9f, 0.9f))
                     .specular(0)
                     .build()
     );
 
-    var left_wall = Shape.sphere(
+    var left_wall = new Sphere(
             Matrix4x4.translation(0, 0, 5)
-                    .multiply(Matrix4x4.rotationOnY(-PI / 4))
-                    .multiply(Matrix4x4.rotationOnX(PI / 2))
+                    .multiply(Matrix4x4.rotationOnY(-QTR_PI))
+                    .multiply(Matrix4x4.rotationOnX(HALF_PI))
                     .multiply(Matrix4x4.scaling(10, 0.01f, 10)),
-            floor.material()
+            floor.getMaterial()
     );
 
-    var right_wall = Shape.sphere(
+    var right_wall = new Sphere(
             Matrix4x4.translation(0, 0, 5)
-                    .multiply(Matrix4x4.rotationOnY(PI / 4))
-                    .multiply(Matrix4x4.rotationOnX(PI / 2))
+                    .multiply(Matrix4x4.rotationOnY(QTR_PI))
+                    .multiply(Matrix4x4.rotationOnX(HALF_PI))
                     .multiply(Matrix4x4.scaling(10, 0.01f, 10)),
-            floor.material()
+            floor.getMaterial()
     );
 
-    var middle = Shape.sphere(
+    var middle = new Sphere(
             Matrix4x4.translation(-0.5f, 1, 0.5f),
             new Material.Builder()
                     .color(Color.create(0.1f, 1, 0.5f))
@@ -40,7 +40,7 @@ void main() throws IOException {
                     .build()
     );
 
-    var right = Shape.sphere(
+    var right = new Sphere(
             Matrix4x4.translation(1.5f, 0.5f, -0.5f)
                     .multiply(Matrix4x4.scaling(0.5f, 0.5f, 0.5f)),
             new Material.Builder()
@@ -50,7 +50,7 @@ void main() throws IOException {
                     .build()
     );
 
-    var left = Shape.sphere(
+    var left = new Sphere(
             Matrix4x4.translation(-1.5f, 0.33f, -0.75f)
                     .multiply(Matrix4x4.scaling(0.33f, 0.33f, 0.33f)),
             new Material.Builder()
@@ -65,9 +65,9 @@ void main() throws IOException {
     var world = new World(objects, light);
 
     var camera = new Camera(1280, 1024, PI / 3, Tuple.viewTransform(
-            new float[] { 0, 1.5f, -5, 1 },
-            new float[] { 0,    1,  0, 1 },
-            new float[] { 0,    1,  0, 0 }
+            new double[] { 0, 1.5f, -5, 1 },
+            new double[] { 0,    1,  0, 1 },
+            new double[] { 0,    1,  0, 0 }
     ));
 
     var canvas = camera.renderParallel(world);
