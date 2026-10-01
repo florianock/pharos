@@ -66,13 +66,13 @@ public class Material {
         this.shininess = shininess;
     }
 
-    public Color lighting(Light light, Tuple point, Tuple eyev, Tuple normalv, boolean shadowed) {
+    public Color lighting(Light light, double[] point, double[] eyev, double[] normalv, boolean shadowed) {
 
         // combine the surface color with the light's color / intensity
         var effectiveColor = color.multiply(light.intensity());
 
         // find the direction to the light source
-        var lightv = light.position().subtract(point).normalize();
+        var lightv = Tuple.normalize(Tuple.subtract(light.position().values().clone(), point));
 
         // compute the ambient contribution
         var ambient = effectiveColor.multiply(this.ambient);
@@ -82,7 +82,7 @@ public class Material {
         // lightDotNormal represents the cosine of the angle between the
         // light vector and the normal vector. A negative number means the
         // light is on the other side of the surface.
-        var lightDotNormal = lightv.dot(normalv);
+        var lightDotNormal = Tuple.dot(lightv.clone(), normalv);
         var diffuse = Color.BLACK;
         var specular = Color.BLACK;
         if (lightDotNormal >= 0) {
@@ -92,8 +92,8 @@ public class Material {
             // reflectDotEye represents the cosine of the angle between the
             // reflection vector and the eye vector. A negative number means the
             // light reflects away from the eye.
-            var reflectv = lightv.negate().reflect(normalv);
-            var reflectDotEye = reflectv.dot(eyev);
+            var reflectv = Tuple.reflect(Tuple.negate(lightv), normalv);
+            var reflectDotEye = Tuple.dot(reflectv, eyev);
             if (reflectDotEye > 0) {
                 // compute the specular contribution
                 var factor = Math.pow(reflectDotEye, this.shininess);

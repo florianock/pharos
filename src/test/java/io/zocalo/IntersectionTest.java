@@ -11,10 +11,10 @@ class IntersectionTest {
     @Test
     void intersection_encapsulates_t_and_object() {
         var s = new Sphere();
-        var i = new Intersection(3.5f, s);
+        var i = new Intersection(3.5, s);
 
-        assertEquals(3.5f, i.t());
-        assertEquals(s, i.shape());
+        assertEquals(3.5, i.t());
+        assertEquals(s, i.object());
     }
 
     @Test
@@ -26,8 +26,8 @@ class IntersectionTest {
         var xs = new Intersections(i1, i2);
 
         assertEquals(2, xs.count());
-        assertEquals(s, xs.get(0).shape());
-        assertEquals(s, xs.get(1).shape());
+        assertEquals(s, xs.get(0).object());
+        assertEquals(s, xs.get(1).object());
     }
 
     @Test
@@ -92,10 +92,10 @@ class IntersectionTest {
         var comps = i.prepareComputations(r);
 
         assertEquals(i.t(), comps.t());
-        assertEquals(i.shape(), comps.object());
-        assertEquals(Tuple.point(0, 0, -1), comps.point());
-        assertEquals(Tuple.vector(0, 0, -1), comps.eyev());
-        assertEquals(Tuple.vector(0, 0, -1), comps.normalv());
+        assertEquals(i.object(), comps.object());
+        assertArrayEquals(new double[]{0, 0, -1, 1}, comps.point());
+        assertArrayEquals(new double[]{0, 0, -1, 0}, comps.eyev());
+        assertArrayEquals(new double[]{0, 0, -1, 0}, comps.normalv());
     }
 
     @Test
@@ -113,11 +113,11 @@ class IntersectionTest {
         var shape = new Sphere();
         var i = new Intersection(1, shape);
         var comps = i.prepareComputations(r);
-        assertEquals(Tuple.point(0, 0, 1), comps.point());
-        assertEquals(Tuple.vector(0, 0, -1), comps.eyev());
+        assertArrayEquals(new double[]{0, 0, 1, 1}, comps.point());
+        assertArrayEquals(new double[]{0, 0, -1, 0}, comps.eyev());
         assertTrue(comps.inside());
         // normal would have been (0, 0, 1), but is inverted!
-        assertEquals(Tuple.vector(0, 0, -1), comps.normalv());
+        assertArrayEquals(new double[]{0, 0, -1, 0}, comps.normalv());
     }
 
     @Test
@@ -126,7 +126,7 @@ class IntersectionTest {
         var shape = new Sphere(Matrix4x4.translation(0, 0, 1));
         var i = new Intersection(5, shape);
         var comps = i.prepareComputations(r);
-        assertTrue(comps.overPoint().z() < -Utils.EPSILON/2);
-        assertTrue(comps.point().z() > comps.overPoint().z());
+        assertTrue(comps.overPoint()[2] < -Utils.EPSILON/2);
+        assertTrue(comps.point()[2] > comps.overPoint()[2]);
     }
 }

@@ -50,10 +50,10 @@ void main() throws IOException {
                             var h = xs.hit();
                             if (h.isPresent()) {
                                 var hit = h.get();
-                                var point = r.position(hit.t());
-                                var normal = hit.shape().normalAt(point);
-                                var eye = new Tuple(Tuple.negate(r.direction()));
-                                var color = hit.shape().getMaterial().lighting(light, point, eye, new Tuple(normal), false);
+                                var point = r.position(hit.t()).values();
+                                var normal = hit.object().normalAt(point);
+                                var eye = Tuple.negate(r.direction());
+                                var color = hit.object().getMaterial().lighting(light, point, eye, normal, false);
                                 canvas.writePixel(x, y, color);
                             }
                         }

@@ -4,14 +4,14 @@ import io.zocalo.kernel.*;
 
 import java.util.Arrays;
 
-public record World(Shape[] objects, Light light) {
+public record World(Shape[] objects, Light[] lights) {
 
     public World() {
         this(new Shape[0], null);
     }
 
-    public World(Light light) {
-        this(getDefaultObjects(), light);
+    public World(Light[] lights) {
+        this(getDefaultObjects(), lights);
     }
 
     public World(Shape[] objects) {
@@ -44,13 +44,14 @@ public record World(Shape[] objects, Light light) {
         };
     }
 
-    private static Light getDefaultLight() {
-        return Light.pointLight(Tuple.point(-10, 10, -10), Color.create(1, 1, 1));
+    private static Light[] getDefaultLight() {
+        return new Light[] { Light.pointLight(Tuple.point(-10, 10, -10), Color.create(1, 1, 1)) };
     }
 
     public Color shadeHit(Computations comps, boolean shadows) {
-        // TODO: for multiple light sources, call comps.shadeHit() for each of them and add colors
-        return comps.shadeHit(light, shadows && isShadowed(comps.overPoint()));
+        return Arrays.stream(lights)
+                .map(light -> comps.shadeHit(light, shadows && isShadowed(comps.overPoint())))
+                .reduce(Color.BLACK, Color::add);
     }
 
     public Color colorAt(Ray r) {
@@ -70,7 +71,7 @@ public record World(Shape[] objects, Light light) {
     }
 
     private Color renderDepth(Ray r, Computations comps) {
-        var hitPoint = comps.point().values();
+        var hitPoint = comps.point();
 
         // Distance from ray origin (camera) to hit point
         var distance = Tuple.magnitude(Tuple.subtract(hitPoint, r.origin()));
@@ -90,21 +91,23 @@ public record World(Shape[] objects, Light light) {
         var normal = comps.normalv();
 
         // Remap [-1, +1] → [0, 1]
-        var red = normal.x() * 0.5 + 0.5;
-        var green = normal.y() * 0.5 + 0.5;
-        var blue = normal.z() * 0.5 + 0.5;
+        var red = normal[0] * 0.5 + 0.5;
+        var green = normal[1] * 0.5 + 0.5;
+        var blue = normal[2] * 0.5 + 0.5;
 
         return Color.create(red, green, blue);
     }
 
-    public boolean isShadowed(Tuple point) {
-        var v = light.position().subtract(point);
-        var distance = v.magnitude();
-        var direction = v.normalize();
+    public boolean isShadowed(double[] point) {
 
-        var r = Ray.create(point, direction);
-        var xs = intersect(r);
-
-        return xs.hit().map(i -> i.t() < distance).orElse(false);
+        return Arrays.stream(lights)
+                .allMatch(light -> {
+                    var v = Tuple.subtract(light.position().values().clone(), point);
+                    var distance = Tuple.magnitude(v);
+                    var direction = Tuple.normalize(v);
+                    var r = Ray.create(point, direction);
+                    var xs = intersect(r);
+                    return xs.hit().map(i -> i.t() < distance).orElse(false);
+                });
     }
 }

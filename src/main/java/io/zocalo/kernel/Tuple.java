@@ -43,13 +43,13 @@ public class Tuple {
         return isPoint(values);
     }
 
-    public static boolean isPoint(double[] t) { return equalEnough(t[3], 1.0);}
+    public static boolean isPoint(double[] t) { return t.length == 4 && equalEnough(t[3], 1.0);}
 
     public boolean isVector() {
         return isVector(values);
     }
 
-    public static boolean isVector(double[] t) { return equalEnough(t[3], 0.0);}
+    public static boolean isVector(double[] t) { return t.length == 4 && equalEnough(t[3], 0.0);}
 
     public Tuple add(Tuple t) {
         return new Tuple(add(values.clone(), t.values()));

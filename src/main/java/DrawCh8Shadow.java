@@ -62,7 +62,7 @@ void main() throws IOException {
 
     var objects = new Shape[] { wall, palm, wrist, thumb, index, middle, ring, pinky };
     var light = Light.pointLight(Tuple.point(0, 0, -100), Color.WHITE);
-    var world = new World(objects, light);
+    var world = new World(objects, new Light[]{light});
 
     var camera = new Camera(1000, 500, PI / 6, Tuple.viewTransform(
             new double[] { 40, 0, -70, 1 },

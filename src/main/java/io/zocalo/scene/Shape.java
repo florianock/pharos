@@ -19,9 +19,23 @@ public abstract class Shape {
         inverseTransformTranspose = inverseTransform.transpose();
     }
 
-    public abstract Intersections intersect(Ray r);
+    public abstract double[] localNormalAt(double[] worldPoint);
 
-    public abstract double[] normalAt(Tuple worldPoint);
+    public abstract Intersections localIntersect(Ray localRay);
+
+    public double[] normalAt(double[] worldPoint) {
+        if (!Tuple.isPoint(worldPoint)) throw new IllegalArgumentException();
+        var localPoint = inverseTransform.multiply(worldPoint);
+        var localNormal = localNormalAt(localPoint);
+        var worldNormal = inverseTransformTranspose.multiply(localNormal);
+        worldNormal[3] = 0;
+        return Tuple.normalize(worldNormal);
+    }
+
+    public Intersections intersect(Ray r) {
+        var localRay = r.transform(inverseTransform);
+        return localIntersect(localRay);
+    }
 
     public Material getMaterial() {
         return material;
@@ -41,7 +55,21 @@ public abstract class Shape {
         inverseTransformTranspose = inverseTransform.transpose();
     }
 
-    public Color lighting(Light light, Tuple point, Tuple eyev, Tuple normalv, boolean shadowed) {
+    public Color lighting(Light light, double[] point, double[] eyev, double[] normalv, boolean shadowed) {
         return material.lighting(light, point, eyev, normalv, shadowed);
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (!(o instanceof Shape shape)) return false;
+
+        return material.equals(shape.material) && transform.equals(shape.transform);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = material.hashCode();
+        result = 31 * result + transform.hashCode();
+        return result;
     }
 }

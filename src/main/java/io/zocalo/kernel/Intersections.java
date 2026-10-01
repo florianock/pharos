@@ -4,10 +4,10 @@ import java.util.*;
 
 public class Intersections {
 
-    private final ArrayList<Intersection> intersections;
+    private final ArrayList<Intersection> hits;
 
     public Intersections(List<Intersection> is) {
-        this.intersections = new ArrayList<>(is);
+        this.hits = new ArrayList<>(is);
     }
 
     public Intersections(Intersection... is) {
@@ -15,41 +15,34 @@ public class Intersections {
     }
 
     public Intersections add(Intersection i) {
-        intersections.add(i);
+        hits.add(i);
         return this;
     }
 
     public Intersections addAll(Intersection... is) {
-        intersections.addAll(List.of(is));
+        hits.addAll(List.of(is));
         return this;
     }
 
     public int count() {
-        return intersections.size();
+        return hits.size();
     }
 
     public ArrayList<Intersection> intersections() {
-        return intersections;
+        return hits;
     }
 
     public Intersection get(int index) {
-        if (index < 0 || intersections.size() <= index) throw new IndexOutOfBoundsException();
+        if (index < 0 || hits.size() <= index) throw new IndexOutOfBoundsException();
 
-        intersections.sort(Comparator.comparingDouble(Intersection::t));
-        return intersections.get(index);
-    }
-
-    public Optional<Intersection> getFirst() {
-        if (intersections.isEmpty()) return Optional.empty();
-
-        intersections.sort(Comparator.comparingDouble(Intersection::t));
-        return Optional.of(intersections.getFirst());
+        hits.sort(Comparator.comparingDouble(Intersection::t));
+        return hits.get(index);
     }
 
     public Optional<Intersection> hit() {
-        intersections.sort(Comparator.comparingDouble(Intersection::t));
-        for (var i : intersections) {
-            if (i.t() > 0) return Optional.of(i);
+        hits.sort(Comparator.comparingDouble(Intersection::t));
+        for (var hit : hits) {
+            if (hit.t() > 0) return Optional.of(hit);
         }
         return Optional.empty();
     }

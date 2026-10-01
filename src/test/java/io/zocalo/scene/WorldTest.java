@@ -13,7 +13,7 @@ class WorldTest {
     void createWorldTest() {
         var w = new World();
         assertEquals(0, w.objects().length);
-        assertNull(w.light());
+        assertNull(w.lights());
     }
 
     @Test
@@ -27,7 +27,7 @@ class WorldTest {
                         .build());
         var s2 = new Sphere(Matrix4x4.scaling(0.5, 0.5, 0.5));
         var w = World.defaultWorld();
-        assertEquals(light, w.light());
+        assertEquals(light, (w.lights())[0]);
         assertTrue(Arrays.asList(w.objects()).contains(s1));
         assertTrue(Arrays.asList(w.objects()).contains(s2));
     }
@@ -57,7 +57,7 @@ class WorldTest {
 
     @Test
     void shadingAnIntersectionFromInside() {
-        var w = new World(Light.pointLight(Tuple.point(0, 0.25, 0), Color.WHITE));
+        var w = new World(new Light[]{Light.pointLight(Tuple.point(0, 0.25, 0), Color.WHITE)});
         var r = Ray.create(Tuple.point(0, 0, 0), Tuple.vector(0, 0, 1));
         var shape = (w.objects())[1];
         var i = new Intersection(0.5, shape);
@@ -97,7 +97,7 @@ class WorldTest {
     @Test
     void noShadowWhenNothingIsCollinearWithPointAndLight() {
         var w = World.defaultWorld();
-        var p = Tuple.point(0, 10, 0);
+        var p = new double[]{0, 10, 0, 1};
 
         assertFalse(w.isShadowed(p));
     }
@@ -105,7 +105,7 @@ class WorldTest {
     @Test
     void shadowWhenObjectIsBetweenPointAndLight() {
         var w = World.defaultWorld();
-        var p = Tuple.point(10, -10, 10);
+        var p = new double[]{10, -10, 10, 1};
 
         assertTrue(w.isShadowed(p));
     }
@@ -113,7 +113,7 @@ class WorldTest {
     @Test
     void noShadowWhenObjectIsBehindLight() {
         var w = World.defaultWorld();
-        var p = Tuple.point(-20, 20, -20);
+        var p = new double[]{-20, 20, -20, 1};
 
         assertFalse(w.isShadowed(p));
     }
@@ -121,7 +121,7 @@ class WorldTest {
     @Test
     void noShadowWhenObjectIsBehindPoint() {
         var w = World.defaultWorld();
-        var p = Tuple.point(-2, 2, -2);
+        var p = new double[]{-2, 2, -2, 1};
 
         assertFalse(w.isShadowed(p));
     }
@@ -131,7 +131,7 @@ class WorldTest {
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
         var s1 = new Sphere();
         var s2 = new Sphere(Matrix4x4.translation(0, 0, 10));
-        var w = new World(new Shape[] { s1, s2 }, light);
+        var w = new World(new Shape[] { s1, s2 }, new Light[]{light});
         var r = Ray.create(Tuple.point(0, 0, 5), Tuple.vector(0, 0, 1));
         var i = new Intersection(4, s2);
 
