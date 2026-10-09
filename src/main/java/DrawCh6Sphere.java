@@ -53,7 +53,7 @@ void main() throws IOException {
                                 var point = r.position(hit.t()).values();
                                 var normal = hit.object().normalAt(point);
                                 var eye = Tuple.negate(r.direction());
-                                var color = hit.object().getMaterial().lighting(light, point, eye, normal, false);
+                                var color = hit.object().getMaterial().lighting(light, point, eye, normal, 1.0);
                                 canvas.writePixel(x, y, color);
                             }
                         }

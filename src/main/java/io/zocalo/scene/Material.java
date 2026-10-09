@@ -1,7 +1,5 @@
 package io.zocalo.scene;
 
-import io.zocalo.kernel.Tuple;
-
 import java.util.Objects;
 
 public class Material {
@@ -66,43 +64,19 @@ public class Material {
         this.shininess = shininess;
     }
 
-    public Color lighting(Light light, double[] point, double[] eyev, double[] normalv, boolean shadowed) {
+    public Color lighting(Light light, double[] point, double[] eyev, double[] normalv, double shadowedIntensity) {
 
         // combine the surface color with the light's color / intensity
         var effectiveColor = color.multiply(light.intensity());
 
-        // find the direction to the light source
-        var lightv = Tuple.normalize(Tuple.subtract(light.position().values().clone(), point));
-
         // compute the ambient contribution
         var ambient = effectiveColor.multiply(this.ambient);
 
-        if (shadowed) return ambient;
-
-        // lightDotNormal represents the cosine of the angle between the
-        // light vector and the normal vector. A negative number means the
-        // light is on the other side of the surface.
-        var lightDotNormal = Tuple.dot(lightv.clone(), normalv);
-        var diffuse = Color.BLACK;
-        var specular = Color.BLACK;
-        if (lightDotNormal >= 0) {
-            // compute the diffuse contribution
-            diffuse = effectiveColor.multiply(this.diffuse).multiply(lightDotNormal);
-
-            // reflectDotEye represents the cosine of the angle between the
-            // reflection vector and the eye vector. A negative number means the
-            // light reflects away from the eye.
-            var reflectv = Tuple.reflect(Tuple.negate(lightv), normalv);
-            var reflectDotEye = Tuple.dot(reflectv, eyev);
-            if (reflectDotEye > 0) {
-                // compute the specular contribution
-                var factor = Math.pow(reflectDotEye, this.shininess);
-                specular = light.intensity().multiply(this.specular).multiply(factor);
-            }
-        }
+        var diffuseAndSpecular = light.getAveragedDiffuseAndSpecularFactor(point, eyev, normalv, shadowedIntensity,
+                effectiveColor, this);
 
         // Add the three contributions together to get the final shading
-        return ambient.add(diffuse).add(specular);
+        return ambient.add(diffuseAndSpecular);
     }
 
     public static Material create() {
@@ -120,6 +94,17 @@ public class Material {
     @Override
     public int hashCode() {
         return Objects.hash(color, ambient, diffuse, specular, shininess);
+    }
+
+    @Override
+    public String toString() {
+        return "Material{" +
+                "color=" + color +
+                ", ambient=" + ambient +
+                ", diffuse=" + diffuse +
+                ", specular=" + specular +
+                ", shininess=" + shininess +
+                '}';
     }
 
     public static class Builder {

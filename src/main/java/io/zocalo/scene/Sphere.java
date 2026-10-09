@@ -50,4 +50,12 @@ public class Sphere extends Shape {
         if (!Tuple.isPoint(localPoint)) throw new IllegalArgumentException();
         return Tuple.subtract(localPoint, Utils.ORIGIN);
     }
+
+    @Override
+    public String toString() {
+        return "Sphere{" +
+                "material=" + material +
+                ", transform=" + transform +
+                '}';
+    }
 }

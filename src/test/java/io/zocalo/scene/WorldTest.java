@@ -2,6 +2,8 @@ package io.zocalo.scene;
 
 import io.zocalo.kernel.*;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.util.Arrays;
 
@@ -95,38 +97,6 @@ class WorldTest {
     }
 
     @Test
-    void noShadowWhenNothingIsCollinearWithPointAndLight() {
-        var w = World.defaultWorld();
-        var p = new double[]{0, 10, 0, 1};
-
-        assertFalse(w.isShadowed(p));
-    }
-
-    @Test
-    void shadowWhenObjectIsBetweenPointAndLight() {
-        var w = World.defaultWorld();
-        var p = new double[]{10, -10, 10, 1};
-
-        assertTrue(w.isShadowed(p));
-    }
-
-    @Test
-    void noShadowWhenObjectIsBehindLight() {
-        var w = World.defaultWorld();
-        var p = new double[]{-20, 20, -20, 1};
-
-        assertFalse(w.isShadowed(p));
-    }
-
-    @Test
-    void noShadowWhenObjectIsBehindPoint() {
-        var w = World.defaultWorld();
-        var p = new double[]{-2, 2, -2, 1};
-
-        assertFalse(w.isShadowed(p));
-    }
-
-    @Test
     void shadeHitIsGivenAnIntersectionInShadow() {
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
         var s1 = new Sphere();
@@ -139,5 +109,21 @@ class WorldTest {
         var c = w.shadeHit(comps, true);
 
         assertEquals(Color.create(0.1, 0.1, 0.1), c);
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "-10, -10, -10, false",
+            "10, 10, 10, true",
+            "-20, -20, -20, false",
+            "-5, -5, -5, false"
+
+    })
+    void isShadowedTestsForOcclusionBetweenTwoPoints(int px, int py, int pz, boolean expected) {
+        var w = World.defaultWorld();
+        var lightPosition = new double[] { -10, -10, -10, 1 };
+        var point = new double[] { px, py, pz, 1 };
+
+        assertEquals(expected, w.isShadowed(lightPosition, point));
     }
 }

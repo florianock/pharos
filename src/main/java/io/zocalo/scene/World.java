@@ -4,6 +4,8 @@ import io.zocalo.kernel.*;
 
 import java.util.Arrays;
 
+import static io.zocalo.Utils.EPSILON;
+
 public record World(Shape[] objects, Light[] lights) {
 
     public World() {
@@ -50,7 +52,7 @@ public record World(Shape[] objects, Light[] lights) {
 
     public Color shadeHit(Computations comps, boolean shadows) {
         return Arrays.stream(lights)
-                .map(light -> comps.shadeHit(light, shadows && isShadowed(comps.overPoint())))
+                .map(light -> comps.shadeHit(light, shadows ? light.intensityAt(comps.overPoint(), this) : 1.0))
                 .reduce(Color.BLACK, Color::add);
     }
 
@@ -98,16 +100,35 @@ public record World(Shape[] objects, Light[] lights) {
         return Color.create(red, green, blue);
     }
 
-    public boolean isShadowed(double[] point) {
+    public boolean isShadowed(double[] lightPosition, double[] shadingPoint) {
+        assert Tuple.isPoint(lightPosition);
+        assert Tuple.isPoint(shadingPoint);
 
-        return Arrays.stream(lights)
-                .allMatch(light -> {
-                    var v = Tuple.subtract(light.position().values().clone(), point);
-                    var distance = Tuple.magnitude(v);
-                    var direction = Tuple.normalize(v);
-                    var r = Ray.create(point, direction);
-                    var xs = intersect(r);
-                    return xs.hit().map(i -> i.t() < distance).orElse(false);
-                });
+        assert Arrays.equals(
+                Tuple.subtract(Tuple.point(3.0, 2d, 1d).values(), Tuple.point(5d, 6d, 7d).values()),
+                Tuple.vector(-2, -4, -6).values()
+        );  // canonical test from Chapter 1 of the Challenge
+
+        var toLight = Tuple.subtract(lightPosition.clone(), shadingPoint);
+        var distance = Tuple.magnitude(toLight);
+        if (distance < EPSILON) return false;
+
+        var direction = Tuple.normalize(toLight.clone());
+        direction[3] = 0;
+
+        var r = Ray.create(shadingPoint, direction);
+        var xs = intersect(r);
+        var hit = xs.hit();
+        return hit
+                .map(i -> i.t() < distance)
+                .orElse(false);
+    }
+
+    @Override
+    public String toString() {
+        return "World{" +
+                "objects=" + Arrays.toString(objects) +
+                ", lights=" + Arrays.toString(lights) +
+                '}';
     }
 }

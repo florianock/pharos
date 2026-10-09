@@ -122,6 +122,7 @@ public class Tuple {
 
     public static double[] normalize(double[] a) {
         var magnitude = magnitude(a);
+        if (magnitude == 0) return a;
         a[0] /= magnitude;
         a[1] /= magnitude;
         a[2] /= magnitude;

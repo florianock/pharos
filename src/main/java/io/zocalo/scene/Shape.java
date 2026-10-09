@@ -55,8 +55,8 @@ public abstract class Shape {
         inverseTransformTranspose = inverseTransform.transpose();
     }
 
-    public Color lighting(Light light, double[] point, double[] eyev, double[] normalv, boolean shadowed) {
-        return material.lighting(light, point, eyev, normalv, shadowed);
+    public Color lighting(Light light, double[] shadowPoint, double[] eyev, double[] normalv, double shadowedIntensity) {
+        return material.lighting(light, shadowPoint, eyev, normalv, shadowedIntensity);
     }
 
     @Override
@@ -71,5 +71,13 @@ public abstract class Shape {
         int result = material.hashCode();
         result = 31 * result + transform.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Shape{" +
+                "transform=" + transform +
+                ", material=" + material +
+                '}';
     }
 }

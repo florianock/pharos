@@ -2,9 +2,76 @@ package io.zocalo.scene;
 
 import io.zocalo.kernel.Tuple;
 
-public record Light(Tuple position, Color intensity) {
+import java.util.concurrent.ThreadLocalRandom;
+
+public record Light(Tuple position, Tuple corner, Tuple uvec, int usteps, Tuple vvec, int vsteps, int samples, boolean jitter, Color intensity) {
 
     public static Light pointLight(Tuple position, Color intensity) {
-        return new Light(position, intensity);
+        return new Light(position, position, Tuple.vector(0, 0, 0), 1, Tuple.vector(0, 0, 0), 1, 1, false, intensity);
+    }
+
+    public static Light areaLight(Tuple corner, Tuple fullUvec, int usteps, Tuple fullVvec, int vsteps, boolean jitter, Color intensity) {
+        var uvec = fullUvec.divide(usteps);
+        var vvec = fullVvec.divide(vsteps);
+        return new Light(
+                corner.add(uvec.multiply((double)usteps/2)).add(vvec.multiply((double)vsteps/2)),
+                corner, uvec, usteps, vvec, vsteps, usteps * vsteps, jitter, intensity
+        );
+    }
+
+    public double intensityAt(double[] surfacePoint, World w) {
+        var total = 0.0;
+        for (var v = 0; v < vsteps; v++) {
+            for (var u = 0; u < usteps; u++) {
+                var lightPosition = pointOnLight(u, v).values();
+                var inShadow = w.isShadowed(lightPosition, surfacePoint);
+                if (!inShadow) {
+                    total += 1.0;
+                }
+            }
+        }
+        return total / samples;
+    }
+
+    public Tuple pointOnLight(int u, int v) {
+        return corner
+                .add(uvec.multiply(u + (jitter ? ThreadLocalRandom.current().nextDouble() : 0.5)))
+                .add(vvec.multiply(v + (jitter ? ThreadLocalRandom.current().nextDouble() : 0.5)));
+    }
+
+    Color getAveragedDiffuseAndSpecularFactor(double[] shadowPoint, double[] eyev, double[] normalv, double shadowedIntensity, Color effectiveColor, Material material) {
+        var sum = Color.BLACK;
+
+        for (var v = 0; v < vsteps; v++) {
+            for (var u = 0; u < usteps; u++) {
+                // find the direction to the light source
+                var lightPosition = pointOnLight(u, v).values();
+                var toLight = Tuple.subtract(lightPosition.clone(), shadowPoint);
+                var lightv = Tuple.normalize(toLight.clone());
+                // lightDotNormal represents the cosine of the angle between the
+                // light vector and the normal vector. A negative number means the
+                // light is on the other side of the surface.
+                var lightDotNormal = Tuple.dot(lightv.clone(), normalv);
+                if (lightDotNormal >= 0) {
+                    // compute the diffuse contribution
+                    double diffusePart = material.diffuse() * lightDotNormal;
+                    sum = sum.add(effectiveColor.multiply(diffusePart));
+
+                    // reflectDotEye represents the cosine of the angle between the
+                    // reflection vector and the eye vector. A negative number means the
+                    // light reflects away from the eye.
+                    var reflectv = Tuple.reflect(Tuple.negate(lightv), normalv.clone());
+                    var reflectDotEye = Tuple.dot(reflectv, eyev);
+                    if (reflectDotEye > 0) {
+                        // compute the specular contribution
+                        var factor = Math.pow(reflectDotEye, material.shininess());
+                        double specularPart = material.specular() * factor;
+                        sum = sum.add(this.intensity.multiply(specularPart));
+                    }
+                }
+            }
+        }
+
+        return sum.multiply(shadowedIntensity / (vsteps * usteps));
     }
 }

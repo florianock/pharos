@@ -31,4 +31,12 @@ public record Ray(double[] origin, double[] direction) {
     public static Ray create(double[] origin, double[] direction) {
         return new Ray(origin, direction);
     }
+
+    @Override
+    public String toString() {
+        return "Ray{" +
+                "origin=" + Arrays.toString(origin) +
+                ", direction=" + Arrays.toString(direction) +
+                '}';
+    }
 }

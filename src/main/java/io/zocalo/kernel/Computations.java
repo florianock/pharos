@@ -6,7 +6,7 @@ import io.zocalo.scene.Shape;
 
 public record Computations(double t, Shape object, double[] point, double[] eyev, double[] normalv, boolean inside, double[] overPoint) {
 
-    public Color shadeHit(Light light, boolean shadowed) {
-        return object.lighting(light, overPoint, eyev, normalv, shadowed);
+    public Color shadeHit(Light light, double shadowedIntensity) {
+        return object.lighting(light, overPoint, eyev, normalv, shadowedIntensity);
     }
 }
