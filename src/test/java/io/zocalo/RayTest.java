@@ -11,12 +11,12 @@ class RayTest {
 
     @Test
     void create_and_query() {
-        var origin = new double[] {1, 2, 3, 1};
-        var direction = new double[] {4, 5, 6, 0};
+        var origin =Tuple.point(1, 2, 3);
+        var direction = Tuple.vector(4, 5, 6);
         var r = Ray.create(origin, direction);
 
-        assertArrayEquals(origin, r.origin());
-        assertArrayEquals(direction, r.direction());
+        assertEquals(origin, r.origin());
+        assertEquals(direction, r.direction());
     }
 
     @Test
@@ -45,8 +45,8 @@ class RayTest {
 
         var r2 = r.transform(m);
 
-        assertArrayEquals(new double[]{4, 6, 8, 1}, r2.origin());
-        assertArrayEquals(new double[]{0, 1, 0, 0}, r2.direction());
+        assertEquals(Tuple.point(4, 6, 8), r2.origin());
+        assertEquals(Tuple.vector(0, 1, 0), r2.direction());
     }
 
     @Test
@@ -56,7 +56,7 @@ class RayTest {
 
         var r2 = r.transform(m);
 
-        assertArrayEquals(new double[] {2, 6, 12, 1}, r2.origin());
-        assertArrayEquals(new double[] {0, 3, 0, 0}, r2.direction());
+        assertEquals(Tuple.point(2, 6, 12), r2.origin());
+        assertEquals(Tuple.vector(0, 3, 0), r2.direction());
     }
 }

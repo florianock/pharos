@@ -19,11 +19,12 @@ public record Light(Tuple position, Tuple corner, Tuple uvec, int usteps, Tuple 
         );
     }
 
-    public double intensityAt(double[] surfacePoint, World w) {
+    public double intensityAt(Tuple surfacePoint, World w) {
+        if (!surfacePoint.isPoint()) throw new IllegalArgumentException("surface point must be a point");
         var total = 0.0;
         for (var v = 0; v < vsteps; v++) {
             for (var u = 0; u < usteps; u++) {
-                var lightPosition = pointOnLight(u, v).values();
+                var lightPosition = pointOnLight(u, v);
                 var inShadow = w.isShadowed(lightPosition, surfacePoint);
                 if (!inShadow) {
                     total += 1.0;
@@ -39,34 +40,32 @@ public record Light(Tuple position, Tuple corner, Tuple uvec, int usteps, Tuple 
                 .add(vvec.multiply(v + (jitter ? ThreadLocalRandom.current().nextDouble() : 0.5)));
     }
 
-    Color getAveragedDiffuseAndSpecularFactor(double[] shadowPoint, double[] eyev, double[] normalv, double shadowedIntensity, Color effectiveColor, Material material) {
+    Color getAveragedDiffuseAndSpecularFactor(Tuple shadowPoint, Tuple eyev, Tuple normalv, double shadowedIntensity, Color effectiveColor, Material material) {
         var sum = Color.BLACK;
 
         for (var v = 0; v < vsteps; v++) {
             for (var u = 0; u < usteps; u++) {
                 // find the direction to the light source
-                var lightPosition = pointOnLight(u, v).values();
-                var toLight = Tuple.subtract(lightPosition, shadowPoint);
-                var lightv = Tuple.normalize(toLight);
+                var lightPosition = pointOnLight(u, v);
+                var toLight = lightPosition.subtract(shadowPoint);
+                var lightv = toLight.normalize();
                 // lightDotNormal represents the cosine of the angle between the
                 // light vector and the normal vector. A negative number means the
                 // light is on the other side of the surface.
-                var lightDotNormal = Tuple.dot(lightv, normalv);
+                var lightDotNormal = lightv.dot(normalv);
                 if (lightDotNormal >= 0) {
                     // compute the diffuse contribution
-                    double diffusePart = material.diffuse() * lightDotNormal;
-                    sum = sum.add(effectiveColor.multiply(diffusePart));
+                    sum = sum.add(effectiveColor.multiply(material.diffuse() * lightDotNormal));
 
                     // reflectDotEye represents the cosine of the angle between the
                     // reflection vector and the eye vector. A negative number means the
                     // light reflects away from the eye.
-                    var reflectv = Tuple.reflect(Tuple.negate(lightv), normalv);
-                    var reflectDotEye = Tuple.dot(reflectv, eyev);
+                    var reflectv = lightv.negate().reflect(normalv);
+                    var reflectDotEye = reflectv.dot(eyev);
                     if (reflectDotEye > 0) {
                         // compute the specular contribution
                         var factor = Math.pow(reflectDotEye, material.shininess());
-                        double specularPart = material.specular() * factor;
-                        sum = sum.add(this.intensity.multiply(specularPart));
+                        sum = sum.add(this.intensity.multiply(material.specular() * factor));
                     }
                 }
             }

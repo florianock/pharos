@@ -86,11 +86,16 @@ class WorldTest {
 
     @Test
     void colorWithAnIntersectionBehindTheRay() {
-        var w =  World.defaultWorld();
-        var outer = (w.objects())[0];
-        outer.getMaterial().ambient(1);
-        var inner = (w.objects())[1];
-        inner.getMaterial().ambient(1);
+        var defaultWorld =  World.defaultWorld();
+        var outer = (defaultWorld.objects())[0];
+        var outerMaterial = new Material.Builder().from(outer.getMaterial()).ambient(1).build();
+        var inner = (defaultWorld.objects())[1];
+        var innerMaterial = new Material.Builder().from(inner.getMaterial()).ambient(1).build();
+        var objects = new Shape[] {
+                new Sphere(outer.getTransform(), outerMaterial),
+                new Sphere(inner.getTransform(), innerMaterial)
+        };
+        var w = new World(objects);
         var r = Ray.create(Tuple.point(0, 0, 0.75), Tuple.vector(0, 0, -1));
         var c = w.colorAt(r);
         assertEquals(inner.getMaterial().color(), c);
@@ -121,8 +126,8 @@ class WorldTest {
     })
     void isShadowedTestsForOcclusionBetweenTwoPoints(int px, int py, int pz, boolean expected) {
         var w = World.defaultWorld();
-        var lightPosition = new double[] { -10, -10, -10, 1 };
-        var point = new double[] { px, py, pz, 1 };
+        var lightPosition = Tuple.point(-10, -10, -10);
+        var point = Tuple.point(px, py, pz);
 
         assertEquals(expected, w.isShadowed(lightPosition, point));
     }

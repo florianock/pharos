@@ -1,5 +1,6 @@
 package io.zocalo;
 
+import io.zocalo.kernel.Tuple;
 import io.zocalo.scene.Color;
 
 public class Utils {
@@ -8,8 +9,8 @@ public class Utils {
     public static final double SHADOW_OFFSET = EPSILON;
     public static final double PI            = Math.PI;
     public static final double HALF_PI       = PI / 2;
-    public static final double QTR_PI       = PI / 4;
-    public static final double[] ORIGIN = new double[] { 0, 0, 0, 1 };
+    public static final double QTR_PI        = PI / 4;
+    public static final Tuple  ORIGIN        = Tuple.point(0, 0, 0);
 
     private Utils() {
         /* This utility class should not be instantiated */

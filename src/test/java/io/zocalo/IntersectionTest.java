@@ -93,9 +93,9 @@ class IntersectionTest {
 
         assertEquals(i.t(), comps.t());
         assertEquals(i.object(), comps.object());
-        assertArrayEquals(new double[]{0, 0, -1, 1}, comps.point());
-        assertArrayEquals(new double[]{0, 0, -1, 0}, comps.eyev());
-        assertArrayEquals(new double[]{0, 0, -1, 0}, comps.normalv());
+        assertEquals(Tuple.point(0, 0, -1), comps.point());
+        assertEquals(Tuple.vector(0, 0, -1), comps.eyev());
+        assertEquals(Tuple.vector(0, 0, -1), comps.normalv());
     }
 
     @Test
@@ -113,11 +113,11 @@ class IntersectionTest {
         var shape = new Sphere();
         var i = new Intersection(1, shape);
         var comps = i.prepareComputations(r);
-        assertArrayEquals(new double[]{0, 0, 1, 1}, comps.point());
-        assertArrayEquals(new double[]{0, 0, -1, 0}, comps.eyev());
+        assertEquals(Tuple.point(0, 0, 1), comps.point());
+        assertEquals(Tuple.vector(0, 0, -1), comps.eyev());
         assertTrue(comps.inside());
         // normal would have been (0, 0, 1), but is inverted!
-        assertArrayEquals(new double[]{0, 0, -1, 0}, comps.normalv());
+        assertEquals(Tuple.vector(0, 0, -1), comps.normalv());
     }
 
     @Test
@@ -126,7 +126,7 @@ class IntersectionTest {
         var shape = new Sphere(Matrix4x4.translation(0, 0, 1));
         var i = new Intersection(5, shape);
         var comps = i.prepareComputations(r);
-        assertTrue(comps.overPoint()[2] < -Utils.EPSILON/2);
-        assertTrue(comps.point()[2] > comps.overPoint()[2]);
+        assertTrue(comps.overPoint().z() < -Utils.EPSILON/2);
+        assertTrue(comps.point().z() > comps.overPoint().z());
     }
 }

@@ -8,7 +8,6 @@ import io.zocalo.kernel.Camera;
 import org.junit.jupiter.api.Test;
 
 import static io.zocalo.TestUtils.assertEqualEnough;
-import static io.zocalo.Utils.EPSILON;
 import static io.zocalo.Utils.HALF_PI;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -40,26 +39,26 @@ class CameraTest {
     @Test
     void constructingARayThroughTheCenterOfTheCanvas() {
         var c = new Camera(201, 101,  HALF_PI);
-        var r = c.rayForPixel(100, 50, new double[4]);
-        assertArrayEquals(new double[] {0, 0,  0, 1}, r.origin(), EPSILON);
-        assertArrayEquals(new double[] {0, 0, -1, 0}, r.direction(), EPSILON);
+        var r = c.rayForPixel(100, 50);
+        assertEquals(Tuple.point(0, 0,  0), r.origin());
+        assertEquals(Tuple.vector(0, 0, -1), r.direction());
     }
 
     @Test
     void constructingARayThroughACornerOfTheCanvas() {
         var c = new Camera(201, 101, HALF_PI);
-        var r = c.rayForPixel(0, 0, new double[4]);
-        assertArrayEquals(new double[] {0, 0, 0, 1}, r.origin(), EPSILON);
-        assertArrayEquals(new double[] {0.66519, 0.33259, -0.66851, 0}, r.direction(), EPSILON);
+        var r = c.rayForPixel(0, 0);
+        assertEquals(Tuple.point(0, 0, 0), r.origin());
+        assertEquals(Tuple.vector(0.66519, 0.33259, -0.66851), r.direction());
     }
 
     @Test
     void constructingARayWhenTheCameraIsTransformed() {
         var t = Matrix4x4.rotationOnY(Utils.QTR_PI).multiply(Matrix4x4.translation(0, -2, 5));
         var c = new Camera(201, 101,  Utils.HALF_PI, t);
-        var r = c.rayForPixel(100, 50, new double[4]);
-        assertArrayEquals(new double[] {0, 2, -5, 1}, r.origin(), EPSILON);
-        assertArrayEquals(new double[] {Math.sqrt(2)/2.0, 0, -1f * Math.sqrt(2)/2.0, 0}, r.direction(), EPSILON);
+        var r = c.rayForPixel(100, 50);
+        assertEquals(Tuple.point(0, 2, -5), r.origin());
+        assertEquals(Tuple.vector(Math.sqrt(2)/2.0, 0, -1f * Math.sqrt(2)/2.0), r.direction());
     }
 
     @Test

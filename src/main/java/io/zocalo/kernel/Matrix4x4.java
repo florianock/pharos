@@ -70,15 +70,6 @@ public class Matrix4x4 {
         );
     }
 
-    public double[] multiply(double[] b) {
-        return new double[] {
-                get(0, 0) * b[0] + get(0, 1) * b[1] + get(0, 2) * b[2] + get(0, 3) * b[3],
-                get(1, 0) * b[0] + get(1, 1) * b[1] + get(1, 2) * b[2] + get(1, 3) * b[3],
-                get(2, 0) * b[0] + get(2, 1) * b[1] + get(2, 2) * b[2] + get(2, 3) * b[3],
-                get(3, 0) * b[0] + get(3, 1) * b[1] + get(3, 2) * b[2] + get(3, 3) * b[3]
-        };
-    }
-
     public Matrix4x4 transpose() {
         return new Matrix4x4(new double[] {m[0], m[4], m[8], m[12], m[1], m[5], m[9], m[13], m[2], m[6], m[10], m[14], m[3], m[7], m[11], m[15]});
     }
@@ -104,11 +95,10 @@ public class Matrix4x4 {
     }
 
     public double determinant() {
-        var result = 0.0;
-        for (var c = 0; c < 4; c++) {
-            result += get(0, c) * cofactor(0, c);
-        }
-        return result;
+        return get(0, 0) * cofactor(0, 0) +
+                get(0, 1) * cofactor(0, 1) +
+                get(0, 2) * cofactor(0, 2) +
+                get(0, 3) * cofactor(0, 3);
     }
 
     public boolean isInvertible() {

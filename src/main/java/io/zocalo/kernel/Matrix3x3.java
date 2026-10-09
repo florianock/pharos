@@ -58,11 +58,9 @@ public class Matrix3x3 {
     }
 
     public double determinant() {
-        double result = 0;
-        for (var c = 0; c < 3; c++) {
-            result += get(0, c) * cofactor(0, c);
-        }
-        return result;
+        return get(0, 0) * cofactor(0, 0) +
+                get(0, 1) * cofactor(0, 1) +
+                get(0, 2) * cofactor(0, 2);
     }
 
     @Override

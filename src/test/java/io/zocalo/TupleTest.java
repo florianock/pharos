@@ -197,7 +197,7 @@ class TupleTest {
         var to = Tuple.point(4, -2, 8);
         var up = Tuple.vector(1, 1, 0);
         var t = from.viewTransform(to, up);
-        var expected = new Matrix4x4(new double[]{
+        var expected = new Matrix4x4(new double[] {
                 -0.50709, 0.50709,  0.67612, -2.36642,
                  0.76772, 0.60609,  0.12122, -2.82843,
                 -0.35857, 0.59761, -0.71714,  0.00000,

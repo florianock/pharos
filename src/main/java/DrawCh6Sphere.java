@@ -27,7 +27,6 @@ void main() throws IOException {
     var numTilesY = (canvasPixels + tileSize - 1) / tileSize;
 
     canvas.setupGui();
-    var rayOriginValues = rayOrigin.values();
     try (var executor = Executors.newWorkStealingPool()) {
         for (var ty = 0; ty < numTilesY; ty++) {
             for (var tx = 0; tx < numTilesX; tx++) {
@@ -36,23 +35,22 @@ void main() throws IOException {
                 final int xEnd = Math.min(canvasPixels, xStart + tileSize);
                 final int yEnd = Math.min(canvasPixels, yStart + tileSize);
                 executor.submit(() -> {
-                    var position = new double[4];
                     for (var y = yStart; y < yEnd; y++){
                         var worldY = half - pixelSize * y;
 
                         for (var x = xStart; x < xEnd; x++) {
                             var worldX = -half + pixelSize * x;
 
-                            position[0] = worldX; position[1] = worldY; position[2] = wallZ; position[3] = 1;
-                            var r = Ray.create(rayOriginValues, Tuple.normalize(Tuple.subtract(position, rayOriginValues)));
+                            var position = Tuple.point(worldX, worldY, wallZ);
+                            var r = Ray.create(rayOrigin, position.subtract(rayOrigin).normalize());
                             var xs = shape.intersect(r);
 
                             var h = xs.hit();
                             if (h.isPresent()) {
                                 var hit = h.get();
-                                var point = r.position(hit.t()).values();
+                                var point = r.position(hit.t());
                                 var normal = hit.object().normalAt(point);
-                                var eye = Tuple.negate(r.direction());
+                                var eye = r.direction().negate();
                                 var color = hit.object().getMaterial().lighting(light, point, eye, normal, 1.0);
                                 canvas.writePixel(x, y, color);
                             }

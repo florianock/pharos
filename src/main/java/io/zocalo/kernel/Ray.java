@@ -1,23 +1,14 @@
 package io.zocalo.kernel;
 
-import java.util.Arrays;
-
-import static io.zocalo.kernel.Tuple.add;
-import static io.zocalo.kernel.Tuple.multiply;
-
-public record Ray(double[] origin, double[] direction) {
+public record Ray(Tuple origin, Tuple direction) {
 
     public Ray {
-        if (!Tuple.isPoint(origin)) throw new IllegalStateException("Not a valid origin: " + Arrays.toString(origin));
-        if (!Tuple.isVector(direction)) throw new IllegalStateException("Not a valid direction: " + Arrays.toString(direction));
+        if (!origin.isPoint()) throw new IllegalStateException("Not a valid origin: " + origin);
+        if (!direction.isVector()) throw new IllegalStateException("Not a valid direction: " + direction);
     }
 
     public Tuple position(double t) {
-        return new Tuple(position(origin, direction, t));
-    }
-
-    public static double[] position(double[] o, double[] d, double t) {
-        return add(o, multiply(d, t));
+        return direction.multiply(t).add(origin);
     }
 
     public Ray transform(Matrix4x4 m) {
@@ -25,18 +16,6 @@ public record Ray(double[] origin, double[] direction) {
     }
 
     public static Ray create(Tuple origin, Tuple direction) {
-        return new Ray(origin.values(), direction.values());
-    }
-
-    public static Ray create(double[] origin, double[] direction) {
         return new Ray(origin, direction);
-    }
-
-    @Override
-    public String toString() {
-        return "Ray{" +
-                "origin=" + Arrays.toString(origin) +
-                ", direction=" + Arrays.toString(direction) +
-                '}';
     }
 }

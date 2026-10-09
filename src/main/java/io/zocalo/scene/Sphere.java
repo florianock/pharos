@@ -23,12 +23,12 @@ public class Sphere extends Shape {
 
     @Override
     public Intersections localIntersect(Ray r) {
-        var sphereToRay = Tuple.subtract(r.origin(), new double[] { 0, 0, 0, 1 });
+        var sphereToRay = r.origin().subtract(Utils.ORIGIN);
 
         var direction = r.direction();
-        var a = Tuple.dot(direction, direction);
-        var b = 2 * Tuple.dot(direction, sphereToRay);
-        var c = Tuple.dot(sphereToRay, sphereToRay) - 1;
+        var a = direction.dot(direction);
+        var b = 2 * direction.dot(sphereToRay);
+        var c = sphereToRay.dot(sphereToRay) - 1;
 
         var discriminant = (b * b) - (4 * a * c);
 
@@ -46,9 +46,9 @@ public class Sphere extends Shape {
     }
 
     @Override
-    public double[] localNormalAt(double[] localPoint) {
-        if (!Tuple.isPoint(localPoint)) throw new IllegalArgumentException();
-        return Tuple.subtract(localPoint, Utils.ORIGIN);
+    public Tuple localNormalAt(Tuple localPoint) {
+        if (!localPoint.isPoint()) throw new IllegalArgumentException();
+        return localPoint.subtract(Utils.ORIGIN);
     }
 
     @Override

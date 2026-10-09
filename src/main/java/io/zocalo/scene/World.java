@@ -28,7 +28,7 @@ public record World(Shape[] objects, Light[] lights) {
         return Arrays.stream(objects)
                 .map(o -> o.intersect(r))
                 .reduce(new Intersections(), (a, b) ->
-                        a.addAll(b.intersections().toArray(new Intersection[b.count()])));
+                        a.addAll(b.intersections().toArray(new Intersection[b.count()]))); // TODO clean this up
     }
 
     private static Material getDefaultMaterial() {
@@ -76,7 +76,7 @@ public record World(Shape[] objects, Light[] lights) {
         var hitPoint = comps.point();
 
         // Distance from ray origin (camera) to hit point
-        var distance = Tuple.magnitude(Tuple.subtract(hitPoint, r.origin()));
+        var distance = hitPoint.subtract(r.origin()).magnitude();
 
         // Option A: linear normalization (works for bounded scenes)
         var maxDistance = 10;  // tune based on your scene scale
@@ -93,28 +93,23 @@ public record World(Shape[] objects, Light[] lights) {
         var normal = comps.normalv();
 
         // Remap [-1, +1] → [0, 1]
-        var red = normal[0] * 0.5 + 0.5;
-        var green = normal[1] * 0.5 + 0.5;
-        var blue = normal[2] * 0.5 + 0.5;
+        var red = normal.x() * 0.5 + 0.5;
+        var green = normal.y() * 0.5 + 0.5;
+        var blue = normal.z() * 0.5 + 0.5;
 
         return Color.create(red, green, blue);
     }
 
-    public boolean isShadowed(double[] lightPosition, double[] shadingPoint) {
-        assert Tuple.isPoint(lightPosition);
-        assert Tuple.isPoint(shadingPoint);
+    public boolean isShadowed(Tuple lightPosition, Tuple shadingPoint) {
+        assert lightPosition.isPoint();
+        assert shadingPoint.isPoint();
 
-        assert Arrays.equals(
-                Tuple.subtract(Tuple.point(3.0, 2d, 1d).values(), Tuple.point(5d, 6d, 7d).values()),
-                Tuple.vector(-2, -4, -6).values()
-        );  // canonical test from Chapter 1 of the Challenge
-
-        var toLight = Tuple.subtract(lightPosition, shadingPoint);
-        var distance = Tuple.magnitude(toLight);
+        var toLight = lightPosition.subtract(shadingPoint);
+        var distance = toLight.magnitude();
         if (distance < EPSILON) return false;
 
-        var direction = Tuple.normalize(toLight);
-        direction[3] = 0;
+        var dir = toLight.normalize();
+        var direction = Tuple.vector(dir.x(), dir.y(), dir.z());
 
         var r = Ray.create(shadingPoint, direction);
         var xs = intersect(r);

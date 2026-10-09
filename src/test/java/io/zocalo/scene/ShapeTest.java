@@ -6,7 +6,6 @@ import io.zocalo.kernel.Ray;
 import io.zocalo.kernel.Tuple;
 import org.junit.jupiter.api.Test;
 
-import static io.zocalo.Utils.EPSILON;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ShapeTest {
@@ -34,8 +33,7 @@ class ShapeTest {
     @Test
     void assigningMaterial() {
         var s = new TestShape();
-        var m = new Material();
-        m.ambient(1.0);
+        var m = new Material.Builder().ambient(1.0).build();
         s.setMaterial(m);
         assertEquals(m, s.getMaterial());
     }
@@ -50,8 +48,8 @@ class ShapeTest {
         var _ = s.intersect(r);
 
         var savedRay = s.getSavedRay();
-        assertArrayEquals(new double[]{0, 0, -2.5, 1}, savedRay.origin());
-        assertArrayEquals(new double[]{0, 0, 0.5, 0}, savedRay.direction());
+        assertEquals(Tuple.point(0, 0, -2.5), savedRay.origin());
+        assertEquals(Tuple.vector(0, 0, 0.5), savedRay.direction());
     }
 
     @Test
@@ -63,8 +61,8 @@ class ShapeTest {
         var _ = s.intersect(r);
 
         var savedRay = s.getSavedRay();
-        assertArrayEquals(new double[]{-5, 0, -5, 1}, savedRay.origin());
-        assertArrayEquals(new double[]{0, 0, 1, 0}, savedRay.direction());
+        assertEquals(Tuple.point(-5, 0, -5), savedRay.origin());
+        assertEquals(Tuple.vector(0, 0, 1), savedRay.direction());
     }
 
     @Test
@@ -72,9 +70,9 @@ class ShapeTest {
         var s = new TestShape();
         s.setTransform(Matrix4x4.translation(0, 1, 0));
 
-        var n = s.normalAt(new double[]{0, 1.70711, -0.70711, 1});
+        var n = s.normalAt(Tuple.point(0, 1.70711, -0.70711));
 
-        assertArrayEquals(new double[] { 0, 0.70711, -0.70711, 0 }, n, EPSILON);
+        assertEquals(Tuple.vector(0, 0.70711, -0.70711), n);
     }
 
     @Test
@@ -83,8 +81,8 @@ class ShapeTest {
         var m = Matrix4x4.scaling(1, 0.5, 1).multiply(Matrix4x4.rotationOnZ(Utils.PI / 5));
         s.setTransform(m);
 
-        var n = s.normalAt(new double[]{0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2, 1});
+        var n = s.normalAt(Tuple.point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2));
 
-        assertArrayEquals(new double[] { 0, 0.97014, -0.24254, 0 }, n, EPSILON);
+        assertEquals(Tuple.vector(0, 0.97014, -0.24254), n);
     }
 }

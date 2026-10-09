@@ -64,10 +64,9 @@ void main() throws IOException {
     var light = Light.pointLight(Tuple.point(0, 0, -100), Color.WHITE);
     var world = new World(objects, new Light[]{light});
 
-    var camera = new Camera(1000, 500, PI / 6, Tuple.viewTransform(
-            new double[] { 40, 0, -70, 1 },
-            new double[] {  0, 0,  -5, 1 },
-            new double[] {  0, 1,   0, 0 }
+    var camera = new Camera(1000, 500, PI / 6, Tuple.point(40, 0, -70).viewTransform(
+            Tuple.point( 0, 0,  -5),
+            Tuple.vector(0, 1,   0)
     ));
 
     var canvas = camera.renderParallel(world);

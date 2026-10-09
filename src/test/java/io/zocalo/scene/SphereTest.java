@@ -88,27 +88,27 @@ class SphereTest {
     void normal_on_sphere_at_point_on_x_axis() {
         var s = new Sphere();
 
-        var n = s.localNormalAt(new double[]{1, 0, 0, 1});
+        var n = s.localNormalAt(Tuple.point(1, 0, 0));
 
-        assertArrayEquals(new double[] { 1.0, 0.0, 0.0, 0 }, n);
+        assertEquals(Tuple.vector(1.0, 0.0, 0.0), n);
     }
 
     @Test
     void normal_on_sphere_at_point_on_y_axis() {
         var s = new Sphere();
 
-        var n = s.localNormalAt(new double[]{0, 1, 0, 1});
+        var n = s.localNormalAt(Tuple.point(0, 1, 0));
 
-        assertArrayEquals(new double[] { 0.0, 1.0, 0.0, 0 }, n);
+        assertEquals(Tuple.vector(0.0, 1.0, 0.0), n);
     }
 
     @Test
     void normal_on_sphere_at_point_on_z_axis() {
         var s = new Sphere();
 
-        var n = s.localNormalAt(new double[]{0, 0, 1, 1});
+        var n = s.localNormalAt(Tuple.point(0, 0, 1));
 
-        assertArrayEquals(new double[] { 0.0, 0.0, 1.0, 0 }, n);
+        assertEquals(Tuple.vector(0.0, 0.0, 1.0), n);
     }
 
     @Test
@@ -116,9 +116,9 @@ class SphereTest {
         var s = new Sphere();
         var v = Math.sqrt(3)/3;
 
-        var n = s.localNormalAt(new double[]{v, v, v, 1});
+        var n = s.localNormalAt(Tuple.point(v, v, v));
 
-        assertArrayEquals(new double[] { Math.sqrt(3)/3, Math.sqrt(3)/3, Math.sqrt(3)/3, 0 }, n);
+        assertEquals(Tuple.vector(Math.sqrt(3)/3, Math.sqrt(3)/3, Math.sqrt(3)/3), n);
     }
 
     @Test
@@ -126,9 +126,9 @@ class SphereTest {
         var s = new Sphere();
         var v = Math.sqrt(3)/3;
 
-        var n = s.localNormalAt(new double[]{v, v, v, 1});
+        var n = s.localNormalAt(Tuple.point(v, v, v));
 
-        var normalizedN = Tuple.normalize(n);
-        assertArrayEquals(normalizedN, n);
+        var normalizedN = n.normalize();
+        assertEquals(normalizedN, n);
     }
 }

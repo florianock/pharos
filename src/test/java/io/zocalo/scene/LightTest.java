@@ -32,7 +32,7 @@ class LightTest {
     void pointLightsEvaluateTheLightIntensityAtAGivenPoint(double px, double py, double pz, double expected) {
         var w = World.defaultWorld();
         var light = w.lights()[0];
-        var pt = new double[]{px, py, pz, 1};
+        var pt = Tuple.point(px, py, pz);
         var intensity = light.intensityAt(pt, w);
 
         assertEquals(expected, intensity);
@@ -84,7 +84,7 @@ class LightTest {
         var v1 = Tuple.vector(1, 0, 0);
         var v2 = Tuple.vector(0, 1, 0);
         var light = Light.areaLight(corner, v1, 2, v2, 2, false, Color.WHITE);
-        var pt = Tuple.point(px, py, pz).values();
+        var pt = Tuple.point(px, py, pz);
 
         var intensity = light.intensityAt(pt, w);
 

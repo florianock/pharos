@@ -16,12 +16,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class MaterialTest {
 
     private Material m;
-    private double[] position;
+    private Tuple position;
 
     @BeforeEach
     void setUp() {
         m = new Material();
-        position = new double[]{0, 0, 0, 1};
+        position = Tuple.point(0, 0, 0);
     }
 
     @Test
@@ -35,8 +35,8 @@ class MaterialTest {
 
     @Test
     void lighting_with_eye_between_light_and_surface() {
-        var eyev = new double[]{0, 0, -1, 0};
-        var normalv = new double[]{0, 0, -1, 0};
+        var eyev = Tuple.vector(0, 0, -1);
+        var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
 
         var result = m.lighting(light, position, eyev, normalv, 1.0);
@@ -45,8 +45,8 @@ class MaterialTest {
 
     @Test
     void lighting_with_eye_between_light_and_surface_eye_offset_45_degree_angle() {
-        var eyev = new double[]{0, Math.sqrt(2)/2, Math.sqrt(2)/2, 0};
-        var normalv = new double[]{0, 0, -1, 0};
+        var eyev = Tuple.vector(0, Math.sqrt(2)/2, Math.sqrt(2)/2);
+        var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
 
         var result = m.lighting(light, position, eyev, normalv, 1.0);
@@ -55,8 +55,8 @@ class MaterialTest {
 
     @Test
     void lighting_with_eye_opposite_surface_light_offset_45_degree_angle() {
-        var eyev = new double[]{0, 0, -1, 0};
-        var normalv = new double[]{0, 0, -1, 0};
+        var eyev = Tuple.vector(0, 0, -1);
+        var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 10, -10), Color.WHITE);
 
         var result = m.lighting(light, position, eyev, normalv, 1.0);
@@ -65,8 +65,8 @@ class MaterialTest {
 
     @Test
     void lighting_with_eye_in_path_of_reflection_vector() {
-        var eyev = new double[]{0, (float) -Math.sqrt(2)/2, (float) -Math.sqrt(2)/2, 0};
-        var normalv = new double[]{0, 0, -1, 0};
+        var eyev = Tuple.vector(0, (float) -Math.sqrt(2)/2, (float) -Math.sqrt(2)/2);
+        var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 10, -10), Color.WHITE);
 
         var result = m.lighting(light, position, eyev, normalv, 1.0);
@@ -75,8 +75,8 @@ class MaterialTest {
 
     @Test
     void lighting_with_light_behind_surface() {
-        var eyev = new double[]{0, 0, -1, 0};
-        var normalv = new double[]{0, 0, -1, 0};
+        var eyev = Tuple.vector(0, 0, -1);
+        var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 0, 10), Color.WHITE);
 
         var result = m.lighting(light, position, eyev, normalv, 1.0);
@@ -85,8 +85,8 @@ class MaterialTest {
 
     @Test
     void lighting_with_surface_in_shadow() {
-        var eyev = new double[]{0, 0, -1, 0};
-        var normalv = new double[]{0, 0, -1, 0};
+        var eyev = Tuple.vector(0, 0, -1);
+        var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
         var inShadow = 0.0;
 
@@ -100,13 +100,17 @@ class MaterialTest {
         var light =  Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
         var w = new World(new Light[]{light});
         var shape = w.objects()[0];
-        shape.getMaterial().ambient(0.1);
-        shape.getMaterial().diffuse(0.9);
-        shape.getMaterial().specular(0);
-        shape.getMaterial().color(Color.WHITE);
-        var pt = new double[]{0, 0, -1, 1};
-        var eyev = new double[]{0, 0, -1, 0};
-        var normalv = new double[]{0, 0, -1, 0};
+        var modifiedMaterial = new Material.Builder().from(shape.getMaterial())
+                .ambient(0.1)
+                .diffuse(0.9)
+                .specular(0)
+                .color(Color.WHITE)
+                .build();
+        shape = new Sphere(modifiedMaterial);
+        var pt = Tuple.point(0, 0, -1);
+        var eyev = Tuple.vector(0, 0, -1);
+        var normalv = Tuple.vector(0, 0, -1);
+
         var result = shape.lighting(light, pt, eyev, normalv, intensity);
 
         assertEquals(expectedColor, result);
@@ -129,7 +133,7 @@ class MaterialTest {
         var eyev = eye.subtract(point).normalize();
         var normalv = Tuple.vector(point.x(), point.y(), point.z());
 
-        var result = m.lighting(light, point.values(), eyev.values(), normalv.values(), 1.0);
+        var result = m.lighting(light, point, eyev, normalv, 1.0);
 
         assertEquals(expectedColor, result);
     }

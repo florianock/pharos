@@ -9,6 +9,7 @@ public class Camera {
 
     private static final boolean showPreview = true;
     private static final boolean shadows = true;
+    private static final RenderMode renderMode = RenderMode.SHADE;
 
     private final int hsize, vsize;
     private final double fov;
@@ -60,7 +61,7 @@ public class Camera {
         return pixelSize;
     }
 
-    public Ray rayForPixel(int px, int py, double[] arr) {
+    public Ray rayForPixel(int px, int py) {
         // the offset from the edge of the canvas to the pixel's center
         var xOffset = (px + 0.5) * pixelSize;
         var yOffset = (py + 0.5) * pixelSize;
@@ -70,19 +71,15 @@ public class Camera {
         var worldX = halfWidth - xOffset;
         var worldY = halfHeight - yOffset;
 
-        arr[0] = worldX;
-        arr[1] = worldY;
-        arr[2] = -1;
-        arr[3] = 1;
+        Tuple arr = Tuple.point(worldX, worldY, -1);
 
         // using the camera matrix, transform the canvas point and the origin,
         // and then compute the ray's direction vector.
         // (remember that the canvas is at z=-1)
         var pixel = inverseViewTransform.multiply(arr);
         var origin = inverseViewTransform.multiply(Utils.ORIGIN);
-        var direction = Tuple.normalize(Tuple.subtract(pixel, origin));
+        var direction = pixel.subtract(origin).normalize();
 
-        // TODO get rid of this create. Re-use a Ray or something similar
         return Ray.create(origin, direction);
     }
 
@@ -90,11 +87,10 @@ public class Camera {
         var image = new Canvas(hsize, vsize);
         if (showPreview) image.setupGui();
         var start = System.nanoTime();
-        var arr = new double[4];
         for (var y = 0; y < vsize; y++) {
             for (var x = 0; x < hsize; x++) {
-                var ray = rayForPixel(x, y, arr);
-                var color = w.colorAt(ray, RenderMode.SHADE, shadows);
+                var ray = rayForPixel(x, y);
+                var color = w.colorAt(ray, renderMode, shadows);
                 image.writePixel(x, y, color);
             }
             if (showPreview) image.repaint();
@@ -125,10 +121,9 @@ public class Camera {
                     var xEnd = Math.min(hsize, xStart + tileSize);
                     var yEnd = Math.min(vsize, yStart + tileSize);
                     executor.submit(() -> {
-                        var arr = new double[4];
                         for (var y = yStart; y < yEnd; y++) {
                             for (var x = xStart; x < xEnd; x++) {
-                                var ray = rayForPixel(x, y, arr);
+                                var ray = rayForPixel(x, y);
                                 var color = w.colorAt(ray, RenderMode.SHADE, shadows);
                                 image.writePixel(x, y, color);
                             }

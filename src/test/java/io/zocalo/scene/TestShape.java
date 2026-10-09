@@ -28,8 +28,8 @@ public class TestShape extends Shape{
     }
 
     @Override
-    public double[] localNormalAt(double[] localPoint) {
-        if (!Tuple.isPoint(localPoint)) throw new IllegalArgumentException();
-        return new double[]{ localPoint[0], localPoint[1], localPoint[2], 0 };
+    public Tuple localNormalAt(Tuple localPoint) {
+        if (!localPoint.isPoint()) throw new IllegalArgumentException();
+        return Tuple.vector(localPoint.x(), localPoint.y(), localPoint.z());
     }
 }

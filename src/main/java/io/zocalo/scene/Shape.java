@@ -19,17 +19,16 @@ public abstract class Shape {
         inverseTransformTranspose = inverseTransform.transpose();
     }
 
-    public abstract double[] localNormalAt(double[] worldPoint);
+    public abstract Tuple localNormalAt(Tuple worldPoint);
 
     public abstract Intersections localIntersect(Ray localRay);
 
-    public double[] normalAt(double[] worldPoint) {
-        if (!Tuple.isPoint(worldPoint)) throw new IllegalArgumentException();
+    public Tuple normalAt(Tuple worldPoint) {
+        if (!worldPoint.isPoint()) throw new IllegalArgumentException();
         var localPoint = inverseTransform.multiply(worldPoint);
         var localNormal = localNormalAt(localPoint);
         var worldNormal = inverseTransformTranspose.multiply(localNormal);
-        worldNormal[3] = 0;
-        return Tuple.normalize(worldNormal);
+        return Tuple.vector(worldNormal.x(), worldNormal.y(), worldNormal.z()).normalize();
     }
 
     public Intersections intersect(Ray r) {
@@ -55,7 +54,7 @@ public abstract class Shape {
         inverseTransformTranspose = inverseTransform.transpose();
     }
 
-    public Color lighting(Light light, double[] shadowPoint, double[] eyev, double[] normalv, double shadowedIntensity) {
+    public Color lighting(Light light, Tuple shadowPoint, Tuple eyev, Tuple normalv, double shadowedIntensity) {
         return material.lighting(light, shadowPoint, eyev, normalv, shadowedIntensity);
     }
 

@@ -7,17 +7,17 @@ import static io.zocalo.Utils.SHADOW_OFFSET;
 public record Intersection(double t, Shape object) {
 
     public Computations prepareComputations(Ray r) {
-        var point = Ray.position(r.origin(), r.direction(), t);
-        var eyev = Tuple.negate(r.direction());
+        var point = r.position(t);
+        var eyev = r.direction().negate();
         var normalv = object.normalAt(point);
         var inside = false;
 
-        if (Tuple.dot(normalv, eyev) < 0) {
+        if (normalv.dot(eyev) < 0) {
             inside = true;
-            normalv = Tuple.negate(normalv);
+            normalv = normalv.negate();
         }
 
-        var overPoint = Tuple.add(point, Tuple.multiply(normalv, SHADOW_OFFSET));
+        var overPoint = normalv.multiply(SHADOW_OFFSET).add(point);
 
         return new Computations(t, object, point, eyev, normalv, inside, overPoint);
     }

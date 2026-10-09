@@ -16,16 +16,16 @@ public class Plane extends Shape {
 
     @Override
     public Intersections localIntersect(Ray r) {
-        if (Math.abs(r.direction()[1]) < EPSILON) {
+        if (Math.abs(r.direction().y()) < EPSILON) {
             return new Intersections();
         }
-        var t = -r.origin()[1] / r.direction()[1];
+        var t = -r.origin().y() / r.direction().y();
         return new Intersections(new Intersection(t, this));
     }
 
     @Override
-    public double[] localNormalAt(double[] localPoint) {
-        if (!Tuple.isPoint(localPoint)) throw new IllegalArgumentException();
-        return new double[] { 0, 1, 0, 0 };
+    public Tuple localNormalAt(Tuple localPoint) {
+        if (!localPoint.isPoint()) throw new IllegalArgumentException();
+        return Tuple.vector(0, 1, 0);
     }
 }

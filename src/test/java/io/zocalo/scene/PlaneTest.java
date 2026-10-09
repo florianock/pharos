@@ -1,9 +1,9 @@
 package io.zocalo.scene;
 
 import io.zocalo.kernel.Ray;
+import io.zocalo.kernel.Tuple;
 import org.junit.jupiter.api.Test;
 
-import static io.zocalo.Utils.EPSILON;
 import static org.junit.jupiter.api.Assertions.*;
 
 class PlaneTest {
@@ -11,19 +11,19 @@ class PlaneTest {
     @Test
     void theNormalOfAPlaneIsConstantEverywhere() {
         var p = new Plane();
-        var n1 = p.localNormalAt(new double[]{0, 0, 0, 1});
-        var n2 = p.localNormalAt(new double[]{10, 0, -10, 1});
-        var n3 = p.localNormalAt(new double[]{-5, 0, 150, 1});
+        var n1 = p.localNormalAt(Tuple.point(0, 0, 0));
+        var n2 = p.localNormalAt(Tuple.point(10, 0, -10));
+        var n3 = p.localNormalAt(Tuple.point(-5, 0, 150));
 
-        assertArrayEquals(new double[]{ 0, 1, 0, 0 }, n1, EPSILON);
-        assertArrayEquals(new double[]{ 0, 1, 0, 0 }, n2, EPSILON);
-        assertArrayEquals(new double[]{ 0, 1, 0, 0 }, n3, EPSILON);
+        assertEquals(Tuple.vector(0, 1, 0), n1);
+        assertEquals(Tuple.vector(0, 1, 0), n2);
+        assertEquals(Tuple.vector(0, 1, 0), n3);
     }
 
     @Test
     void intersectWithARayParallelToThePlane() {
         var p = new Plane();
-        var r = new Ray(new double[]{0, 10, 0, 1}, new double[]{0, 0, 1, 0});
+        var r = new Ray(Tuple.point(0, 10, 0),Tuple.vector(0, 0, 1));
         var xs = p.localIntersect(r);
         assertEquals(0, xs.count());
     }
@@ -31,7 +31,7 @@ class PlaneTest {
     @Test
     void intersectWithACoplanarRay() {
         var p = new Plane();
-        var r = new Ray(new double[]{0, 0, 0, 1}, new double[]{0, 0, 1, 0});
+        var r = new Ray(Tuple.point(0, 0, 0), Tuple.vector(0, 0, 1));
         var xs = p.localIntersect(r);
         assertEquals(0, xs.count());
     }
@@ -39,7 +39,7 @@ class PlaneTest {
     @Test
     void aRayIntersectingAPlaneFromAbove() {
         var p = new Plane();
-        var r = new Ray(new double[]{0, 1, 0, 1}, new double[]{0, -1, 0, 0});
+        var r = new Ray(Tuple.point(0, 1, 0), Tuple.vector(0, -1, 0));
         var xs = p.localIntersect(r);
         assertEquals(1, xs.count());
         var x = xs.get(0);
@@ -50,7 +50,7 @@ class PlaneTest {
     @Test
     void aRayIntersectingAPlaneFromBelow() {
         var p = new Plane();
-        var r = new Ray(new double[]{0, -1, 0, 1}, new double[]{0, 1, 0, 0});
+        var r = new Ray(Tuple.point(0, -1, 0), Tuple.vector(0, 1, 0));
         var xs = p.localIntersect(r);
         assertEquals(1, xs.count());
         var x = xs.get(0);
