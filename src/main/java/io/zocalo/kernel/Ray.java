@@ -13,7 +13,7 @@ public record Ray(double[] origin, double[] direction) {
     }
 
     public Tuple position(double t) {
-        return new Tuple(position(origin.clone(), direction.clone(), t));
+        return new Tuple(position(origin, direction, t));
     }
 
     public static double[] position(double[] o, double[] d, double t) {

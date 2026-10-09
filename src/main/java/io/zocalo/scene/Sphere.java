@@ -26,9 +26,9 @@ public class Sphere extends Shape {
         var sphereToRay = Tuple.subtract(r.origin(), new double[] { 0, 0, 0, 1 });
 
         var direction = r.direction();
-        var a = Tuple.dot(direction.clone(), direction);
-        var b = 2 * Tuple.dot(direction.clone(), sphereToRay);
-        var c = Tuple.dot(sphereToRay.clone(), sphereToRay) - 1;
+        var a = Tuple.dot(direction, direction);
+        var b = 2 * Tuple.dot(direction, sphereToRay);
+        var c = Tuple.dot(sphereToRay, sphereToRay) - 1;
 
         var discriminant = (b * b) - (4 * a * c);
 

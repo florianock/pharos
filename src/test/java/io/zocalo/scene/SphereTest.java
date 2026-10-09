@@ -128,6 +128,7 @@ class SphereTest {
 
         var n = s.localNormalAt(new double[]{v, v, v, 1});
 
-        assertEquals(n, Tuple.normalize(n));
+        var normalizedN = Tuple.normalize(n);
+        assertArrayEquals(normalizedN, n);
     }
 }

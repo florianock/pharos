@@ -109,11 +109,11 @@ public record World(Shape[] objects, Light[] lights) {
                 Tuple.vector(-2, -4, -6).values()
         );  // canonical test from Chapter 1 of the Challenge
 
-        var toLight = Tuple.subtract(lightPosition.clone(), shadingPoint);
+        var toLight = Tuple.subtract(lightPosition, shadingPoint);
         var distance = Tuple.magnitude(toLight);
         if (distance < EPSILON) return false;
 
-        var direction = Tuple.normalize(toLight.clone());
+        var direction = Tuple.normalize(toLight);
         direction[3] = 0;
 
         var r = Ray.create(shadingPoint, direction);

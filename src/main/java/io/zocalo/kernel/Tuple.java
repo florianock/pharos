@@ -52,43 +52,46 @@ public class Tuple {
     public static boolean isVector(double[] t) { return t.length == 4 && equalEnough(t[3], 0.0);}
 
     public Tuple add(Tuple t) {
-        return new Tuple(add(values.clone(), t.values()));
+        return new Tuple(add(values, t.values()));
     }
 
     public static double[] add(double[] a, double[] b) {
-        a[0] += b[0];
-        a[1] += b[1];
-        a[2] += b[2];
-        a[3] += b[3];
-        return a;
+        return new double[] {
+            a[0] + b[0],
+            a[1] + b[1],
+            a[2] + b[2],
+            a[3] + b[3]
+        };
     }
 
     public Tuple subtract(Tuple t) {
-        return new Tuple(subtract(values.clone(), t.values()));
+        return new Tuple(subtract(values, t.values()));
     }
 
     public static double[] subtract(double[] a, double[] b) {
-        a[0] -= b[0];
-        a[1] -= b[1];
-        a[2] -= b[2];
-        a[3] -= b[3];
-        return a;
+        return new double[] {
+            a[0] - b[0],
+            a[1] - b[1],
+            a[2] - b[2],
+            a[3] - b[3],
+        };
     }
 
     public Tuple multiply(double scalar) {
-        return new Tuple(multiply(values.clone(), scalar));
+        return new Tuple(multiply(values, scalar));
     }
 
     public static double[] multiply(double[] a, double scalar) {
-        a[0] *= scalar;
-        a[1] *= scalar;
-        a[2] *= scalar;
-        a[3] *= scalar;
-        return a;
+        return new double[] {
+            a[0] * scalar,
+            a[1] * scalar,
+            a[2] * scalar,
+            a[3] * scalar
+        };
     }
 
     public Tuple divide(double scalar) {
-        return new Tuple(divide(values.clone(), scalar));
+        return new Tuple(divide(values, scalar));
     }
 
     public static double[] divide(double[] a, double scalar) {
@@ -96,20 +99,21 @@ public class Tuple {
     }
 
     public Tuple negate() {
-        return new Tuple(negate(values.clone()));
+        return new Tuple(negate(values));
     }
 
     public static double[] negate(double[] a) {
-        a[0] = 0 - a[0];
-        a[1] = 0 - a[1];
-        a[2] = 0 - a[2];
-        a[3] = 0 - a[3];
-        return a;
+        return new double[] {
+            0 - a[0],
+            0 - a[1],
+            0 - a[2],
+            0 - a[3]
+        };
     }
 
     public double magnitude() {
         if (this.isPoint()) throw new IllegalStateException(this.toString());
-        return magnitude(values.clone());
+        return magnitude(values);
     }
 
     public static double magnitude(double[] a) {
@@ -117,17 +121,18 @@ public class Tuple {
     }
 
     public Tuple normalize() {
-        return new Tuple(normalize(values.clone()));
+        return new Tuple(normalize(values));
     }
 
     public static double[] normalize(double[] a) {
         var magnitude = magnitude(a);
         if (magnitude == 0) return a;
-        a[0] /= magnitude;
-        a[1] /= magnitude;
-        a[2] /= magnitude;
-        a[3] /= magnitude;
-        return a;
+        return new double[] {
+            a[0] / magnitude,
+            a[1] / magnitude,
+            a[2] / magnitude,
+            a[3] / magnitude
+        };
     }
 
     public double dot(Tuple t) {
@@ -158,7 +163,7 @@ public class Tuple {
     }
 
     public Tuple reflect(final Tuple n) {
-        return new Tuple(reflect(values.clone(), n.values()));
+        return new Tuple(reflect(values, n.values()));
     }
 
     public static double[] reflect(double[] a, double[] b) {
@@ -201,10 +206,10 @@ public class Tuple {
         var trueUp = Tuple.cross(left, forward);
 
         var orientation = new Matrix4x4(new double[] {
-                    left[0],         left[1],         left[2], 0,
-                  trueUp[0],       trueUp[1],       trueUp[2], 0,
-                -forward[0],     -forward[1],     -forward[2], 0,
-                          0,               0,               0, 1
+                left[0],     left[1],     left[2], 0,
+              trueUp[0],   trueUp[1],   trueUp[2], 0,
+            -forward[0], -forward[1], -forward[2], 0,
+                      0,           0,           0, 1
         });
 
         return orientation.multiply(Matrix4x4.translation(-from[0], -from[1], -from[2]));

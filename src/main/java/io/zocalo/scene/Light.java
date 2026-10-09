@@ -46,12 +46,12 @@ public record Light(Tuple position, Tuple corner, Tuple uvec, int usteps, Tuple 
             for (var u = 0; u < usteps; u++) {
                 // find the direction to the light source
                 var lightPosition = pointOnLight(u, v).values();
-                var toLight = Tuple.subtract(lightPosition.clone(), shadowPoint);
-                var lightv = Tuple.normalize(toLight.clone());
+                var toLight = Tuple.subtract(lightPosition, shadowPoint);
+                var lightv = Tuple.normalize(toLight);
                 // lightDotNormal represents the cosine of the angle between the
                 // light vector and the normal vector. A negative number means the
                 // light is on the other side of the surface.
-                var lightDotNormal = Tuple.dot(lightv.clone(), normalv);
+                var lightDotNormal = Tuple.dot(lightv, normalv);
                 if (lightDotNormal >= 0) {
                     // compute the diffuse contribution
                     double diffusePart = material.diffuse() * lightDotNormal;
@@ -60,7 +60,7 @@ public record Light(Tuple position, Tuple corner, Tuple uvec, int usteps, Tuple 
                     // reflectDotEye represents the cosine of the angle between the
                     // reflection vector and the eye vector. A negative number means the
                     // light reflects away from the eye.
-                    var reflectv = Tuple.reflect(Tuple.negate(lightv), normalv.clone());
+                    var reflectv = Tuple.reflect(Tuple.negate(lightv), normalv);
                     var reflectDotEye = Tuple.dot(reflectv, eyev);
                     if (reflectDotEye > 0) {
                         // compute the specular contribution
