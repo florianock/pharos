@@ -35,9 +35,10 @@ public record Light(Tuple position, Tuple corner, Tuple uvec, int usteps, Tuple 
     }
 
     public Tuple pointOnLight(int u, int v) {
-        return corner
+        var jittered = corner
                 .add(uvec.multiply(u + (jitter ? ThreadLocalRandom.current().nextDouble() : 0.5)))
                 .add(vvec.multiply(v + (jitter ? ThreadLocalRandom.current().nextDouble() : 0.5)));
+        return Tuple.point(jittered.x(), jittered.y(), jittered.z());
     }
 
     Color getAveragedDiffuseAndSpecularFactor(Tuple shadowPoint, Tuple eyev, Tuple normalv, double shadowedIntensity, Color effectiveColor, Material material) {
