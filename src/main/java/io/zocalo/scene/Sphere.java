@@ -3,6 +3,7 @@ package io.zocalo.scene;
 import io.zocalo.Utils;
 import io.zocalo.kernel.*;
 
+// TODO Consider making a record
 public class Sphere extends Shape {
 
     public Sphere(Matrix4x4 t) {

@@ -2,6 +2,8 @@ package io.zocalo.kernel;
 
 import static io.zocalo.Utils.equalEnough;
 
+// TODO consider removing w component and just defining Point and Vector classes instead of Tuple.
+//      Leverage the type system to make nonsensical calculations impossible, like Point.add(Point), Point.magnitude(), etc.
 public record Tuple(double x, double y, double z, double w) {
 
     public Tuple(double[] values) {
@@ -38,7 +40,7 @@ public record Tuple(double x, double y, double z, double w) {
     }
 
     public double magnitude() {
-        if (this.isPoint()) throw new IllegalStateException(this.toString());
+        if (!this.isVector()) throw new IllegalStateException(this.toString());
         return Math.sqrt(x * x + y * y + z * z + w * w);
     }
 
@@ -49,15 +51,15 @@ public record Tuple(double x, double y, double z, double w) {
     }
 
     public double dot(Tuple t) {
-        if (this.isPoint()) throw new IllegalStateException(this.toString());
-        if (t.isPoint()) throw new IllegalArgumentException(t.toString());
+        if (!this.isVector()) throw new IllegalStateException(this.toString());
+        if (!t.isVector()) throw new IllegalArgumentException(t.toString());
 
-        return x * t.x() + y * t.y() + z * t.z() + w * t.w();
+        return x * t.x() + y * t.y() + z * t.z() + 0;
     }
 
     public Tuple cross(Tuple t) {
-        if (this.isPoint()) throw new IllegalStateException(this.toString());
-        if (t.isPoint()) throw new IllegalArgumentException(t.toString());
+        if (!this.isVector()) throw new IllegalStateException(this.toString());
+        if (!t.isVector()) throw new IllegalArgumentException(t.toString());
 
         return new Tuple(
                 y * t.z() - z * t.y(),

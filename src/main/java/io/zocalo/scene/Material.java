@@ -4,19 +4,7 @@ import io.zocalo.kernel.Tuple;
 
 import java.util.Objects;
 
-public class Material {
-
-    private final Color color;
-    private final double ambient, diffuse, specular;
-    private final double shininess;
-
-    public Material(Color color, double ambient, double diffuse, double specular, double shininess) {
-        this.color = color;
-        this.ambient = ambient;
-        this.diffuse = diffuse;
-        this.specular = specular;
-        this.shininess = shininess;
-    }
+public record Material(Color color, double ambient, double diffuse, double specular, double shininess) {
 
     public Material() {
         this(Color.WHITE, 0.1, 0.9, 0.9, 200.0);
@@ -24,26 +12,6 @@ public class Material {
 
     public Material(Builder builder) {
         this(builder.color, builder.ambient, builder.diffuse, builder.specular, builder.shininess);
-    }
-
-    public Color color() {
-        return color;
-    }
-
-    public double ambient() {
-        return ambient;
-    }
-
-    public double diffuse() {
-        return diffuse;
-    }
-
-    public double specular() {
-        return specular;
-    }
-
-    public double shininess() {
-        return shininess;
     }
 
     public Color lighting(Light light, Tuple point, Tuple eyev, Tuple normalv, double shadowedIntensity) {
@@ -67,26 +35,12 @@ public class Material {
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Material material)) return false;
-        return Double.compare(ambient, material.ambient) == 0 && Double.compare(diffuse, material.diffuse) == 0 &&
-                Double.compare(specular, material.specular) == 0 && shininess == material.shininess &&
-                Objects.equals(color, material.color);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(color, ambient, diffuse, specular, shininess);
-    }
-
-    @Override
-    public String toString() {
-        return "Material{" +
-                "color=" + color +
-                ", ambient=" + ambient +
-                ", diffuse=" + diffuse +
-                ", specular=" + specular +
-                ", shininess=" + shininess +
-                '}';
+        if (!(o instanceof Material(
+                Color color1, double ambient1, double diffuse1, double specular1, double shininess1
+        ))) return false;
+        return Double.compare(ambient, ambient1) == 0 && Double.compare(diffuse, diffuse1) == 0 &&
+                Double.compare(specular, specular1) == 0 && shininess == shininess1 &&
+                Objects.equals(color, color1);
     }
 
     public static class Builder {
@@ -128,10 +82,6 @@ public class Material {
             this.specular = material.specular;
             this.shininess = material.shininess;
             return this;
-        }
-
-        public static Material create() {
-            return new Material();
         }
 
         public Material build() {

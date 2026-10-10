@@ -5,6 +5,7 @@ import io.zocalo.kernel.Matrix4x4;
 import io.zocalo.kernel.Ray;
 import io.zocalo.kernel.Tuple;
 
+// TODO Consider changing to sealed interface
 public abstract class Shape {
 
     protected Material material;
