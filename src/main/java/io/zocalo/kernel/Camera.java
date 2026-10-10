@@ -7,9 +7,10 @@ import java.util.concurrent.Executors;
 
 public class Camera {
 
-    private static final boolean showPreview = true;
-    private static final boolean shadows = true;
-    private static final RenderMode renderMode = RenderMode.SHADE;
+    private static final boolean SHOW_PREVIEW = true;
+    private static final boolean SHADOWS = true;
+    private static final RenderMode RENDER_MODE = RenderMode.SHADE;
+    private static final int TILE_SIZE = 32;
 
     private final int hsize, vsize;
     private final double fov;
@@ -85,15 +86,15 @@ public class Camera {
 
     public Canvas render(World w) {
         var image = new Canvas(hsize, vsize);
-        if (showPreview) image.setupGui();
+        if (SHOW_PREVIEW) image.setupGui();
         var start = System.nanoTime();
         for (var y = 0; y < vsize; y++) {
             for (var x = 0; x < hsize; x++) {
                 var ray = rayForPixel(x, y);
-                var color = w.colorAt(ray, renderMode, shadows);
+                var color = w.colorAt(ray, RENDER_MODE, SHADOWS);
                 image.writePixel(x, y, color);
             }
-            if (showPreview) image.repaint();
+            if (SHOW_PREVIEW) image.repaint();
         }
         var end = System.nanoTime();
         System.out.println("Duration: " + (end - start) + " nanoseconds");
@@ -106,29 +107,28 @@ public class Camera {
     public Canvas renderParallel(World w) {
         var image = new Canvas(hsize, vsize);
 
-        var tileSize = 32;
-        var numTilesX = (hsize + tileSize - 1) / tileSize;
-        var numTilesY = (vsize + tileSize - 1) / tileSize;
+        var numTilesX = (hsize + TILE_SIZE - 1) / TILE_SIZE;
+        var numTilesY = (vsize + TILE_SIZE - 1) / TILE_SIZE;
 
-        if (showPreview) image.setupGui();
+        if (SHOW_PREVIEW) image.setupGui();
         var start = System.nanoTime();
 
         try (var executor = Executors.newWorkStealingPool()) {
             for (var ty = 0; ty < numTilesY; ty++) {
                 for (var tx = 0; tx < numTilesX; tx++) {
-                    var xStart = tx * tileSize;
-                    var yStart = ty * tileSize;
-                    var xEnd = Math.min(hsize, xStart + tileSize);
-                    var yEnd = Math.min(vsize, yStart + tileSize);
+                    var xStart = tx * TILE_SIZE;
+                    var yStart = ty * TILE_SIZE;
+                    var xEnd = Math.min(hsize, xStart + TILE_SIZE);
+                    var yEnd = Math.min(vsize, yStart + TILE_SIZE);
                     executor.submit(() -> {
                         for (var y = yStart; y < yEnd; y++) {
                             for (var x = xStart; x < xEnd; x++) {
                                 var ray = rayForPixel(x, y);
-                                var color = w.colorAt(ray, RenderMode.SHADE, shadows);
+                                var color = w.colorAt(ray, RenderMode.SHADE, SHADOWS);
                                 image.writePixel(x, y, color);
                             }
                         }
-                        if (showPreview) image.repaint();
+                        if (SHOW_PREVIEW) image.repaint();
                     });
                 }
             }
