@@ -2,6 +2,7 @@ package io.zocalo.kernel;
 
 import java.util.*;
 
+// TODO make this behave like a collection or something
 public class Intersections {
 
     private final ArrayList<Intersection> hits;

@@ -35,11 +35,6 @@ public class Sphere extends Shape {
 
         if (discriminant < 0) return new Intersections();
 
-//        double q = (b < 0)
-//                ? -(b + Math.sqrt(discriminant)) / 2
-//                : -(b - Math.sqrt(discriminant)) / 2;
-//
-//        return new Intersections(new Intersection(q, this), new Intersection(c / q, this));
         return new Intersections(
                 new Intersection((-b - Math.sqrt(discriminant)) / (2 * a), this),
                 new Intersection((-b + Math.sqrt(discriminant)) / (2 * a), this)
