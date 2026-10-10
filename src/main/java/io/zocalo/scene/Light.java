@@ -4,19 +4,16 @@ import io.zocalo.kernel.Tuple;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public record Light(Tuple position, Tuple corner, Tuple uvec, int usteps, Tuple vvec, int vsteps, int samples, boolean jitter, Color intensity) {
+public record Light(Tuple corner, Tuple uvec, int usteps, Tuple vvec, int vsteps, int samples, boolean jitter, Color intensity) {
 
     public static Light pointLight(Tuple position, Color intensity) {
-        return new Light(position, position, Tuple.vector(0, 0, 0), 1, Tuple.vector(0, 0, 0), 1, 1, false, intensity);
+        return new Light(position, Tuple.vector(0, 0, 0), 1, Tuple.vector(0, 0, 0), 1, 1, false, intensity);
     }
 
     public static Light areaLight(Tuple corner, Tuple fullUvec, int usteps, Tuple fullVvec, int vsteps, boolean jitter, Color intensity) {
         var uvec = fullUvec.divide(usteps);
         var vvec = fullVvec.divide(vsteps);
-        return new Light(
-                corner.add(uvec.multiply((double)usteps/2)).add(vvec.multiply((double)vsteps/2)),
-                corner, uvec, usteps, vvec, vsteps, usteps * vsteps, jitter, intensity
-        );
+        return new Light(corner, uvec, usteps, vvec, vsteps, usteps * vsteps, jitter, intensity);
     }
 
     public double intensityAt(Tuple surfacePoint, World w) {

@@ -15,7 +15,7 @@ class LightTest {
         var intensity = Color.WHITE;
         var light = Light.pointLight(position, intensity);
 
-        assertEquals(light.position(), position);
+        assertEquals(light.corner(), position);
         assertEquals(light.intensity(), intensity);
     }
 
@@ -50,7 +50,6 @@ class LightTest {
         assertEquals(Tuple.vector(0, 0, 0.5), light.vvec());
         assertEquals(2, light.vsteps());
         assertEquals(8, light.samples());
-        assertEquals(Tuple.point(1, 0, 0.5), light.position());
     }
 
     @ParameterizedTest
