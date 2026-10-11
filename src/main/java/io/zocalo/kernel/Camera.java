@@ -13,9 +13,9 @@ public class Camera {
     private static final int TILE_SIZE = 32;
 
     private final int hsize, vsize;
-    private final double fov;
-    private final Matrix4x4 viewTransform;
-    private final Matrix4x4 inverseViewTransform;
+    private double fov;
+    private Matrix4x4 viewTransform;
+    private Matrix4x4 inverseViewTransform;
     private final double halfWidth;
     private final double halfHeight;
     private final double pixelSize;
@@ -62,6 +62,13 @@ public class Camera {
         return pixelSize;
     }
 
+    // TODO update camera to 'walk' through world
+    public void update(Matrix4x4 viewTransform, double fov) {
+        this.viewTransform = viewTransform;
+        this.inverseViewTransform = viewTransform.invert();
+        this.fov = fov;
+    }
+
     public Ray rayForPixel(int px, int py) {
         // the offset from the edge of the canvas to the pixel's center
         var xOffset = (px + 0.5) * pixelSize;
@@ -105,12 +112,16 @@ public class Camera {
     }
 
     public Canvas renderParallel(World w) {
+        return renderParallel(w, SHOW_PREVIEW);
+    }
+
+    public Canvas renderParallel(World w, boolean showPreview) {
         var image = new Canvas(hsize, vsize);
 
         var numTilesX = (hsize + TILE_SIZE - 1) / TILE_SIZE;
         var numTilesY = (vsize + TILE_SIZE - 1) / TILE_SIZE;
 
-        if (SHOW_PREVIEW) image.setupGui();
+        if (showPreview) image.setupGui();
         var start = System.nanoTime();
 
         try (var executor = Executors.newWorkStealingPool()) {
@@ -128,7 +139,7 @@ public class Camera {
                                 image.writePixel(x, y, color);
                             }
                         }
-                        if (SHOW_PREVIEW) image.repaint();
+                        if (showPreview) image.repaint();
                     });
                 }
             }

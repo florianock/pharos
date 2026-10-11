@@ -1,6 +1,7 @@
-package io.zocalo.scene;
+package io.zocalo.scene.shapes;
 
 import io.zocalo.kernel.*;
+import io.zocalo.scene.Material;
 
 import static io.zocalo.Utils.EPSILON;
 
@@ -8,6 +9,10 @@ public class Plane extends Shape {
 
     public Plane() {
         super(Matrix4x4.identity(), new Material());
+    }
+
+    public Plane(Material material) {
+        super(Matrix4x4.identity(), material);
     }
 
     public Plane(Matrix4x4 transform, Material material) {
@@ -25,7 +30,7 @@ public class Plane extends Shape {
 
     @Override
     public Tuple localNormalAt(Tuple localPoint) {
-        if (!localPoint.isPoint()) throw new IllegalArgumentException();
+        assert localPoint.isPoint();
         return Tuple.vector(0, 1, 0);
     }
 }

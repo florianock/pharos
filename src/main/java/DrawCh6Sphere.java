@@ -4,7 +4,7 @@ import io.zocalo.kernel.Tuple;
 import io.zocalo.scene.Color;
 import io.zocalo.scene.Light;
 import io.zocalo.scene.Material;
-import io.zocalo.scene.Sphere;
+import io.zocalo.scene.shapes.Sphere;
 
 void main() throws IOException {
     var canvasPixels = 1080;
@@ -17,9 +17,9 @@ void main() throws IOException {
 
     final double pixelSize = wallSize / canvasPixels;
     final double half = wallSize / 2d;
-    var m = new Material.Builder().color(Color.create(1, 0.2, 1)).build();
+    var m = new Material.Builder().color(new Color(1, 0.2, 1)).build();
     final Sphere shape = new Sphere(m);
-    var lightColor = Color.create(1, 1, 1);
+    var lightColor = new Color(1, 1, 1);
     var light = Light.pointLight(lightPosition, lightColor);
 
     var tileSize = 32;
@@ -51,7 +51,7 @@ void main() throws IOException {
                                 var point = r.position(hit.t());
                                 var normal = hit.object().normalAt(point);
                                 var eye = r.direction().negate();
-                                var color = hit.object().getMaterial().lighting(light, point, eye, normal, 1.0);
+                                var color = hit.object().getMaterial().lighting(new Sphere(), light, point, eye, normal, 1.0);
                                 canvas.writePixel(x, y, color);
                             }
                         }

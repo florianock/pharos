@@ -69,7 +69,7 @@ class CameraTest {
         var up = Tuple.vector(0, 1, 0);
         var c = new Camera(11, 11, HALF_PI, from.viewTransform(to, up));
         Canvas image = c.render(w);
-        var expected = Utils.pack255(Color.create(0.38066, 0.47583, 0.2855));
+        var expected = Utils.pack255(new Color(0.38066, 0.47583, 0.2855));
         assertEquals(expected, image.pixelAt(5, 5));
     }
 }

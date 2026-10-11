@@ -34,8 +34,7 @@ public class Intersections {
     }
 
     public Intersection get(int index) {
-        if (index < 0 || hits.size() <= index) throw new IndexOutOfBoundsException();
-
+        assert 0 <= index && index < hits.size();
         hits.sort(Comparator.comparingDouble(Intersection::t));
         return hits.get(index);
     }

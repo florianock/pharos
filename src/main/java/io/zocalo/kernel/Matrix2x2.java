@@ -13,23 +13,17 @@ public class Matrix2x2 {
     }
 
     public Matrix2x2(double[] data) {
-        if (data.length != 4) throw new IllegalArgumentException(Arrays.toString(data));
-
+        assert data.length == 4;
         this.m = data.clone();
     }
 
     public Matrix2x2(double[][] m) {
-        if (m.length != 2 || m[0].length != 2 || m[1].length != 2) {
-            throw new IllegalArgumentException(Arrays.toString(m));
-        }
-
+        assert m.length == 2 && m[0].length == 2 && m[1].length == 2;
         this(new double[] { m[0][0], m[0][1], m[1][0], m[1][1] });
     }
 
     public double get(int r, int c) {
-        if (r < 0 || 1 < r) throw new IndexOutOfBoundsException(r);
-        if (c < 0 || 1 < c) throw new IndexOutOfBoundsException(c);
-
+        assert 0 <= r && r <= 1 && 0 <= c && c <= 1;
         return m[r * 2 + c];
     }
 

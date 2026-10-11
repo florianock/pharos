@@ -3,8 +3,7 @@ package io.zocalo.kernel;
 public record Ray(Tuple origin, Tuple direction) {
 
     public Ray {
-        if (!origin.isPoint()) throw new IllegalStateException("Not a valid origin: " + origin);
-        if (!direction.isVector()) throw new IllegalStateException("Not a valid direction: " + direction);
+        assert origin.isPoint() && direction.isVector();
     }
 
     public Tuple position(double t) {

@@ -3,6 +3,9 @@ package io.zocalo;
 import io.zocalo.kernel.Tuple;
 import io.zocalo.scene.*;
 import io.zocalo.scene.Color;
+import io.zocalo.scene.patterns.Solid;
+import io.zocalo.scene.patterns.Stripe;
+import io.zocalo.scene.shapes.Sphere;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,7 +29,7 @@ class MaterialTest {
 
     @Test
     void default_material() {
-        assertEquals(Color.create(1, 1, 1), m.color());
+        assertEquals(new Color(1, 1, 1), m.color());
         assertEquals(0.1, m.ambient());
         assertEquals(0.9, m.diffuse());
         assertEquals(0.9, m.specular());
@@ -39,8 +42,8 @@ class MaterialTest {
         var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
 
-        var result = m.lighting(light, position, eyev, normalv, 1.0);
-        assertEquals(Color.create(1.9, 1.9, 1.9), result);
+        var result = m.lighting(new Sphere(), light, position, eyev, normalv, 1.0);
+        assertEquals(new Color(1.9, 1.9, 1.9), result);
     }
 
     @Test
@@ -49,8 +52,8 @@ class MaterialTest {
         var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
 
-        var result = m.lighting(light, position, eyev, normalv, 1.0);
-        assertEquals(Color.create(1.0, 1.0, 1.0), result);
+        var result = m.lighting(new Sphere(), light, position, eyev, normalv, 1.0);
+        assertEquals(new Color(1.0, 1.0, 1.0), result);
     }
 
     @Test
@@ -59,8 +62,8 @@ class MaterialTest {
         var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 10, -10), Color.WHITE);
 
-        var result = m.lighting(light, position, eyev, normalv, 1.0);
-        assertEquals(Color.create(0.7364, 0.7364, 0.7364), result);
+        var result = m.lighting(new Sphere(), light, position, eyev, normalv, 1.0);
+        assertEquals(new Color(0.7364, 0.7364, 0.7364), result);
     }
 
     @Test
@@ -69,8 +72,8 @@ class MaterialTest {
         var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 10, -10), Color.WHITE);
 
-        var result = m.lighting(light, position, eyev, normalv, 1.0);
-        assertEquals(Color.create(1.63639, 1.63639, 1.63639), result);
+        var result = m.lighting(new Sphere(), light, position, eyev, normalv, 1.0);
+        assertEquals(new Color(1.63639, 1.63639, 1.63639), result);
     }
 
     @Test
@@ -79,8 +82,8 @@ class MaterialTest {
         var normalv = Tuple.vector(0, 0, -1);
         var light = Light.pointLight(Tuple.point(0, 0, 10), Color.WHITE);
 
-        var result = m.lighting(light, position, eyev, normalv, 1.0);
-        assertEquals(Color.create(0.1, 0.1, 0.1), result);
+        var result = m.lighting(new Sphere(), light, position, eyev, normalv, 1.0);
+        assertEquals(new Color(0.1, 0.1, 0.1), result);
     }
 
     @Test
@@ -90,8 +93,8 @@ class MaterialTest {
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
         var inShadow = 0.0;
 
-        var result = m.lighting(light, position, eyev, normalv, inShadow);
-        assertEquals(Color.create(0.1, 0.1, 0.1), result);
+        var result = m.lighting(new Sphere(), light, position, eyev, normalv, inShadow);
+        assertEquals(new Color(0.1, 0.1, 0.1), result);
     }
 
     @ParameterizedTest
@@ -133,23 +136,43 @@ class MaterialTest {
         var eyev = eye.subtract(point).normalize();
         var normalv = Tuple.vector(point.x(), point.y(), point.z());
 
-        var result = m.lighting(light, point, eyev, normalv, 1.0);
+        var result = m.lighting(new Sphere(), light, point, eyev, normalv, 1.0);
 
         assertEquals(expectedColor, result);
     }
 
+   @Test
+   void lightingWithAPatternApplied() {
+        var m = new Material.Builder()
+                .pattern(new Stripe(new Solid(Color.WHITE), new Solid(Color.BLACK)))
+                .ambient(1)
+                .diffuse(0)
+                .specular(0)
+                .build();
+        var sphere = new Sphere(m);
+        var eyev = Tuple.vector(0, 0, -1);
+        var normalv = Tuple.vector(0, 0, -1);
+        var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
+
+        var c1 = sphere.lighting(light, Tuple.point(0.9, 0, 0), eyev, normalv, 0.0);
+        var c2 = sphere.lighting(light, Tuple.point(1.1, 0, 0), eyev, normalv, 0.0);
+
+        assertEquals(Color.WHITE, c1);
+        assertEquals(Color.BLACK, c2);
+   }
+
     public static Stream<Arguments> intensitiesAndColors() {
         return Stream.of(
-                Arguments.of(1.0, Color.create(1, 1, 1)),
-                Arguments.of(0.5, Color.create(0.55, 0.55, 0.55)),
-                Arguments.of(0.0, Color.create(0.1, 0.1, 0.1))
+                Arguments.of(1.0, new Color(1, 1, 1)),
+                Arguments.of(0.5, new Color(0.55, 0.55, 0.55)),
+                Arguments.of(0.0, new Color(0.1, 0.1, 0.1))
         );
     }
 
     public static Stream<Arguments> normalsAndColors() {
         return Stream.of(
-                Arguments.of(Tuple.point(0, 0, -1), Color.create(0.9965, 0.9965, 0.9965)),
-                Arguments.of(Tuple.point(0, 0.7071, -0.7071), Color.create(0.6232, 0.6232, 0.6232))
+                Arguments.of(Tuple.point(0, 0, -1), new Color(0.9965, 0.9965, 0.9965)),
+                Arguments.of(Tuple.point(0, 0.7071, -0.7071), new Color(0.6232, 0.6232, 0.6232))
         );
     }
 }

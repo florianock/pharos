@@ -1,6 +1,6 @@
 package io.zocalo.kernel;
 
-import io.zocalo.scene.Shape;
+import io.zocalo.scene.shapes.Shape;
 
 import static io.zocalo.Utils.SHADOW_OFFSET;
 

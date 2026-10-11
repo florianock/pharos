@@ -11,26 +11,26 @@ class Matrix4x4Test {
 
     @Test
     void construct4x4Matrix_throwsIfNot16values() {
-        assertThrows(IllegalArgumentException.class, () -> new Matrix4x4(new double[][] {
+        assertThrows(AssertionError.class, () -> new Matrix4x4(new double[][] {
                 { 1, 2, 3, 4 },
                 { 5.5, 6.5, 7.5, 8.5 },
                 { 9, 10, 11, 12 },
                 { 13.5, 14.5, 15.5 }
         }));
-        assertThrows(IllegalArgumentException.class, () -> new Matrix4x4(new double[][] {
+        assertThrows(AssertionError.class, () -> new Matrix4x4(new double[][] {
                 { 1, 2, 3, 4 },
                 { 5.5, 6.5, 7.5, 8.5 },
                 { 9, 10, 11, 12 },
                 { 13.5, 14.5, 15.5, 16.5, 17.5 }
         }));
-        assertThrows(IllegalArgumentException.class, () -> new Matrix4x4(new double[][] {
+        assertThrows(AssertionError.class, () -> new Matrix4x4(new double[][] {
                 { 1, 2, 3, 4 },
                 { 5.5, 6.5, 7.5, 8.5 },
                 { 9, 10, 11, 12 },
                 { 13.5, 14.5, 15.5, 16.5 },
                 { 1, 2, 5, 6 }
         }));
-        assertThrows(IllegalArgumentException.class, () -> new Matrix4x4(new double[][] {
+        assertThrows(AssertionError.class, () -> new Matrix4x4(new double[][] {
                 { 1, 2, 3, 4 },
                 { 9, 10, 11, 12 },
                 { 13.5, 14.5, 15.5, 16.5, 17.5 }
@@ -64,10 +64,10 @@ class Matrix4x4Test {
                 { 13.5, 14.5, 15.5, 16.5 }
         });
 
-        assertThrows(IndexOutOfBoundsException.class, () -> m.get(4, 0));
-        assertThrows(IndexOutOfBoundsException.class, () -> m.get(0, 4));
-        assertThrows(IndexOutOfBoundsException.class, () -> m.get(-1, 0));
-        assertThrows(IndexOutOfBoundsException.class, () -> m.get(0, -1));
+        assertThrows(AssertionError.class, () -> m.get(4, 0));
+        assertThrows(AssertionError.class, () -> m.get(0, 4));
+        assertThrows(AssertionError.class, () -> m.get(-1, 0));
+        assertThrows(AssertionError.class, () -> m.get(0, -1));
     }
 
     @Test

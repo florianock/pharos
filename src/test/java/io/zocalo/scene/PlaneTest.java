@@ -2,6 +2,7 @@ package io.zocalo.scene;
 
 import io.zocalo.kernel.Ray;
 import io.zocalo.kernel.Tuple;
+import io.zocalo.scene.shapes.Plane;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

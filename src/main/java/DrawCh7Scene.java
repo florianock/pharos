@@ -3,6 +3,8 @@ import io.zocalo.scene.Material;
 import io.zocalo.kernel.Matrix4x4;
 import io.zocalo.kernel.Tuple;
 import io.zocalo.scene.*;
+import io.zocalo.scene.shapes.Shape;
+import io.zocalo.scene.shapes.Sphere;
 
 import static io.zocalo.Utils.*;
 
@@ -10,7 +12,7 @@ void main() throws IOException {
 
     var floor = new Sphere(Matrix4x4.scaling(10,0.01f, 10),
             new Material.Builder()
-                    .color(Color.create(1, 0.9f, 0.9f))
+                    .color(new Color(1, 0.9f, 0.9f))
                     .specular(0)
                     .build()
     );
@@ -34,7 +36,7 @@ void main() throws IOException {
     var middle = new Sphere(
             Matrix4x4.translation(-0.5f, 1, 0.5f),
             new Material.Builder()
-                    .color(Color.create(0.1f, 1, 0.5f))
+                    .color(new Color(0.1f, 1, 0.5f))
                     .diffuse(0.7f)
                     .specular(0.3f)
                     .build()
@@ -44,7 +46,7 @@ void main() throws IOException {
             Matrix4x4.translation(1.5f, 0.5f, -0.5f)
                     .multiply(Matrix4x4.scaling(0.5f, 0.5f, 0.5f)),
             new Material.Builder()
-                    .color(Color.create(0.5f, 1, 0.1f))
+                    .color(new Color(0.5f, 1, 0.1f))
                     .diffuse(0.7f)
                     .specular(0.3f)
                     .build()
@@ -54,7 +56,7 @@ void main() throws IOException {
             Matrix4x4.translation(-1.5f, 0.33f, -0.75f)
                     .multiply(Matrix4x4.scaling(0.33f, 0.33f, 0.33f)),
             new Material.Builder()
-                    .color(Color.create(1, 0.8f, 0.1f))
+                    .color(new Color(1, 0.8f, 0.1f))
                     .diffuse(0.7f)
                     .specular(0.3f)
                     .build()

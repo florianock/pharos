@@ -8,7 +8,7 @@ class ColorTest {
 
     @Test
     void colorTest() {
-        var c = Color.create(-0.5, 0.4, 1.7);
+        var c = new Color(-0.5, 0.4, 1.7);
 
         assertEqualEnough(-0.5, c.red());
         assertEqualEnough(0.4, c.green());
@@ -16,8 +16,8 @@ class ColorTest {
     }
     @Test
     void add() {
-        var c1 = Color.create(0.9, 0.6, 0.75);
-        var c2 = Color.create(0.7, 0.1, 0.25);
+        var c1 = new Color(0.9, 0.6, 0.75);
+        var c2 = new Color(0.7, 0.1, 0.25);
 
         var result = c1.add(c2);
 
@@ -28,8 +28,8 @@ class ColorTest {
 
     @Test
     void subtract() {
-        var c1 = Color.create(0.9, 0.6, 0.75);
-        var c2 = Color.create(0.7, 0.1, 0.25);
+        var c1 = new Color(0.9, 0.6, 0.75);
+        var c2 = new Color(0.7, 0.1, 0.25);
 
         var result = c1.subtract(c2);
 
@@ -40,7 +40,7 @@ class ColorTest {
 
     @Test
     void multiplyScalar() {
-        var c = Color.create(0.2, 0.3, 0.4);
+        var c = new Color(0.2, 0.3, 0.4);
 
         var result = c.multiply(2);
 
@@ -51,8 +51,8 @@ class ColorTest {
 
     @Test
     void hadamardProduct() {
-        var c1 = Color.create(1, 0.2, 0.4);
-        var c2 = Color.create(0.9, 1, 0.1);
+        var c1 = new Color(1, 0.2, 0.4);
+        var c2 = new Color(0.9, 1, 0.1);
 
         var result = c1.multiply(c2);
 

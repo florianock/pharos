@@ -14,35 +14,26 @@ public class Matrix4x4 {
     }
 
     public Matrix4x4(double[] data) {
-        if (data.length != 16) throw new IllegalArgumentException(Arrays.toString(data));
-
+        assert data.length == 16;
         this.m = data.clone();
     }
 
     public Matrix4x4(double[][] m) {
-        if (m.length != 4 || m[0].length != 4 || m[1].length != 4 || m[2].length != 4 || m[3].length != 4) {
-            throw new IllegalArgumentException(Arrays.toString(m));
-        }
-
+        assert m.length == 4 && m[0].length == 4 && m[1].length == 4 && m[2].length == 4 && m[3].length == 4;
         var data = new double[16];
         for (var r = 0; r < 4; r++) {
             System.arraycopy(m[r], 0, data, r * 4, 4);
         }
-
         this(data);
     }
 
     public double get(int r, int c) {
-        if (r < 0 || 3 < r) throw new IndexOutOfBoundsException(r);
-        if (c < 0 || 3 < c) throw new IndexOutOfBoundsException(c);
-
+        assert 0 <= r && r <= 3 && 0 <= c && c <= 3;
         return m[r * 4 + c];
     }
 
     public Matrix4x4 set(int r, int c, double value) {
-        if (r < 0 || 3 < r) throw new IndexOutOfBoundsException(r);
-        if (c < 0 || 3 < c) throw new IndexOutOfBoundsException(c);
-
+        assert 0 <= r && r <= 3 && 0 <= c && c <= 3;
         m[r * 4 + c] = value;
         return this;
     }

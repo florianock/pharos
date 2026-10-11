@@ -1,9 +1,12 @@
-package io.zocalo.scene;
+package io.zocalo.scene.shapes;
 
 import io.zocalo.kernel.Intersections;
 import io.zocalo.kernel.Matrix4x4;
 import io.zocalo.kernel.Ray;
 import io.zocalo.kernel.Tuple;
+import io.zocalo.scene.Color;
+import io.zocalo.scene.Light;
+import io.zocalo.scene.Material;
 
 // TODO Consider changing to sealed interface
 public abstract class Shape {
@@ -25,7 +28,7 @@ public abstract class Shape {
     public abstract Intersections localIntersect(Ray localRay);
 
     public Tuple normalAt(Tuple worldPoint) {
-        if (!worldPoint.isPoint()) throw new IllegalArgumentException();
+        assert worldPoint.isPoint();
         var localPoint = inverseTransform.multiply(worldPoint);
         var localNormal = localNormalAt(localPoint);
         var worldNormal = inverseTransformTranspose.multiply(localNormal);
@@ -45,6 +48,8 @@ public abstract class Shape {
         return transform;
     }
 
+    public Matrix4x4 getInverseTransform() {return inverseTransform;}
+
     public void setMaterial(Material material) {
         this.material = material;
     }
@@ -55,8 +60,12 @@ public abstract class Shape {
         inverseTransformTranspose = inverseTransform.transpose();
     }
 
+    public Tuple worldToObject(Tuple worldPoint) {
+        return inverseTransform.multiply(worldPoint);
+    }
+
     public Color lighting(Light light, Tuple shadowPoint, Tuple eyev, Tuple normalv, double shadowedIntensity) {
-        return material.lighting(light, shadowPoint, eyev, normalv, shadowedIntensity);
+        return material.lighting(this, light,shadowPoint, eyev, normalv, shadowedIntensity);
     }
 
     @Override

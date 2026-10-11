@@ -24,8 +24,8 @@ class RayTest {
         var origin = Tuple.point(1, 2, 3);
         var direction = Tuple.vector(4, 5, 6);
 
-        assertThrows(IllegalStateException.class, () -> Ray.create(direction, direction));
-        assertThrows(IllegalStateException.class, () -> Ray.create(origin, origin));
+        assertThrows(AssertionError.class, () -> Ray.create(direction, direction));
+        assertThrows(AssertionError.class, () -> Ray.create(origin, origin));
     }
 
     @Test

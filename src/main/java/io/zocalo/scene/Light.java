@@ -17,7 +17,7 @@ public record Light(Tuple corner, Tuple uvec, int usteps, Tuple vvec, int vsteps
     }
 
     public double intensityAt(Tuple surfacePoint, World w) {
-        if (!surfacePoint.isPoint()) throw new IllegalArgumentException("surface point must be a point");
+        assert surfacePoint.isPoint();
         var total = 0.0;
         for (var v = 0; v < vsteps; v++) {
             for (var u = 0; u < usteps; u++) {

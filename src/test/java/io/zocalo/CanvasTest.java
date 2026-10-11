@@ -15,7 +15,7 @@ class CanvasTest {
         assertEquals(10, c.width());
         assertEquals(20, c.height());
 
-        var zero = Color.create(0, 0, 0);
+        var zero = new Color(0, 0, 0);
         for (var x = 0; x < 10; x++) {
             for (var y = 0; y < 20; y++) {
                 assertEquals(zero, Color.of(c.pixelAt(x, y)));
@@ -47,9 +47,9 @@ class CanvasTest {
     @Test
     void canvasToPPM_PixelData() {
         var c = new Canvas(5, 3);
-        var c1 = Color.create(1.5f, 0, 0);
-        var c2 = Color.create(0, 0.5f, 0);
-        var c3 = Color.create(-0.5f, 0, 1);
+        var c1 = new Color(1.5f, 0, 0);
+        var c2 = new Color(0, 0.5f, 0);
+        var c3 = new Color(-0.5f, 0, 1);
 
         c.writePixel(0, 0, c1);
         c.writePixel(2, 1, c2);
@@ -66,7 +66,7 @@ class CanvasTest {
     @Test
     void canvasToPPM_splitsLongLines() {
         var c = new Canvas(10, 2);
-        c.initialize(Color.create(1, 0.8f, 0.6f));
+        c.initialize(new Color(1, 0.8f, 0.6f));
 
         var ppm = c.toPPM();
 

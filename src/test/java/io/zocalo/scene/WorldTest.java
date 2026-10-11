@@ -1,6 +1,8 @@
 package io.zocalo.scene;
 
 import io.zocalo.kernel.*;
+import io.zocalo.scene.shapes.Shape;
+import io.zocalo.scene.shapes.Sphere;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -20,10 +22,10 @@ class WorldTest {
 
     @Test
     void defaultWorldTest() {
-        var light = Light.pointLight(Tuple.point(-10, 10, -10), Color.create(1, 1, 1));
+        var light = Light.pointLight(Tuple.point(-10, 10, -10), new Color(1, 1, 1));
         var s1 = new Sphere(new Material
                         .Builder()
-                        .color(Color.create(0.8, 1.0, 0.6))
+                        .color(new Color(0.8, 1.0, 0.6))
                         .diffuse(0.7)
                         .specular(0.2)
                         .build());
@@ -54,7 +56,7 @@ class WorldTest {
         var i = new Intersection(4, shape);
         var comps = i.prepareComputations(r);
         var c = w.shadeHit(comps, false);
-        assertEquals(Color.create(0.38066, 0.47583, 0.2855), c);
+        assertEquals(new Color(0.38066, 0.47583, 0.2855), c);
     }
 
     @Test
@@ -65,7 +67,7 @@ class WorldTest {
         var i = new Intersection(0.5, shape);
         var comps = i.prepareComputations(r);
         var c =  w.shadeHit(comps, false);
-        assertEquals(Color.create(0.90498, 0.90498, 0.90498), c);
+        assertEquals(new Color(0.90498, 0.90498, 0.90498), c);
     }
 
     @Test
@@ -81,7 +83,7 @@ class WorldTest {
         var w =  World.defaultWorld();
         var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
         var c = w.colorAt(r);
-        assertEquals(Color.create(0.38066, 0.47583, 0.2855), c);
+        assertEquals(new Color(0.38066, 0.47583, 0.2855), c);
     }
 
     @Test
@@ -113,7 +115,7 @@ class WorldTest {
         var comps = i.prepareComputations(r);
         var c = w.shadeHit(comps, true);
 
-        assertEquals(Color.create(0.1, 0.1, 0.1), c);
+        assertEquals(new Color(0.1, 0.1, 0.1), c);
     }
 
     @ParameterizedTest

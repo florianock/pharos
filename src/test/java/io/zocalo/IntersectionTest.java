@@ -1,7 +1,7 @@
 package io.zocalo;
 
 import io.zocalo.kernel.*;
-import io.zocalo.scene.Sphere;
+import io.zocalo.scene.shapes.Sphere;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

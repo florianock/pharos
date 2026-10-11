@@ -45,23 +45,17 @@ public class Canvas {
     }
 
     public int pixelAt(int x, int y) {
-        if (x < 0 || width < x) throw new IndexOutOfBoundsException(x);
-        if (y < 0 || height < y) throw new IndexOutOfBoundsException(y);
-
+        assert 0 <= x && x < width && 0 <= y && y < height;
         return pixels[y * width + x];
     }
 
     public void writePixel(int x, int y, Color color) {
-        if (x < 0 || width < x) throw new IndexOutOfBoundsException(x);
-        if (y < 0 || height < y) throw new IndexOutOfBoundsException(y);
-
+        assert 0 <= x && x < width && 0 <= y && y < height;
         writePixel(x, y, pack255(color));
     }
 
     public void writePixel(int x, int y, int value) {
-        if (x < 0 || width < x) throw new IndexOutOfBoundsException(x);
-        if (y < 0 || height < y) throw new IndexOutOfBoundsException(y);
-
+        assert 0 <= x && x < width && 0 <= y && y < height;
         pixels[y * width + x] = value;
     }
 

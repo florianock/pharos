@@ -2,6 +2,8 @@ import io.zocalo.kernel.Camera;
 import io.zocalo.kernel.Matrix4x4;
 import io.zocalo.kernel.Tuple;
 import io.zocalo.scene.*;
+import io.zocalo.scene.shapes.Shape;
+import io.zocalo.scene.shapes.Sphere;
 
 import static io.zocalo.Utils.PI;
 import static io.zocalo.Utils.QTR_PI;
@@ -22,34 +24,34 @@ void main() throws IOException {
 
     var palm = new Sphere(
             Matrix4x4.translation(0, 0, -15).multiply(Matrix4x4.scaling(4, 3, 3)),
-            new Material.Builder().from(baseMaterial).color(Color.create(0.1f, 0.1f, 1)).build()
+            new Material.Builder().from(baseMaterial).color(new Color(0.1f, 0.1f, 1)).build()
     );
 
     var wrist = new Sphere(
                     Matrix4x4.rotationOnZ(QTR_PI)
                     .multiply(Matrix4x4.translation(-4, 0, -21))
                     .multiply(Matrix4x4.scaling(3, 3, 3)),
-            new Material.Builder().from(baseMaterial).color(Color.create(0.1f, 1, 1)).build()
+            new Material.Builder().from(baseMaterial).color(new Color(0.1f, 1, 1)).build()
     );
 
     var thumb = new Sphere(
             Matrix4x4.translation(-2, 2, -16).multiply(Matrix4x4.scaling(1, 3, 1)),
-            new Material.Builder().from(baseMaterial).color(Color.create(0.1f, 0.1f, 1)).build()
+            new Material.Builder().from(baseMaterial).color(new Color(0.1f, 0.1f, 1)).build()
     );
 
     var index = new Sphere(
             Matrix4x4.translation(3, 2, -22).multiply(Matrix4x4.scaling(3, 0.75f, 0.75f)),
-            new Material.Builder().from(baseMaterial).color(Color.create(1, 1, 0.1f)).build()
+            new Material.Builder().from(baseMaterial).color(new Color(1, 1, 0.1f)).build()
     );
 
     var middle = new Sphere(
             Matrix4x4.translation(4, 1, -19).multiply(Matrix4x4.scaling(3, 0.75f, 0.75f)),
-            new Material.Builder().from(baseMaterial).color(Color.create(0.1f, 1, 0.5f)).build()
+            new Material.Builder().from(baseMaterial).color(new Color(0.1f, 1, 0.5f)).build()
     );
 
     var ring = new Sphere(
             Matrix4x4.translation(4, 0, -18).multiply(Matrix4x4.scaling(3, 0.75f, 0.75f)),
-            new Material.Builder().from(baseMaterial).color(Color.create(0.1f, 1, 0.1f)).build()
+            new Material.Builder().from(baseMaterial).color(new Color(0.1f, 1, 0.1f)).build()
     );
 
     var pinky = new Sphere(
@@ -57,7 +59,7 @@ void main() throws IOException {
                     .multiply(Matrix4x4.rotationOnZ(-PI / 10))
                     .multiply(Matrix4x4.translation(1, 0, 0))
                     .multiply(Matrix4x4.scaling(2.5f, 0.6f, 0.6f)),
-            new Material.Builder().from(baseMaterial).color(Color.create(0.1f, 0.5f, 1)).build()
+            new Material.Builder().from(baseMaterial).color(new Color(0.1f, 0.5f, 1)).build()
     );
 
     var objects = new Shape[] { wall, palm, wrist, thumb, index, middle, ring, pinky };

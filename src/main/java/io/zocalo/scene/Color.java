@@ -7,24 +7,20 @@ import static io.zocalo.Utils.unpack255;
 public record Color(double red, double green, double blue) {
 
     public Color add(Color color) {
-        return Color.create(red + color.red(), green + color.green(), blue + color.blue());
+        return new Color(red + color.red(), green + color.green(), blue + color.blue());
     }
 
     public Color subtract(Color color) {
-        return Color.create(red - color.red(), green - color.green(), blue - color.blue());
+        return new Color(red - color.red(), green - color.green(), blue - color.blue());
     }
 
     public Color multiply(double scalar) {
-        return Color.create(red * scalar, green * scalar, blue * scalar);
+        return new Color(red * scalar, green * scalar, blue * scalar);
     }
 
     public Color multiply(Color color) {
         // Hadamard Product for colors
-        return Color.create(red() * color.red(), green() * color.green(), blue() * color.blue());
-    }
-
-    public static Color create(double r, double g, double b) {
-        return new Color(r, g, b);
+        return new Color(red() * color.red(), green() * color.green(), blue() * color.blue());
     }
 
     public static Color of(int i) {
@@ -33,11 +29,21 @@ public record Color(double red, double green, double blue) {
         return new Color(argb[1] / 255f, argb[2] / 255f, argb[3] / 255f);
     }
 
-    public static Color BLACK = Color.create(0, 0, 0);
-    public static Color RED = Color.create(1, 0, 0);
-    public static Color GREEN = Color.create(0, 1, 0);
-    public static Color BLUE = Color.create(0, 0, 1);
-    public static Color WHITE = Color.create(1, 1, 1);
+    public static Color BLACK = new Color(0, 0, 0);
+    public static Color RED = new Color(1, 0, 0);
+    public static Color GREEN = new Color(0, 1, 0);
+    public static Color AGREEN = new Color(  42/255d, 102/255d,  41/255d ); // green: grass
+    public static Color BLUE = new Color(0, 0, 1);
+    public static Color DARKBLUE = new Color(   2/255d,  43/255d,  68/255d ); // dark blue: deep water
+    public static Color DEEPBLUE = new Color(   9/255d,  62/255d,  92/255d ); // deep blue: water
+    public static Color ABLUE = new Color(  17/255d,  82/255d, 112/255d ); // blue: shallow water
+    public static Color LIGHTBLUE = new Color(  69/255d, 108/255d, 118/255d ); // light blue: shore
+    public static Color WHITE = new Color(1, 1, 1);
+    public static Color LIGHTGREEN = new Color( 115/255d, 128/255d,  77/255d ); // light green: veld
+    public static Color BROWN = new Color( 153/255d, 143/255d,  92/255d ); // brown: tundra
+    public static Color AGREY = new Color( 179/255d, 179/255d, 179/255d ); // grey: rocks
+    public static Color GREY = new Color( 0.5, 0.5, 0.5 ); // grey: rocks
+    public static final Color YELLOW = new Color(1, 1, 0);
 
     @Override
     public boolean equals(Object o) {

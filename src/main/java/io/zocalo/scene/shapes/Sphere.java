@@ -1,7 +1,8 @@
-package io.zocalo.scene;
+package io.zocalo.scene.shapes;
 
 import io.zocalo.Utils;
 import io.zocalo.kernel.*;
+import io.zocalo.scene.Material;
 
 // TODO Consider making a record
 public class Sphere extends Shape {
@@ -43,7 +44,7 @@ public class Sphere extends Shape {
 
     @Override
     public Tuple localNormalAt(Tuple localPoint) {
-        if (!localPoint.isPoint()) throw new IllegalArgumentException();
+        assert localPoint.isPoint();
         return localPoint.subtract(Utils.ORIGIN);
     }
 

@@ -1,4 +1,4 @@
-package io.zocalo.scene;
+package io.zocalo.scene.shapes;
 
 public enum Shapes {
     Sphere,

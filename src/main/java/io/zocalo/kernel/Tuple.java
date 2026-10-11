@@ -7,7 +7,7 @@ import static io.zocalo.Utils.equalEnough;
 public record Tuple(double x, double y, double z, double w) {
 
     public Tuple(double[] values) {
-        if (values.length != 4) throw new IllegalArgumentException();
+        assert values.length == 4;
         this(values[0], values[1], values[2], values[3]);
     }
 
@@ -20,6 +20,7 @@ public record Tuple(double x, double y, double z, double w) {
     }
 
     public Tuple add(Tuple t) {
+        assert !(t.isPoint() && this.isPoint());
         return new Tuple(x + t.x(), y + t.y(), z + t.z(), w + t.w());
     }
 
@@ -40,27 +41,24 @@ public record Tuple(double x, double y, double z, double w) {
     }
 
     public double magnitude() {
-        if (!this.isVector()) throw new IllegalStateException(this.toString());
+        assert this.isVector();
         return Math.sqrt(x * x + y * y + z * z + w * w);
     }
 
     public Tuple normalize() {
+        assert this.isVector();
         var magnitude = magnitude();
         if (magnitude <= 0) return this;
         return new Tuple(x / magnitude, y / magnitude, z / magnitude, w / magnitude);
     }
 
     public double dot(Tuple t) {
-        if (!this.isVector()) throw new IllegalStateException(this.toString());
-        if (!t.isVector()) throw new IllegalArgumentException(t.toString());
-
+        assert this.isVector() && t.isVector();
         return x * t.x() + y * t.y() + z * t.z() + 0;
     }
 
     public Tuple cross(Tuple t) {
-        if (!this.isVector()) throw new IllegalStateException(this.toString());
-        if (!t.isVector()) throw new IllegalArgumentException(t.toString());
-
+        assert this.isVector() && t.isVector();
         return new Tuple(
                 y * t.z() - z * t.y(),
                 z * t.x() - x * t.z(),
@@ -89,6 +87,7 @@ public record Tuple(double x, double y, double z, double w) {
     }
 
     public Matrix4x4 viewTransform(Tuple to, Tuple up) {
+        assert this.isPoint() && to.isPoint() && up.isVector();
         var forward = to.subtract(this).normalize();
         var upn = up.normalize();
         var left = forward.cross(upn);

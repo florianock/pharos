@@ -38,6 +38,12 @@ public class Utils {
         out[offset + 3]  =  i        & 0xFF;
     }
 
+    // This method is a *lot* faster than using (int)Math.floor(x)
+    public static int fastFloor(double x) {
+        int xi = (int)x;
+        return x<xi ? xi-1 : xi;
+    }
+
     /**
      * Useful alternative to Math.pow() for float base and int exponent.
      */

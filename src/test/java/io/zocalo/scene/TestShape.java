@@ -4,8 +4,9 @@ import io.zocalo.kernel.Intersections;
 import io.zocalo.kernel.Matrix4x4;
 import io.zocalo.kernel.Ray;
 import io.zocalo.kernel.Tuple;
+import io.zocalo.scene.shapes.Shape;
 
-public class TestShape extends Shape{
+public class TestShape extends Shape {
 
     private Ray savedRay;
 
@@ -29,7 +30,7 @@ public class TestShape extends Shape{
 
     @Override
     public Tuple localNormalAt(Tuple localPoint) {
-        if (!localPoint.isPoint()) throw new IllegalArgumentException();
+        assert localPoint.isPoint();
         return Tuple.vector(localPoint.x(), localPoint.y(), localPoint.z());
     }
 }

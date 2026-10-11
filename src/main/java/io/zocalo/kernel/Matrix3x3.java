@@ -13,16 +13,12 @@ public class Matrix3x3 {
     }
 
     public Matrix3x3(double[] data) {
-        if (data.length != 9) throw new IllegalArgumentException(Arrays.toString(data));
-
+        assert data.length == 9;
         this.m = data.clone();
     }
 
     public Matrix3x3(double[][] m) {
-        if (m.length != 3 || m[0].length != 3 || m[1].length != 3 || m[2].length != 3) {
-            throw new IllegalArgumentException(Arrays.toString(m));
-        }
-
+        assert m.length == 3 && m[0].length == 3 && m[1].length == 3 && m[2].length == 3;
         this(new double[] {
                 m[0][0], m[0][1], m[0][2],
                 m[1][0], m[1][1], m[1][2],
@@ -31,9 +27,7 @@ public class Matrix3x3 {
     }
 
     public double get(int r, int c) {
-        if (r < 0 || 2 < r) throw new IndexOutOfBoundsException(r);
-        if (c < 0 || 2 < c) throw new IndexOutOfBoundsException(c);
-
+        assert 0 <= r && r <= 2 && 0 <= c && c <= 2;
         return m[r * 3 + c];
     }
 

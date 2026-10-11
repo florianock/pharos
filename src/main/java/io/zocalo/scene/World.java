@@ -1,6 +1,8 @@
 package io.zocalo.scene;
 
 import io.zocalo.kernel.*;
+import io.zocalo.scene.shapes.Shape;
+import io.zocalo.scene.shapes.Sphere;
 
 import java.util.Arrays;
 
@@ -33,7 +35,7 @@ public record World(Shape[] objects, Light[] lights) {
 
     private static Material getDefaultMaterial() {
         return new Material.Builder()
-                .color(Color.create(0.8, 1.0, 0.6))
+                .color(new Color(0.8, 1.0, 0.6))
                 .diffuse(0.7)
                 .specular(0.2)
                 .build();
@@ -47,7 +49,7 @@ public record World(Shape[] objects, Light[] lights) {
     }
 
     private static Light[] getDefaultLight() {
-        return new Light[] { Light.pointLight(Tuple.point(-10, 10, -10), Color.create(1, 1, 1)) };
+        return new Light[] { Light.pointLight(Tuple.point(-10, 10, -10), new Color(1, 1, 1)) };
     }
 
     public Color shadeHit(Computations comps, boolean shadows) {
@@ -97,7 +99,7 @@ public record World(Shape[] objects, Light[] lights) {
         var green = normal.y() * 0.5 + 0.5;
         var blue = normal.z() * 0.5 + 0.5;
 
-        return Color.create(red, green, blue);
+        return new Color(red, green, blue);
     }
 
     public boolean isShadowed(Tuple lightPosition, Tuple shadingPoint) {
