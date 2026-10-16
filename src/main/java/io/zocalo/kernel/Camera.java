@@ -12,7 +12,7 @@ public class Camera {
     private static final boolean REFLECTIONS = true;
     private static final boolean REFRACTIONS = true;
     private static final RenderMode RENDER_MODE = RenderMode.SHADE;
-    private static final int TILE_SIZE = 32;
+    private static final int TILE_SIZE = 16;
     private static final int RECURSIVE_REFLECTION_LIMIT = 10;
 
     private final int hsize, vsize;

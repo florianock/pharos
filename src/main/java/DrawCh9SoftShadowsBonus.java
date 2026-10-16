@@ -3,6 +3,7 @@ import io.zocalo.scene.Material;
 import io.zocalo.kernel.Matrix4x4;
 import io.zocalo.kernel.Tuple;
 import io.zocalo.scene.*;
+import io.zocalo.scene.shapes.Cube;
 import io.zocalo.scene.shapes.Plane;
 import io.zocalo.scene.shapes.Shape;
 import io.zocalo.scene.shapes.Sphere;
@@ -44,25 +45,17 @@ void main() throws IOException {
                     .build()
     );
 
-    // TODO add cube for light reflection
-    /*
-    - add: cube
-  material:
-    color: [1.5, 1.5, 1.5]
-    ambient: 1
-    diffuse: 0
-    specular: 0
-  transform:
-    - [ scale, 1, 1, 0.01 ]
-    - [ translate, 0, 3, 4 ]
-  shadow: false
-     */
+    var lightCube = new Cube(
+            Matrix4x4.translation(0, 3, 4).multiply(Matrix4x4.scaling(1, 1, 0.01)),
+            new Material.Builder().color(1.5, 1.5, 1.5).ambient(1).diffuse(0).specular(0).build(),
+            false
+    );
 
-    var objects = new Shape[] { floor, right, left };
+    var objects = new Shape[] { lightCube, floor, right, left };
     var light = Light.areaLight(Tuple.point(-1, 2, 4), Tuple.point(2, 0, 0), 10, Tuple.point(0, 2, 0), 10, true, new Color(1.5, 1.5, 1.5));
     var world = new World(objects, new Light[]{light});
 
-    var camera = new Camera(1000, 500, PI / 4, Tuple.viewTransform(
+    var camera = new Camera(1280, 1024, PI / 4, Tuple.viewTransform(
             Tuple.point(-3,   1, 2.5),
             Tuple.point( 0, 0.5,   0),
             Tuple.vector(0,   1,   0)

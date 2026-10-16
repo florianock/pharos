@@ -19,7 +19,6 @@ void main() throws IOException {
     var bubbleCanvas = result2.camera().renderParallel(result2.world());
 //    bubbleCanvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.png"));
 //    bubbleCanvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.ppm"));
-
 }
 
 SceneSetup drawScene() {
