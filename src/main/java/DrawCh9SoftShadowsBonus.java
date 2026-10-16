@@ -55,13 +55,13 @@ void main() throws IOException {
     var light = Light.areaLight(Tuple.point(-1, 2, 4), Tuple.point(2, 0, 0), 10, Tuple.point(0, 2, 0), 10, true, new Color(1.5, 1.5, 1.5));
     var world = new World(objects, new Light[]{light});
 
-    var camera = new Camera(1280, 1024, PI / 4, Tuple.viewTransform(
+    var camera = new Camera(3840, 2160, PI / 4, Tuple.viewTransform(
             Tuple.point(-3,   1, 2.5),
             Tuple.point( 0, 0.5,   0),
             Tuple.vector(0,   1,   0)
     ));
 
     var canvas = camera.renderParallel(world);
-    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.png"));
-    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.ppm"));
+    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh9HQ.png"));
+    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh9HQ.ppm"));
 }

@@ -10,18 +10,18 @@ import io.zocalo.scene.shapes.Sphere;
 import static io.zocalo.scene.MaterialConstants.*;
 
 void main() throws IOException {
-    var result1 = drawScene();
+    var result1 = drawScene(3840, 2160);
     var sceneCanvas = result1.camera().renderParallel(result1.world());
-//    sceneCanvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.png"));
-//    sceneCanvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.ppm"));
+    sceneCanvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh11HQA.png"));
+    sceneCanvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh11HQA.ppm"));
 
-    var result2 = drawAirBubble();
+    var result2 = drawAirBubble(3840, 2160);
     var bubbleCanvas = result2.camera().renderParallel(result2.world());
-//    bubbleCanvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.png"));
-//    bubbleCanvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.ppm"));
+    bubbleCanvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh11HQB.png"));
+    bubbleCanvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh11HQB.ppm"));
 }
 
-SceneSetup drawScene() {
+SceneSetup drawScene(int h, int v) {
     var c1 = new Solid(0.45, 0.45, 0.45);
     var c2 = new Solid(0.55, 0.55, 0.55);
     var transform = Matrix4x4.rotationOnY(1.5708).multiply(Matrix4x4.scaling(0.25, 0.25, 0.25));
@@ -88,10 +88,10 @@ SceneSetup drawScene() {
             Tuple.point(-0.6, 1, -0.8),
             Tuple.vector(0, 1, 0)
     );
-    return new SceneSetup(new Camera(1280, 1024, 1.15, view), world);
+    return new SceneSetup(new Camera(h, v, 1.15, view), world);
 }
 
-SceneSetup drawAirBubble() {
+SceneSetup drawAirBubble(int h, int v) {
     var wall = new Plane(Matrix4x4.translation(0, 0, 10).multiply(Matrix4x4.rotationOnX(1.5708)),
             new Material.Builder()
                     .pattern(new Checkers(new Solid(0.15, 0.15, 0.15), new Solid(0.85, 0.85, 0.85)))
@@ -109,7 +109,7 @@ SceneSetup drawAirBubble() {
             Tuple.point(0, 0, 0),
             Tuple.vector(0, 1, 0)
     );
-    return new SceneSetup(new Camera(1000, 1000, 0.45, view), world);
+    return new SceneSetup(new Camera(h, v, 0.45, view), world);
 }
 
 record SceneSetup(Camera camera, World world){}

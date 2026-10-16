@@ -94,10 +94,10 @@ void main() throws IOException {
     littleCube1, littleCube2, littleCube3, littleCube4, littleCube5, mirror, mirrorFrame, frame1, frame2, frame3};
     var world = new World(shapes, new Light[]{light});
     var view = Tuple.viewTransform(Tuple.point(8, 6, -8), Tuple.point(0, 3, 0), Tuple.vector(0, 1, 0));
-    var camera = new Camera(1280, 1024, 0.7854, view);
+    var camera = new Camera(3840, 2160, 0.7854, view);
     var canvas = camera.renderParallel(world);
-    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.png"));
-    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.ppm"));
+    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh12HQ.png"));
+    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh12HQ.ppm"));
 }
 
 private Cube leg(double x, double z) {
