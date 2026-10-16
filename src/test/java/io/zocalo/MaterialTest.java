@@ -97,6 +97,14 @@ class MaterialTest {
         assertEquals(new Color(0.1, 0.1, 0.1), result);
     }
 
+    public static Stream<Arguments> intensitiesAndColors() {
+        return Stream.of(
+                Arguments.of(1.0, new Color(1, 1, 1)),
+                Arguments.of(0.5, new Color(0.55, 0.55, 0.55)),
+                Arguments.of(0.0, new Color(0.1, 0.1, 0.1))
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("intensitiesAndColors")
     void lightingUsesLightIntensityToAttenuateColor(double intensity, Color expectedColor){
@@ -117,6 +125,13 @@ class MaterialTest {
         var result = shape.lighting(light, pt, eyev, normalv, intensity);
 
         assertEquals(expectedColor, result);
+    }
+
+    public static Stream<Arguments> normalsAndColors() {
+        return Stream.of(
+                Arguments.of(Tuple.point(0, 0, -1), new Color(0.9965, 0.9965, 0.9965)),
+                Arguments.of(Tuple.point(0, 0.7071, -0.7071), new Color(0.6232, 0.6232, 0.6232))
+        );
     }
 
     @ParameterizedTest
@@ -141,38 +156,36 @@ class MaterialTest {
         assertEquals(expectedColor, result);
     }
 
-   @Test
-   void lightingWithAPatternApplied() {
-        var m = new Material.Builder()
-                .pattern(new Stripe(new Solid(Color.WHITE), new Solid(Color.BLACK)))
-                .ambient(1)
-                .diffuse(0)
-                .specular(0)
-                .build();
-        var sphere = new Sphere(m);
-        var eyev = Tuple.vector(0, 0, -1);
-        var normalv = Tuple.vector(0, 0, -1);
-        var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
+    @Test
+    void lightingWithAPatternApplied() {
+       var m = new Material.Builder()
+               .pattern(new Stripe(new Solid(Color.WHITE), new Solid(Color.BLACK)))
+               .ambient(1)
+               .diffuse(0)
+               .specular(0)
+               .build();
+       var sphere = new Sphere(m);
+       var eyev = Tuple.vector(0, 0, -1);
+       var normalv = Tuple.vector(0, 0, -1);
+       var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
 
-        var c1 = sphere.lighting(light, Tuple.point(0.9, 0, 0), eyev, normalv, 0.0);
-        var c2 = sphere.lighting(light, Tuple.point(1.1, 0, 0), eyev, normalv, 0.0);
+       var c1 = sphere.lighting(light, Tuple.point(0.9, 0, 0), eyev, normalv, 0.0);
+       var c2 = sphere.lighting(light, Tuple.point(1.1, 0, 0), eyev, normalv, 0.0);
 
-        assertEquals(Color.WHITE, c1);
-        assertEquals(Color.BLACK, c2);
-   }
-
-    public static Stream<Arguments> intensitiesAndColors() {
-        return Stream.of(
-                Arguments.of(1.0, new Color(1, 1, 1)),
-                Arguments.of(0.5, new Color(0.55, 0.55, 0.55)),
-                Arguments.of(0.0, new Color(0.1, 0.1, 0.1))
-        );
+       assertEquals(Color.WHITE, c1);
+       assertEquals(Color.BLACK, c2);
     }
 
-    public static Stream<Arguments> normalsAndColors() {
-        return Stream.of(
-                Arguments.of(Tuple.point(0, 0, -1), new Color(0.9965, 0.9965, 0.9965)),
-                Arguments.of(Tuple.point(0, 0.7071, -0.7071), new Color(0.6232, 0.6232, 0.6232))
-        );
+    @Test
+    void reflectivityForTheDefaultMaterial() {
+        var m = new Material();
+        assertEquals(0, m.reflective());
+    }
+
+    @Test
+    void transparencyAndRefractiveIndexForTheDefaultMaterial() {
+        var m = new Material();
+        assertEquals(0, m.transparency());
+        assertEquals(1.0, m.refractiveIndex());
     }
 }

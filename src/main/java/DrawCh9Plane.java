@@ -52,7 +52,8 @@ void main() throws IOException {
     var light = Light.pointLight(Tuple.point(-10, 10, -10), new Color(0.8, 0.8, 0.8));
     var world = new World(objects, new Light[]{light});
 
-    var camera = new Camera(1280, 1024, PI / 3, Tuple.point(0, 1.5, -5).viewTransform(
+    var camera = new Camera(1280, 1024, PI / 3, Tuple.viewTransform(
+            Tuple.point(0, 1.5, -5),
            Tuple.point(0,    1,  0),
            Tuple.vector(0,    1,  0)
     ));

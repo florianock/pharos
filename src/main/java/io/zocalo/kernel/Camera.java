@@ -9,13 +9,16 @@ public class Camera {
 
     private static final boolean SHOW_PREVIEW = true;
     private static final boolean SHADOWS = true;
+    private static final boolean REFLECTIONS = true;
+    private static final boolean REFRACTIONS = true;
     private static final RenderMode RENDER_MODE = RenderMode.SHADE;
     private static final int TILE_SIZE = 32;
+    private static final int RECURSIVE_REFLECTION_LIMIT = 10;
 
     private final int hsize, vsize;
-    private double fov;
-    private Matrix4x4 viewTransform;
-    private Matrix4x4 inverseViewTransform;
+    private final double fov;
+    private final Matrix4x4 viewTransform;
+    private final Matrix4x4 inverseViewTransform;
     private final double halfWidth;
     private final double halfHeight;
     private final double pixelSize;
@@ -62,13 +65,6 @@ public class Camera {
         return pixelSize;
     }
 
-    // TODO update camera to 'walk' through world
-    public void update(Matrix4x4 viewTransform, double fov) {
-        this.viewTransform = viewTransform;
-        this.inverseViewTransform = viewTransform.invert();
-        this.fov = fov;
-    }
-
     public Ray rayForPixel(int px, int py) {
         // the offset from the edge of the canvas to the pixel's center
         var xOffset = (px + 0.5) * pixelSize;
@@ -88,7 +84,7 @@ public class Camera {
         var origin = inverseViewTransform.multiply(Utils.ORIGIN);
         var direction = pixel.subtract(origin).normalize();
 
-        return Ray.create(origin, direction);
+        return new Ray(origin, direction);
     }
 
     public Canvas render(World w) {
@@ -98,7 +94,7 @@ public class Camera {
         for (var y = 0; y < vsize; y++) {
             for (var x = 0; x < hsize; x++) {
                 var ray = rayForPixel(x, y);
-                var color = w.colorAt(ray, RENDER_MODE, SHADOWS);
+                var color = w.colorAt(ray, 5, RENDER_MODE, SHADOWS, REFLECTIONS, REFRACTIONS);
                 image.writePixel(x, y, color);
             }
             if (SHOW_PREVIEW) image.repaint();
@@ -135,7 +131,7 @@ public class Camera {
                         for (var y = yStart; y < yEnd; y++) {
                             for (var x = xStart; x < xEnd; x++) {
                                 var ray = rayForPixel(x, y);
-                                var color = w.colorAt(ray, RenderMode.SHADE, SHADOWS);
+                                var color = w.colorAt(ray, RECURSIVE_REFLECTION_LIMIT, RENDER_MODE, SHADOWS, REFLECTIONS, REFRACTIONS);
                                 image.writePixel(x, y, color);
                             }
                         }

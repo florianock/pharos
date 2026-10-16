@@ -18,7 +18,7 @@ class SphereTest {
 
     @Test
     void ray_intersects_sphere_at_two_points() {
-        var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
+        var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
         var s = new Sphere();
 
         var xs = s.localIntersect(r);
@@ -30,7 +30,7 @@ class SphereTest {
 
     @Test
     void ray_intersects_sphere_at_tangent() {
-        var r = Ray.create(Tuple.point(0, 1, -5), Tuple.vector(0, 0, 1));
+        var r = new Ray(Tuple.point(0, 1, -5), Tuple.vector(0, 0, 1));
         var s = new Sphere();
 
         var xs = s.localIntersect(r);
@@ -42,7 +42,7 @@ class SphereTest {
 
     @Test
     void ray_misses_sphere() {
-        var r = Ray.create(Tuple.point(0, 2, -5), Tuple.vector(0, 0, 1));
+        var r = new Ray(Tuple.point(0, 2, -5), Tuple.vector(0, 0, 1));
         var s = new Sphere();
 
         var xs = s.localIntersect(r);
@@ -52,7 +52,7 @@ class SphereTest {
 
     @Test
     void ray_originates_inside_sphere() {
-        var r = Ray.create(Tuple.point(0, 0, 0), Tuple.vector(0, 0, 1));
+        var r = new Ray(Tuple.point(0, 0, 0), Tuple.vector(0, 0, 1));
         var s = new Sphere();
 
         var xs = s.localIntersect(r);
@@ -64,7 +64,7 @@ class SphereTest {
 
     @Test
     void ray_behind_sphere() {
-        var r = Ray.create(Tuple.point(0, 0, 5), Tuple.vector(0, 0, 1));
+        var r = new Ray(Tuple.point(0, 0, 5), Tuple.vector(0, 0, 1));
         var s = new Sphere();
 
         var xs = s.localIntersect(r);
@@ -76,7 +76,7 @@ class SphereTest {
 
     @Test
     void intersect_sets_object_on_intersection() {
-        var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
+        var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
         var s = new Sphere();
 
         var xs = s.localIntersect(r);
@@ -132,5 +132,12 @@ class SphereTest {
 
         var normalizedN = n.normalize();
         assertEquals(normalizedN, n);
+    }
+
+    @Test
+    void aHelperForProducingASphereWithAGlassyMaterial() {
+        var s = Sphere.glassSphere();
+        assertEquals(1, s.getMaterial().transparency());
+        assertEquals(1.5, s.getMaterial().refractiveIndex());
     }
 }

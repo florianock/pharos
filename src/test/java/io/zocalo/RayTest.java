@@ -13,7 +13,7 @@ class RayTest {
     void create_and_query() {
         var origin =Tuple.point(1, 2, 3);
         var direction = Tuple.vector(4, 5, 6);
-        var r = Ray.create(origin, direction);
+        var r = new Ray(origin, direction);
 
         assertEquals(origin, r.origin());
         assertEquals(direction, r.direction());
@@ -24,13 +24,13 @@ class RayTest {
         var origin = Tuple.point(1, 2, 3);
         var direction = Tuple.vector(4, 5, 6);
 
-        assertThrows(AssertionError.class, () -> Ray.create(direction, direction));
-        assertThrows(AssertionError.class, () -> Ray.create(origin, origin));
+        assertThrows(AssertionError.class, () -> new Ray(direction, direction));
+        assertThrows(AssertionError.class, () -> new Ray(origin, origin));
     }
 
     @Test
     void position() {
-        var r = Ray.create(Tuple.point(2, 3, 4), Tuple.vector(1, 0, 0));
+        var r = new Ray(Tuple.point(2, 3, 4), Tuple.vector(1, 0, 0));
 
         assertEquals(Tuple.point(2, 3, 4), r.position(0));
         assertEquals(Tuple.point(3, 3, 4), r.position(1));
@@ -40,7 +40,7 @@ class RayTest {
 
     @Test
     void translating_ray() {
-        var r = Ray.create(Tuple.point(1, 2, 3), Tuple.vector(0, 1, 0));
+        var r = new Ray(Tuple.point(1, 2, 3), Tuple.vector(0, 1, 0));
         var m = Matrix4x4.translation(3, 4, 5);
 
         var r2 = r.transform(m);
@@ -51,7 +51,7 @@ class RayTest {
 
     @Test
     void scaling_ray() {
-        var r = Ray.create(Tuple.point(1, 2, 3), Tuple.vector(0, 1, 0));
+        var r = new Ray(Tuple.point(1, 2, 3), Tuple.vector(0, 1, 0));
         var m = Matrix4x4.scaling(2, 3, 4);
 
         var r2 = r.transform(m);

@@ -11,10 +11,6 @@ public record Ray(Tuple origin, Tuple direction) {
     }
 
     public Ray transform(Matrix4x4 m) {
-        return Ray.create(m.multiply(origin), m.multiply(direction));
-    }
-
-    public static Ray create(Tuple origin, Tuple direction) {
-        return new Ray(origin, direction);
+        return new Ray(m.multiply(origin), m.multiply(direction));
     }
 }

@@ -8,7 +8,7 @@ import io.zocalo.scene.Material;
 public class Sphere extends Shape {
 
     public Sphere(Matrix4x4 t) {
-        this(t, Material.create());
+        this(t, Material.create(), true);
     }
 
     public Sphere() {
@@ -16,11 +16,14 @@ public class Sphere extends Shape {
     }
 
     public Sphere(Material m) {
-        this(Matrix4x4.identity(), m);
+        this(Matrix4x4.identity(), m, true);
     }
 
     public Sphere(Matrix4x4 transform, Material material) {
-        super(transform, material);
+        super(transform, material, true);
+    }
+    public Sphere(Matrix4x4 transform, Material material, boolean shadow) {
+        super(transform, material, shadow);
     }
 
     @Override
@@ -54,5 +57,17 @@ public class Sphere extends Shape {
                 "material=" + material +
                 ", transform=" + transform +
                 '}';
+    }
+
+    public static Sphere glassSphere() {
+        return new Sphere(new Material.Builder().transparency(1.0).refractiveIndex(1.5).build());
+    }
+
+    public static Sphere glassSphere(Matrix4x4 transform) {
+        return new Sphere(transform, new Material.Builder().transparency(1.0).refractiveIndex(1.5).build());
+    }
+
+    public static Sphere glassSphere(Matrix4x4 transform, double refractiveIndex) {
+        return new Sphere(transform, new Material.Builder().transparency(1.0).refractiveIndex(refractiveIndex).build());
     }
 }

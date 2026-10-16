@@ -49,27 +49,44 @@ public record World(Shape[] objects, Light[] lights) {
     }
 
     private static Light[] getDefaultLight() {
-        return new Light[] { Light.pointLight(Tuple.point(-10, 10, -10), new Color(1, 1, 1)) };
+        return new Light[]{Light.pointLight(Tuple.point(-10, 10, -10), new Color(1, 1, 1))};
     }
 
-    public Color shadeHit(Computations comps, boolean shadows) {
-        return Arrays.stream(lights)
+    public Color shadeHit(Computations comps, int remaining) {
+        return shadeHit(comps, remaining, true, true, true);
+    }
+
+    public Color shadeHit(Computations comps, int remaining, boolean shadows, boolean reflections, boolean refractions) {
+        var surface = Arrays.stream(lights)
                 .map(light -> comps.shadeHit(light, shadows ? light.intensityAt(comps.overPoint(), this) : 1.0))
                 .reduce(Color.BLACK, Color::add);
+
+        var reflected = reflections ? reflectedColor(comps, remaining) : Color.BLACK;
+        var refracted = refractions ? refractedColor(comps, remaining) : Color.BLACK;
+
+        var material = comps.object().getMaterial();
+        if (reflections && refractions && material.reflective() > 0 && material.transparency() > 0) {
+            var reflectance = comps.schlick();
+            return surface.add(reflected.multiply(reflectance)).add(refracted.multiply(1 - reflectance));
+        }
+
+        return surface.add(reflected).add(refracted);
     }
 
-    public Color colorAt(Ray r) {
-        return colorAt(r, RenderMode.SHADE, false);
+    // TODO put stuff like RenderMode and shadows in separate Configuration object and remove
+    //      these overloads like for shadeHit and colorAt
+    public Color colorAt(Ray r, int remaining) {
+        return colorAt(r, remaining, RenderMode.SHADE, true, true, true);
     }
 
-    public Color colorAt(Ray r, RenderMode mode, boolean shadows) {
-        return intersect(r)
-                .hit()
-                .map(i -> i.prepareComputations(r))
-                .map(c -> switch(mode) {
+    public Color colorAt(Ray r, int remaining, RenderMode mode, boolean shadows, boolean reflections, boolean refractions) {
+        var xs = intersect(r);
+        return xs.hit()
+                .map(i -> i.prepareComputations(r, xs))
+                .map(c -> switch (mode) {
                     case DEPTH -> renderDepth(r, c);
                     case NORMALS -> renderNormals(c);
-                    case SHADE -> shadeHit(c, shadows);
+                    case SHADE -> shadeHit(c, remaining, shadows, reflections, refractions);
                 })
                 .orElse(Color.BLACK);
     }
@@ -113,12 +130,43 @@ public record World(Shape[] objects, Light[] lights) {
         var dir = toLight.normalize();
         var direction = Tuple.vector(dir.x(), dir.y(), dir.z());
 
-        var r = Ray.create(shadingPoint, direction);
+        var r = new Ray(shadingPoint, direction);
         var xs = intersect(r);
         var hit = xs.hit();
         return hit
-                .map(i -> i.t() < distance)
+                .map(i -> i.object().hasShadow() && i.t() < distance)
                 .orElse(false);
+    }
+
+    public Color reflectedColor(Computations comps, int remaining) {
+        if (comps.object().getReflective() == 0 || remaining < 1) return Color.BLACK;
+        var reflectRay = new Ray(comps.overPoint(), comps.reflectv());
+        return colorAt(reflectRay, remaining - 1).multiply(comps.object().getReflective());
+    }
+
+    public Color refractedColor(Computations comps, int remaining) {
+        if (comps.object().getTransparency() == 0 || remaining < 1) return Color.BLACK;
+
+        // Find the ratio of first index of refraction to the second.
+        // (Yup, this is inverted from the definition of Snell's Law.)
+        var nRatio = comps.n1() / comps.n2();
+        // cos(theta_i) is the same as the dot product of the two vectors.
+        var cosi = comps.eyev().dot(comps.normalv());
+        // Find sin(theta_t)^2 via trigonometric identity
+        var sin2t = nRatio * nRatio * (1 - cosi * cosi);
+
+        if (sin2t > 1) return Color.BLACK;
+
+        // Find cos(theta_t) via trigonometric identity
+        var cost = Math.sqrt(1.0 - sin2t);
+        // Compute the direction of the refracted ray
+        var direction = comps.normalv().multiply(nRatio * cosi - cost).subtract(comps.eyev().multiply(nRatio));
+        // Create the refracted ray
+        var refractRay = new Ray(comps.underPoint(), direction);
+
+        // Find the color of the refracted ray, making sure to multiply
+        // by the transparency value to account for any opacity
+        return colorAt(refractRay, remaining - 1).multiply(comps.object().getTransparency());
     }
 
     @Override

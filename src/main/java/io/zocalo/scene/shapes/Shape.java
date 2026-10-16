@@ -15,12 +15,22 @@ public abstract class Shape {
     protected Matrix4x4 transform;
     protected Matrix4x4 inverseTransform;
     protected Matrix4x4 inverseTransformTranspose;
+    protected boolean shadow;
 
-    public Shape (Matrix4x4 transform, Material material) {
+    public Shape(Matrix4x4 transform, Material material) {
         this.transform = transform;
         this.material = material;
         inverseTransform = transform.invert();
         inverseTransformTranspose = inverseTransform.transpose();
+        shadow = true;
+    }
+
+    public Shape(Matrix4x4 transform, Material material, boolean shadow) {
+        this.transform = transform;
+        this.material = material;
+        inverseTransform = transform.invert();
+        inverseTransformTranspose = inverseTransform.transpose();
+        this.shadow = shadow;
     }
 
     public abstract Tuple localNormalAt(Tuple worldPoint);
@@ -48,7 +58,13 @@ public abstract class Shape {
         return transform;
     }
 
-    public Matrix4x4 getInverseTransform() {return inverseTransform;}
+    public Matrix4x4 getInverseTransform() {
+        return inverseTransform;
+    }
+
+    public boolean hasShadow() {
+        return shadow;
+    }
 
     public void setMaterial(Material material) {
         this.material = material;
@@ -65,7 +81,19 @@ public abstract class Shape {
     }
 
     public Color lighting(Light light, Tuple shadowPoint, Tuple eyev, Tuple normalv, double shadowedIntensity) {
-        return material.lighting(this, light,shadowPoint, eyev, normalv, shadowedIntensity);
+        return material.lighting(this, light, shadowPoint, eyev, normalv, shadowedIntensity);
+    }
+
+    public double getReflective() {
+        return material.reflective();
+    }
+
+    public double getRefractiveIndex() {
+        return material.refractiveIndex();
+    }
+
+    public double getTransparency() {
+        return material.transparency();
     }
 
     @Override

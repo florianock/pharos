@@ -86,9 +86,9 @@ public record Tuple(double x, double y, double z, double w) {
         return (equalEnough(x1, this.x()) && equalEnough(y1, this.y()) && equalEnough(z1, this.z()) && equalEnough(w1, this.w()));
     }
 
-    public Matrix4x4 viewTransform(Tuple to, Tuple up) {
-        assert this.isPoint() && to.isPoint() && up.isVector();
-        var forward = to.subtract(this).normalize();
+    public static Matrix4x4 viewTransform(Tuple from, Tuple to, Tuple up) {
+        assert from.isPoint() && to.isPoint() && up.isVector();
+        var forward = to.subtract(from).normalize();
         var upn = up.normalize();
         var left = forward.cross(upn);
         var trueUp = left.cross(forward);
@@ -98,6 +98,6 @@ public record Tuple(double x, double y, double z, double w) {
                 -forward.x(), -forward.y(), -forward.z(), 0,
                            0,            0,            0, 1
         });
-        return orientation.multiply(Matrix4x4.translation(-x, -y, -z));
+        return orientation.multiply(Matrix4x4.translation(-from.x(), -from.y(), -from.z()));
     }
 }

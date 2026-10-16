@@ -41,7 +41,7 @@ class ShapeTest {
 
     @Test
     void intersectingScaledSphereWithRay() {
-        var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
+        var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
         var s = new TestShape();
         s.setTransform(Matrix4x4.scaling(2, 2, 2));
 
@@ -54,7 +54,7 @@ class ShapeTest {
 
     @Test
     void intersectingTranslatedSphereWithRay() {
-        var r = Ray.create(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
+        var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
         var s = new TestShape();
         s.setTransform(Matrix4x4.translation(5, 0, 0));
 

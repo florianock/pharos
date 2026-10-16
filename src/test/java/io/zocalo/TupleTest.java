@@ -169,7 +169,7 @@ class TupleTest {
         var from = Tuple.point(0, 0, 0);
         var to = Tuple.point(0, 0, -1);
         var up = Tuple.vector(0, 1, 0);
-        var t = from.viewTransform(to, up);
+        var t = Tuple.viewTransform(from, to, up);
         assertEquals(Matrix4x4.identity(), t);
     }
 
@@ -178,7 +178,7 @@ class TupleTest {
         var from = Tuple.point(0, 0, 0);
         var to = Tuple.point(0, 0, 1);
         var up = Tuple.vector(0, 1, 0);
-        var t = from.viewTransform(to, up);
+        var t = Tuple.viewTransform(from, to, up);
         assertEquals(Matrix4x4.scaling(-1, 1, -1), t);
     }
 
@@ -187,7 +187,7 @@ class TupleTest {
         var from = Tuple.point(0, 0, 8);
         var to = Tuple.point(0, 0, 0);
         var up = Tuple.vector(0, 1, 0);
-        var t = from.viewTransform(to, up);
+        var t = Tuple.viewTransform(from, to, up);
         assertEquals(Matrix4x4.translation(0, 0, -8), t);
     }
 
@@ -196,7 +196,7 @@ class TupleTest {
         var from = Tuple.point(1, 3, 2);
         var to = Tuple.point(4, -2, 8);
         var up = Tuple.vector(1, 1, 0);
-        var t = from.viewTransform(to, up);
+        var t = Tuple.viewTransform(from, to, up);
         var expected = new Matrix4x4(new double[] {
                 -0.50709, 0.50709,  0.67612, -2.36642,
                  0.76772, 0.60609,  0.12122, -2.82843,

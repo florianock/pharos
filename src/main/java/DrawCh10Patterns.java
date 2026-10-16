@@ -52,10 +52,10 @@ void main() throws IOException {
     var shapes = new Shape[] { floor, leftWall, rightWall, left, middle, right };
     var w = new World(shapes, new Light[] {light});
 
-    var view = Tuple.point(0, 1.5, -5).viewTransform(Tuple.point(0, 1, 0), Tuple.vector(0, 1, 0));
+    var view = Tuple.viewTransform(Tuple.point(0, 1.5, -5), Tuple.point(0, 1, 0), Tuple.vector(0, 1, 0));
     var camera = new Camera(1280, 1024, PI / 3, view);
 
     var canvas = camera.renderParallel(w);
-    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh10.png"));
-    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh10.ppm"));
+//    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.png"));
+//    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.ppm"));
 }

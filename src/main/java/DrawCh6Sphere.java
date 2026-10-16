@@ -42,7 +42,7 @@ void main() throws IOException {
                             var worldX = -half + pixelSize * x;
 
                             var position = Tuple.point(worldX, worldY, wallZ);
-                            var r = Ray.create(rayOrigin, position.subtract(rayOrigin).normalize());
+                            var r = new Ray(rayOrigin, position.subtract(rayOrigin).normalize());
                             var xs = shape.intersect(r);
 
                             var h = xs.hit();

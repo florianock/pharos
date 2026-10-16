@@ -8,15 +8,18 @@ import static io.zocalo.Utils.EPSILON;
 public class Plane extends Shape {
 
     public Plane() {
-        super(Matrix4x4.identity(), new Material());
+        super(Matrix4x4.identity(), new Material(), true);
     }
 
     public Plane(Material material) {
-        super(Matrix4x4.identity(), material);
+        super(Matrix4x4.identity(), material, true);
     }
 
     public Plane(Matrix4x4 transform, Material material) {
-        super(transform, material);
+        super(transform, material, true);
+    }
+    public Plane(Matrix4x4 transform, Material material, boolean shadow) {
+        super(transform, material, shadow);
     }
 
     @Override

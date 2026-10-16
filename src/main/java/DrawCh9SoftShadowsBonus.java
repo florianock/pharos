@@ -28,7 +28,7 @@ void main() throws IOException {
                     .ambient(0.1)
                     .specular(0)
                     .diffuse(0.6)
-                    // .reflective(0.3)
+                    .reflective(0.3)
                     .build()
     );
 
@@ -40,17 +40,30 @@ void main() throws IOException {
                     .ambient(0.1)
                     .specular(0)
                     .diffuse(0.6)
-                    // .reflective(0.3)
+                    .reflective(0.3)
                     .build()
     );
 
     // TODO add cube for light reflection
+    /*
+    - add: cube
+  material:
+    color: [1.5, 1.5, 1.5]
+    ambient: 1
+    diffuse: 0
+    specular: 0
+  transform:
+    - [ scale, 1, 1, 0.01 ]
+    - [ translate, 0, 3, 4 ]
+  shadow: false
+     */
 
     var objects = new Shape[] { floor, right, left };
     var light = Light.areaLight(Tuple.point(-1, 2, 4), Tuple.point(2, 0, 0), 10, Tuple.point(0, 2, 0), 10, true, new Color(1.5, 1.5, 1.5));
     var world = new World(objects, new Light[]{light});
 
-    var camera = new Camera(1000, 500, PI / 4, Tuple.point(-3,   1, 2.5).viewTransform(
+    var camera = new Camera(1000, 500, PI / 4, Tuple.viewTransform(
+            Tuple.point(-3,   1, 2.5),
             Tuple.point( 0, 0.5,   0),
             Tuple.vector(0,   1,   0)
     ));
