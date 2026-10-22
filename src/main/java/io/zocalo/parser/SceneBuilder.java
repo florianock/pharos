@@ -110,9 +110,15 @@ public class SceneBuilder {
         var shadow = !m.containsKey("shadow") || booleanOf(m, "shadow");
         var material = m.containsKey("material") ? materialOf(m) : defaultCylinder.getMaterial();
         var transform = m.containsKey("transform") ? transformOf(m, defs) : Matrix4x4.identity();
-        var minimum = m.containsKey("minimum") ? doubleOf(m, "minimum") : defaultCylinder.minimum();
-        var maximum = m.containsKey("maximum") ? doubleOf(m, "maximum") : defaultCylinder.maximum();
+        var minimum = m.containsKey("min") ? doubleOf(m, "min") : defaultCylinder.minimum();
+        var maximum = m.containsKey("max") ? doubleOf(m, "max") : defaultCylinder.maximum();
         var closed = m.containsKey("closed") ? booleanOf(m, "closed") : defaultCylinder.closed();
+        if (m.containsKey("args")) {
+            var args = asList(m.get("args"));
+            minimum = asDouble(args.get(0));
+            maximum = asDouble(args.get(1));
+            closed = (int)args.get(2) == 1;
+        }
         return new Cylinder(transform, material, minimum, maximum, closed, shadow);
     }
 
@@ -121,9 +127,15 @@ public class SceneBuilder {
         var shadow = !m.containsKey("shadow") || booleanOf(m, "shadow");
         var material = m.containsKey("material") ? materialOf(m) : defaultCone.getMaterial();
         var transform = m.containsKey("transform") ? transformOf(m, defs) : Matrix4x4.identity();
-        var minimum = m.containsKey("minimum") ? doubleOf(m, "minimum") : defaultCone.minimum();
-        var maximum = m.containsKey("maximum") ? doubleOf(m, "maximum") : defaultCone.maximum();
+        var minimum = m.containsKey("min") ? doubleOf(m, "min") : defaultCone.minimum();
+        var maximum = m.containsKey("max") ? doubleOf(m, "max") : defaultCone.maximum();
         var closed = m.containsKey("closed") ? booleanOf(m, "closed") : defaultCone.closed();
+        if (m.containsKey("args")) {
+            var args = asList(m.get("args"));
+            minimum = asDouble(args.get(0));
+            maximum = asDouble(args.get(1));
+            closed = (int)args.get(2) == 1;
+        }
         return new Cone(transform, material, minimum, maximum, closed, shadow);
     }
 
