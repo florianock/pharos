@@ -11,11 +11,11 @@ import io.zocalo.scene.Material;
 // TODO Consider changing to sealed interface
 public abstract class Shape {
 
-    protected Material material;
-    protected Matrix4x4 transform;
-    protected Matrix4x4 inverseTransform;
-    protected Matrix4x4 inverseTransformTranspose;
-    protected boolean shadow;
+    protected final Material material;
+    protected final Matrix4x4 transform;
+    protected final Matrix4x4 inverseTransform;
+    protected final Matrix4x4 inverseTransformTranspose;
+    protected final boolean shadow;
 
     public Shape(Matrix4x4 transform, Material material) {
         this.transform = transform;
@@ -64,16 +64,6 @@ public abstract class Shape {
 
     public boolean hasShadow() {
         return shadow;
-    }
-
-    public void setMaterial(Material material) {
-        this.material = material;
-    }
-
-    public void setTransform(Matrix4x4 transform) {
-        this.transform = transform;
-        inverseTransform = transform.invert();
-        inverseTransformTranspose = inverseTransform.transpose();
     }
 
     public Tuple worldToObject(Tuple worldPoint) {

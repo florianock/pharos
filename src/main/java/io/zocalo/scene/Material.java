@@ -106,7 +106,7 @@ public record Material(Color color, Pattern pattern, double ambient, double diff
             return this;
         }
 
-        public Builder shininess(int shininess) {
+        public Builder shininess(double shininess) {
             this.shininess = shininess;
             return this;
         }

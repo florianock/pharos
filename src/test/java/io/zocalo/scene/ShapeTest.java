@@ -18,8 +18,7 @@ class ShapeTest {
 
     @Test
     void assigningTransformation() {
-        var s = new TestShape();
-        s.setTransform(Matrix4x4.translation(2, 3, 4));
+        var s = new TestShape(Matrix4x4.translation(2, 3, 4));
         assertEquals(Matrix4x4.translation(2, 3, 4), s.getTransform());
     }
 
@@ -32,9 +31,8 @@ class ShapeTest {
 
     @Test
     void assigningMaterial() {
-        var s = new TestShape();
         var m = new Material.Builder().ambient(1.0).build();
-        s.setMaterial(m);
+        var s = new TestShape(m);
         assertEquals(m, s.getMaterial());
     }
 
@@ -42,8 +40,7 @@ class ShapeTest {
     @Test
     void intersectingScaledSphereWithRay() {
         var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
-        var s = new TestShape();
-        s.setTransform(Matrix4x4.scaling(2, 2, 2));
+        var s = new TestShape(Matrix4x4.scaling(2, 2, 2));
 
         var _ = s.intersect(r);
 
@@ -55,8 +52,7 @@ class ShapeTest {
     @Test
     void intersectingTranslatedSphereWithRay() {
         var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
-        var s = new TestShape();
-        s.setTransform(Matrix4x4.translation(5, 0, 0));
+        var s = new TestShape(Matrix4x4.translation(5, 0, 0));
 
         var _ = s.intersect(r);
 
@@ -67,8 +63,7 @@ class ShapeTest {
 
     @Test
     void computingNormalOnTranslatedSphere() {
-        var s = new TestShape();
-        s.setTransform(Matrix4x4.translation(0, 1, 0));
+        var s = new TestShape(Matrix4x4.translation(0, 1, 0));
 
         var n = s.normalAt(Tuple.point(0, 1.70711, -0.70711));
 
@@ -77,9 +72,8 @@ class ShapeTest {
 
     @Test
     void computingNormalOnTransformedSphere() {
-        var s = new TestShape();
         var m = Matrix4x4.scaling(1, 0.5, 1).multiply(Matrix4x4.rotationOnZ(Utils.PI / 5));
-        s.setTransform(m);
+        var s = new TestShape(m);
 
         var n = s.normalAt(Tuple.point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2));
 

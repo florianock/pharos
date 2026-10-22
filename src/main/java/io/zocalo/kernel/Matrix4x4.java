@@ -3,6 +3,7 @@ package io.zocalo.kernel;
 import io.zocalo.Utils;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.StringJoiner;
 
 public class Matrix4x4 {
@@ -143,6 +144,10 @@ public class Matrix4x4 {
         });
     }
 
+    public static Matrix4x4 translation(List<Double> a) {
+        assert a.size() == 3;
+        return translation(a.get(0), a.get(1), a.get(2));
+    }
     public static Matrix4x4 translation(double x, double y, double z) {
         return new Matrix4x4(new double[] {
                 1, 0, 0, x,
@@ -152,6 +157,10 @@ public class Matrix4x4 {
         });
     }
 
+    public static Matrix4x4 scaling(List<Double> a) {
+        assert a.size() == 3;
+        return scaling(a.get(0), a.get(1), a.get(2));
+    }
     public static Matrix4x4 scaling(double x, double y, double z) {
         return new Matrix4x4(new double[] {
                 x, 0, 0, 0,
@@ -188,6 +197,10 @@ public class Matrix4x4 {
         });
     }
 
+    public static Matrix4x4 shearing(List<Double> a) {
+        assert a.size() == 6;
+        return shearing(a.get(0), a.get(1), a.get(2), a.get(3), a.get(4), a.get(5));
+    }
     public static Matrix4x4 shearing(double xInProportionToY, double xInProportionToZ, double yInProportionToX,
                                      double yInProportionToZ, double zInProportionToX, double zInProportionToY) {
         return new Matrix4x4(new double[] {

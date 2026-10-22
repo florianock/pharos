@@ -40,13 +40,20 @@ public class Cube extends Shape {
     @Override
     public Intersections localIntersect(Ray localRay) {
         var x = checkAxis(localRay.origin().x(), localRay.direction().x());
+        var tmin = x.tmin();
+        var tmax = x.tmax();
+
         var y = checkAxis(localRay.origin().y(), localRay.direction().y());
+        tmin = Math.max(y.tmin(), tmin);
+        tmax = Math.min(y.tmax(), tmax);
+
+        if (tmin > tmax || tmax < 0) return new Intersections();
+
         var z = checkAxis(localRay.origin().z(), localRay.direction().z());
+        tmin = Math.max(z.tmin(), tmin);
+        tmax = Math.min(z.tmax(), tmax);
 
-        var tmin = Math.max(Math.max(x.tmin(), y.tmin()), z.tmin());
-        var tmax = Math.min(Math.min(x.tmax(), y.tmax()), z.tmax());
-
-        if (tmin > tmax) return new Intersections();
+        if (tmin > tmax || tmax < 0) return new Intersections();
 
         return new Intersections(new Intersection(tmin, this), new Intersection(tmax, this));
     }

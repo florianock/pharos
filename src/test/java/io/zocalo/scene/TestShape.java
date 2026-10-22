@@ -14,6 +14,14 @@ public class TestShape extends Shape {
         super(Matrix4x4.identity(), new Material());
     }
 
+    public TestShape(Matrix4x4 transform) {
+        super(transform, new Material());
+    }
+
+    public TestShape(Material material) {
+        super(Matrix4x4.identity(), material);
+    }
+
     public TestShape(Matrix4x4 transform, Material material) {
         super(transform, material);
     }

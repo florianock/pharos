@@ -12,13 +12,13 @@ import static io.zocalo.scene.MaterialConstants.*;
 void main() throws IOException {
     var result1 = drawScene(3840, 2160);
     var sceneCanvas = result1.camera().renderParallel(result1.world());
-    sceneCanvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh11HQA.png"));
-    sceneCanvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh11HQA.ppm"));
+    sceneCanvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.png"));
+    sceneCanvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.ppm"));
 
     var result2 = drawAirBubble(3840, 2160);
     var bubbleCanvas = result2.camera().renderParallel(result2.world());
-    bubbleCanvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh11HQB.png"));
-    bubbleCanvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh11HQB.ppm"));
+    bubbleCanvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.png"));
+    bubbleCanvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.ppm"));
 }
 
 SceneSetup drawScene(int h, int v) {

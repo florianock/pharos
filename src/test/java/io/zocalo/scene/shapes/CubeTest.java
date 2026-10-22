@@ -50,7 +50,8 @@ class CubeTest {
                 Arguments.of(Tuple.point(0, 0, -2), Tuple.vector(0.5345, 0.8018, 0.2673)),
                 Arguments.of(Tuple.point(2, 0, 2), Tuple.vector(0, 0, -1)),
                 Arguments.of(Tuple.point(0, 2, 2), Tuple.vector(0, -1, 0)),
-                Arguments.of(Tuple.point(2, 2, 0), Tuple.vector(-1, 0, 0))
+                Arguments.of(Tuple.point(2, 2, 0), Tuple.vector(-1, 0, 0)),
+                Arguments.of(Tuple.point(0, 0, 2), Tuple.vector(0, 0, 1))
         );
     }
 

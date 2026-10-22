@@ -1,0 +1,84 @@
+# From https://forum.raytracerchallenge.com/thread/194/recreate-image
+
+#
+# camera
+#
+
+- add: camera
+  width: 600
+  height: 400
+  field-of-view: 1.4279966607226332902102924469452
+  from: [0, 0, -1]
+  to: [0, 0, 0]
+  up: [0, 1, 0]
+
+#
+# light
+#
+
+- add: light
+  at: [5, 5, -5]
+  intensity: [2, 2, 2]
+
+#
+# floor
+#
+
+- add: plane
+  transform:
+    - [ translate, 0, -0.7, 0 ]
+  material:
+    color: [0.25, 0.25, 0.25]
+    ambient: 0.1
+    diffuse: 0.6
+    specular: 1.0
+    shininess: 100.0
+    reflective: 0.5
+
+#
+# red sphere
+#
+
+- add: sphere
+  transform:
+    - [ scale, 0.7, 0.7, 0.7 ]
+    - [ translate, -0.2, 0, 1 ]
+  material:
+    color: [0.35, 0, 0]
+    ambient: 0.1
+    diffuse: 0.7
+    specular: 1.0
+    shininess: 25.0
+    reflective: 0.5
+
+#
+# magenta sphere
+#
+
+- add: sphere
+  transform:
+    - [ scale, 0.1, 0.1, 0.1 ]
+    - [ translate, 0.1, -0.3, 0 ]
+  material:
+    color: [0.35, 0, 0.35]
+    ambient: 0.1
+    diffuse: 0.7
+    specular: 1.0
+    shininess: 25.0
+    reflective: 0.5
+
+#
+# green sphere
+#
+
+- add: sphere
+  transform:
+    - [ scale, 0.15, 0.15, 0.15 ]
+    - [ translate, -0.3, 0, 0 ]
+  material:
+    color: [0, 0.35, 0]
+    ambient: 0.1
+    diffuse: 0.6
+    specular: 1.0
+    shininess: 25.0
+    reflective: 0.5

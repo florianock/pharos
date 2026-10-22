@@ -5,6 +5,7 @@ import io.zocalo.scene.shapes.Shape;
 import io.zocalo.scene.shapes.Sphere;
 
 import java.util.Arrays;
+import java.util.Collection;
 
 import static io.zocalo.Utils.EPSILON;
 
@@ -20,6 +21,10 @@ public record World(Shape[] objects, Light[] lights) {
 
     public World(Shape[] objects) {
         this(objects, getDefaultLight());
+    }
+
+    public World(Collection<Shape> shapes, Collection<Light> lights) {
+        this(shapes.toArray(new Shape[0]), lights.toArray(new Light[0]));
     }
 
     public static World defaultWorld() {

@@ -56,6 +56,6 @@ void main() throws IOException {
     var camera = new Camera(3840, 2160, PI / 3, view);
 
     var canvas = camera.renderParallel(w);
-    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh10HQ.png"));
-    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh10HQ.ppm"));
+    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.png"));
+    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.ppm"));
 }
