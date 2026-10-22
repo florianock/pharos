@@ -23,6 +23,11 @@ public class Camera {
     private final double halfHeight;
     private final double pixelSize;
 
+    public Camera(int hsize, int vsize, double fov, Tuple from, Tuple to, Tuple up) {
+        assert from.isPoint() && to.isPoint() && up.isVector();
+        var viewTransform = Tuple.viewTransform(from, to, up);
+        this(hsize, vsize, fov, viewTransform);
+    }
     public Camera(int hsize, int vsize, double fov, Matrix4x4 viewTransform) {
         this.hsize = hsize;
         this.vsize = vsize;
@@ -70,7 +75,7 @@ public class Camera {
         var xOffset = (px + 0.5) * pixelSize;
         var yOffset = (py + 0.5) * pixelSize;
 
-        // the untransformed coordinates of hte pixel in world space.
+        // the untransformed coordinates of the pixel in world space.
         // (remember that the camera looks toward -z, so +x is to the *left*
         var worldX = halfWidth - xOffset;
         var worldY = halfHeight - yOffset;

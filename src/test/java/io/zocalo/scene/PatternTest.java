@@ -327,7 +327,7 @@ class PatternTest {
 
         var canvas = camera.renderParallel(world, true);
         canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/" + fileName + ".png"));
-        Thread.sleep(1);
+        Thread.sleep(2000);
     }
 
     private boolean runVisuals() {

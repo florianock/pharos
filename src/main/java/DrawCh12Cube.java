@@ -96,8 +96,8 @@ void main() throws IOException {
     var view = Tuple.viewTransform(Tuple.point(8, 6, -8), Tuple.point(0, 3, 0), Tuple.vector(0, 1, 0));
     var camera = new Camera(3840, 2160, 0.7854, view);
     var canvas = camera.renderParallel(world);
-    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh12HQ.png"));
-    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh12HQ.ppm"));
+//    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh12HQ.png"));
+//    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh12HQ.ppm"));
 }
 
 private Cube leg(double x, double z) {

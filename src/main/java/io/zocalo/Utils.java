@@ -32,7 +32,7 @@ public class Utils {
     }
 
     public static void unpack255(int i, int[] out, int offset) {
-        out[offset]      = (i >> 24) & 0xFF;
+        out[offset    ]  = (i >> 24) & 0xFF;
         out[offset + 1]  = (i >> 16) & 0xFF;
         out[offset + 2]  = (i >> 8)  & 0xFF;
         out[offset + 3]  =  i        & 0xFF;

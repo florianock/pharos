@@ -125,7 +125,7 @@ public record World(Shape[] objects, Light[] lights) {
 
         var toLight = lightPosition.subtract(shadingPoint);
         var distance = toLight.magnitude();
-        if (distance < EPSILON) return false;
+        if (Math.abs(distance) < EPSILON) return false;
 
         var dir = toLight.normalize();
         var direction = Tuple.vector(dir.x(), dir.y(), dir.z());
