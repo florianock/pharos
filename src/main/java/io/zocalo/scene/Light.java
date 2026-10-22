@@ -1,6 +1,6 @@
 package io.zocalo.scene;
 
-import io.zocalo.kernel.Tuple;
+import io.zocalo.base.Tuple;
 
 import java.util.concurrent.ThreadLocalRandom;
 

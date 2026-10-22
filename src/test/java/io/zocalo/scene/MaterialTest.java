@@ -1,8 +1,6 @@
-package io.zocalo;
+package io.zocalo.scene;
 
-import io.zocalo.kernel.Tuple;
-import io.zocalo.scene.*;
-import io.zocalo.scene.Color;
+import io.zocalo.base.Tuple;
 import io.zocalo.scene.patterns.Solid;
 import io.zocalo.scene.patterns.Stripe;
 import io.zocalo.scene.shapes.Sphere;

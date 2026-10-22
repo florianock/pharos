@@ -1,6 +1,6 @@
 package io.zocalo.parser;
 
-import io.zocalo.kernel.Camera;
+import io.zocalo.base.Camera;
 import io.zocalo.scene.Light;
 import io.zocalo.scene.World;
 import io.zocalo.scene.shapes.Shape;

@@ -1,6 +1,6 @@
 package io.zocalo.scene.patterns;
 
-import io.zocalo.kernel.Tuple;
+import io.zocalo.base.Tuple;
 import io.zocalo.scene.Color;
 import io.zocalo.scene.patterns.noise.SimplexNoise;
 

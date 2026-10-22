@@ -1,8 +1,6 @@
-package io.zocalo;
+package io.zocalo.base;
 
-import io.zocalo.kernel.Matrix3x3;
-import io.zocalo.kernel.Matrix4x4;
-import io.zocalo.kernel.Tuple;
+import io.zocalo.Utils;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

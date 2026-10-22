@@ -1,6 +1,6 @@
 package io.zocalo.scene.shapes;
 
-import io.zocalo.kernel.*;
+import io.zocalo.base.*;
 import io.zocalo.scene.Material;
 
 import java.util.ArrayList;

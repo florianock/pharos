@@ -1,7 +1,7 @@
 import io.zocalo.*;
-import io.zocalo.kernel.Canvas;
-import io.zocalo.kernel.Matrix4x4;
-import io.zocalo.kernel.Tuple;
+import io.zocalo.base.Canvas;
+import io.zocalo.base.Matrix4x4;
+import io.zocalo.base.Tuple;
 import io.zocalo.scene.Color;
 
 void main() throws IOException {

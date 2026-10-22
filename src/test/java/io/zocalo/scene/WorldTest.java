@@ -1,6 +1,6 @@
 package io.zocalo.scene;
 
-import io.zocalo.kernel.*;
+import io.zocalo.base.*;
 import io.zocalo.scene.patterns.*;
 import io.zocalo.scene.shapes.Plane;
 import io.zocalo.scene.shapes.Shape;

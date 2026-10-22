@@ -1,4 +1,4 @@
-package io.zocalo.kernel;
+package io.zocalo.base;
 
 import static io.zocalo.Utils.equalEnough;
 

@@ -1,6 +1,6 @@
 package io.zocalo.scene.patterns;
 
-import io.zocalo.kernel.Tuple;
+import io.zocalo.base.Tuple;
 import io.zocalo.scene.Color;
 
 public final class Solid extends Pattern {

@@ -1,7 +1,5 @@
-package io.zocalo;
+package io.zocalo.base;
 
-import io.zocalo.kernel.Matrix4x4;
-import io.zocalo.kernel.Tuple;
 import org.junit.jupiter.api.Test;
 
 import static io.zocalo.TestUtils.assertEqualEnough;

@@ -1,8 +1,8 @@
 package io.zocalo.parser;
 
-import io.zocalo.kernel.Camera;
-import io.zocalo.kernel.Matrix4x4;
-import io.zocalo.kernel.Tuple;
+import io.zocalo.base.Camera;
+import io.zocalo.base.Matrix4x4;
+import io.zocalo.base.Tuple;
 import io.zocalo.scene.Color;
 import io.zocalo.scene.Light;
 import io.zocalo.scene.shapes.Cube;

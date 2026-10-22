@@ -1,6 +1,6 @@
-import io.zocalo.kernel.Camera;
-import io.zocalo.kernel.Matrix4x4;
-import io.zocalo.kernel.Tuple;
+import io.zocalo.base.Camera;
+import io.zocalo.base.Matrix4x4;
+import io.zocalo.base.Tuple;
 import io.zocalo.scene.*;
 import io.zocalo.scene.shapes.Shape;
 import io.zocalo.scene.shapes.Sphere;

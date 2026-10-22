@@ -1,7 +1,7 @@
 package io.zocalo.scene.shapes;
 
 import io.zocalo.Utils;
-import io.zocalo.kernel.*;
+import io.zocalo.base.*;
 import io.zocalo.scene.Material;
 
 // TODO Consider making a record

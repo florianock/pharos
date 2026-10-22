@@ -1,9 +1,9 @@
 package io.zocalo.scene;
 
 import io.zocalo.Utils;
-import io.zocalo.kernel.Matrix4x4;
-import io.zocalo.kernel.Ray;
-import io.zocalo.kernel.Tuple;
+import io.zocalo.base.Matrix4x4;
+import io.zocalo.base.Ray;
+import io.zocalo.base.Tuple;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

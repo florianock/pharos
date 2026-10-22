@@ -1,6 +1,6 @@
-import io.zocalo.kernel.Canvas;
-import io.zocalo.kernel.Ray;
-import io.zocalo.kernel.Tuple;
+import io.zocalo.base.Canvas;
+import io.zocalo.base.Ray;
+import io.zocalo.base.Tuple;
 import io.zocalo.scene.Color;
 import io.zocalo.scene.Light;
 import io.zocalo.scene.Material;

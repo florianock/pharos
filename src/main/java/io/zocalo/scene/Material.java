@@ -1,6 +1,6 @@
 package io.zocalo.scene;
 
-import io.zocalo.kernel.Tuple;
+import io.zocalo.base.Tuple;
 import io.zocalo.scene.patterns.Pattern;
 import io.zocalo.scene.shapes.Shape;
 

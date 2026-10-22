@@ -1,6 +1,5 @@
-package io.zocalo;
+package io.zocalo.base;
 
-import io.zocalo.kernel.Canvas;
 import io.zocalo.scene.Color;
 import org.junit.jupiter.api.Test;
 

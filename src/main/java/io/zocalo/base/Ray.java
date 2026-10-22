@@ -1,4 +1,4 @@
-package io.zocalo.kernel;
+package io.zocalo.base;
 
 public record Ray(Tuple origin, Tuple direction) {
 

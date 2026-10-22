@@ -1,6 +1,6 @@
-package io.zocalo;
+package io.zocalo.base;
 
-import io.zocalo.kernel.*;
+import io.zocalo.Utils;
 import io.zocalo.scene.shapes.Plane;
 import io.zocalo.scene.shapes.Sphere;
 import org.junit.jupiter.api.Test;

@@ -1,10 +1,8 @@
-package io.zocalo.scene;
+package io.zocalo.base;
 
-import io.zocalo.kernel.Canvas;
-import io.zocalo.kernel.Matrix4x4;
-import io.zocalo.kernel.Tuple;
 import io.zocalo.Utils;
-import io.zocalo.kernel.Camera;
+import io.zocalo.scene.Color;
+import io.zocalo.scene.World;
 import org.junit.jupiter.api.Test;
 
 import static io.zocalo.TestUtils.assertEqualEnough;

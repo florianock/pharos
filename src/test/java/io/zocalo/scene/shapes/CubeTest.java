@@ -1,8 +1,8 @@
 package io.zocalo.scene.shapes;
 
-import io.zocalo.kernel.Matrix4x4;
-import io.zocalo.kernel.Ray;
-import io.zocalo.kernel.Tuple;
+import io.zocalo.base.Matrix4x4;
+import io.zocalo.base.Ray;
+import io.zocalo.base.Tuple;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
