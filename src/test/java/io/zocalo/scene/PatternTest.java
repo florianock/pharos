@@ -309,7 +309,7 @@ class PatternTest {
     }
 
     private static void visualize(World world, String fileName) throws InterruptedException, IOException {
-        var camera = new Camera(640, 480, PI / 3, Transform.viewTransform(
+        var camera = new Camera(640, 480, THIRD_PI, Transform.viewTransform(
                 Tuple.point(0, 2, -10),
                 Tuple.point(0, 2, 4),
                 Tuple.vector(0, 1, 0)));

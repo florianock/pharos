@@ -23,7 +23,8 @@ public class Plane extends Shape {
     }
 
     @Override
-    public Intersections localIntersect(Ray r) {
+    public Intersections intersect(Ray worldRay) {
+        var r = worldRay.transform(inverseTransform);
         if (Math.abs(r.direction().y()) < EPSILON) {
             return new Intersections();
         }

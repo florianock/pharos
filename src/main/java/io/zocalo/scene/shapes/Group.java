@@ -51,11 +51,11 @@ public class Group extends Shape {
     }
 
     @Override
-    public Intersections localIntersect(Ray localRay) {
-        var transformedRay = localRay.transform(inverseTransform);
+    public Intersections intersect(Ray worldRay) {
+        var localRay = worldRay.transform(inverseTransform);
         var hits = new ArrayList<Intersection>();
         for (var child : children) {
-            var xs = child.intersect(transformedRay);
+            var xs = child.intersect(localRay);
             hits.addAll(xs.intersections());
         }
         return new Intersections(hits);

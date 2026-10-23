@@ -7,9 +7,11 @@ public final class Utils {
 
     public static final double EPSILON       = 1e-4f;
     public static final double SHADOW_OFFSET = EPSILON;
-    public static final double PI            = Math.PI;
+    public static final double PI            = 3.1415926535898;
     public static final double HALF_PI       = PI / 2;
+    public static final double THIRD_PI      = PI / 3;
     public static final double QTR_PI        = PI / 4;
+    public static final double SIXTH_PI      = PI / 6;
     public static final Tuple  ORIGIN        = Tuple.point(0, 0, 0);
 
     private Utils() {

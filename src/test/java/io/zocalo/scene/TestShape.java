@@ -28,8 +28,8 @@ public class TestShape extends Shape {
     }
 
     @Override
-    public Intersections localIntersect(Ray r) {
-        savedRay = r;
+    public Intersections intersect(Ray worldRay) {
+        savedRay = worldRay.transform(inverseTransform);
         return new Intersections();
     }
 

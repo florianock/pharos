@@ -13,7 +13,7 @@ void main() throws IOException {
 
     var hours = new Tuple[12];
     hours[0] = Tuple.point(0, 0, 1);
-    var r = Transform.rotationOnY(Utils.PI / 6);
+    var r = Transform.rotationOnY(Utils.SIXTH_PI);
 
     for (var i = 1; i < 12; i++) {
         hours[i] = r.multiply(hours[i-1]);

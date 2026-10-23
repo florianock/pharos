@@ -84,7 +84,8 @@ public class Cone extends Shape {
     }
 
     @Override
-    public Intersections localIntersect(Ray localRay) {
+    public Intersections intersect(Ray worldRay) {
+        var localRay = worldRay.transform(inverseTransform);
         var a = localRay.direction().x() * localRay.direction().x() -
                 localRay.direction().y() * localRay.direction().y() +
                 localRay.direction().z() * localRay.direction().z();

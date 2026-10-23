@@ -40,7 +40,7 @@ class GroupTest {
     void intersectingARayWithAnEmptyGroup() {
         var g = new Group();
         var r = new Ray(Tuple.point(0, 0, 0), Tuple.vector(0, 0, 1));
-        var xs = g.localIntersect(r);
+        var xs = g.intersect(r);
         assertEquals(0, xs.count());
     }
 
@@ -51,7 +51,7 @@ class GroupTest {
         var s3 = new Sphere(Transform.translation(5, 0, 0));
         var g = new Group.Builder().add(s1).add(s2).add(s3).build();
         var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
-        var xs = g.localIntersect(r);
+        var xs = g.intersect(r);
         assertEquals(4, xs.count());
         assertEquals(xs.get(0).object(), s2);
         assertEquals(xs.get(1).object(), s2);
@@ -64,7 +64,7 @@ class GroupTest {
         var s1 = new Sphere(Transform.translation(5, 0, 0));
         var g = new Group.Builder().transform(Transform.scaling(2, 2, 2)).add(s1).build();
         var r = new Ray(Tuple.point(10, 0, -10), Tuple.vector(0, 0, 1));
-        var xs = g.localIntersect(r);
+        var xs = g.intersect(r);
         assertEquals(2, xs.count());
     }
 

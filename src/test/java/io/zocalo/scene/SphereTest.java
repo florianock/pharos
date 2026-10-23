@@ -21,7 +21,7 @@ class SphereTest {
         var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
         var s = new Sphere();
 
-        var xs = s.localIntersect(r);
+        var xs = s.intersect(r);
 
         assertEquals(2, xs.count());
         assertEquals(4.0, xs.get(0).t());
@@ -33,7 +33,7 @@ class SphereTest {
         var r = new Ray(Tuple.point(0, 1, -5), Tuple.vector(0, 0, 1));
         var s = new Sphere();
 
-        var xs = s.localIntersect(r);
+        var xs = s.intersect(r);
 
         assertEquals(2, xs.count());
         assertEquals(5.0, xs.get(0).t());
@@ -45,7 +45,7 @@ class SphereTest {
         var r = new Ray(Tuple.point(0, 2, -5), Tuple.vector(0, 0, 1));
         var s = new Sphere();
 
-        var xs = s.localIntersect(r);
+        var xs = s.intersect(r);
 
         assertEquals(0, xs.count());
     }
@@ -55,7 +55,7 @@ class SphereTest {
         var r = new Ray(Tuple.point(0, 0, 0), Tuple.vector(0, 0, 1));
         var s = new Sphere();
 
-        var xs = s.localIntersect(r);
+        var xs = s.intersect(r);
 
         assertEquals(2, xs.count());
         assertEquals(-1.0, xs.get(0).t());
@@ -67,7 +67,7 @@ class SphereTest {
         var r = new Ray(Tuple.point(0, 0, 5), Tuple.vector(0, 0, 1));
         var s = new Sphere();
 
-        var xs = s.localIntersect(r);
+        var xs = s.intersect(r);
 
         assertEquals(2, xs.count());
         assertEquals(-6.0, xs.get(0).t());
@@ -79,7 +79,7 @@ class SphereTest {
         var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
         var s = new Sphere();
 
-        var xs = s.localIntersect(r);
+        var xs = s.intersect(r);
 
         assertEquals(2, xs.count());
         assertEquals(s, xs.get(0).object());

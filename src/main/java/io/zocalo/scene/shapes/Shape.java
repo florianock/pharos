@@ -38,20 +38,15 @@ public abstract class Shape {
         parent = null;
     }
 
-    public abstract Tuple localNormalAt(Tuple worldPoint);
+    public abstract Tuple localNormalAt(Tuple localPoint);
 
-    public abstract Intersections localIntersect(Ray localRay);
+    public abstract Intersections intersect(Ray worldRay);
 
     public Tuple normalAt(Tuple worldPoint) {
         assert worldPoint.isPoint();
         var localPoint = worldToObject(worldPoint);
         var localNormal = localNormalAt(localPoint);
         return normalToWorld(localNormal);
-    }
-
-    public Intersections intersect(Ray r) {
-        var localRay = r.transform(inverseTransform);
-        return localIntersect(localRay);
     }
 
     public Shape getParent() {
@@ -80,8 +75,8 @@ public abstract class Shape {
 
     public Tuple worldToObject(final Tuple worldPoint) {
         assert worldPoint.isPoint();
-        var point = Optional.ofNullable(parent).map(p -> p.worldToObject(worldPoint)).orElse(worldPoint);
-        return inverseTransform.multiply(point);
+        var parentPoint = Optional.ofNullable(parent).map(parentShape -> parentShape.worldToObject(worldPoint)).orElse(worldPoint);
+        return inverseTransform.multiply(parentPoint);
     }
 
     public Tuple normalToWorld(Tuple normal) {

@@ -27,7 +27,7 @@ class ConeTest {
     void intersectingAConeWitARay(Tuple origin, Tuple direction, double t0, double t1) {
         var shape = new Cone();
         var r = new Ray(origin, direction.normalize());
-        var xs = shape.localIntersect(r);
+        var xs = shape.intersect(r);
         assertEquals(2, xs.count());
         assertEquals(t0, xs.get(0).t(), EPSILON);
         assertEquals(t1, xs.get(1).t(), EPSILON);
@@ -38,7 +38,7 @@ class ConeTest {
         var shape = new Cone();
         var direction = Tuple.vector(0, 1, 1).normalize();
         var r = new Ray(Tuple.point(0, 0, -1), direction);
-        var xs = shape.localIntersect(r);
+        var xs = shape.intersect(r);
         assertEquals(1, xs.count());
         assertEquals(0.35355, xs.get(0).t(), EPSILON);
     }
@@ -56,7 +56,7 @@ class ConeTest {
     void intersectingAConesEndCaps(Tuple origin, Tuple direction, double count) {
         var shape = new Cone(-0.5, 0.5, true);
         var r = new Ray(origin, direction.normalize());
-        var xs = shape.localIntersect(r);
+        var xs = shape.intersect(r);
         assertEquals(count, xs.count());
     }
 

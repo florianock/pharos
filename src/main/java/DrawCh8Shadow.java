@@ -5,8 +5,7 @@ import io.zocalo.scene.*;
 import io.zocalo.scene.shapes.Shape;
 import io.zocalo.scene.shapes.Sphere;
 
-import static io.zocalo.Utils.PI;
-import static io.zocalo.Utils.QTR_PI;
+import static io.zocalo.Utils.*;
 
 void main() throws IOException {
 
@@ -66,7 +65,7 @@ void main() throws IOException {
     var light = Light.pointLight(Tuple.point(0, 0, -100), Color.WHITE);
     var world = new World(objects, new Light[]{light});
 
-    var camera = new Camera(1000, 500, PI / 6, Transform.viewTransform(
+    var camera = new Camera(1000, 500, SIXTH_PI, Transform.viewTransform(
             Tuple.point(40, 0, -70),
             Tuple.point( 0, 0,  -5),
             Tuple.vector(0, 1,   0)

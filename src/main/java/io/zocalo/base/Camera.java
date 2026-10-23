@@ -1,9 +1,10 @@
 package io.zocalo.base;
 
-import io.zocalo.Utils;
 import io.zocalo.scene.World;
 
 import java.util.concurrent.Executors;
+
+import static io.zocalo.Utils.ORIGIN;
 
 public class Camera {
 
@@ -80,13 +81,11 @@ public class Camera {
         var worldX = halfWidth - xOffset;
         var worldY = halfHeight - yOffset;
 
-        Tuple arr = Tuple.point(worldX, worldY, -1);
-
         // using the camera matrix, transform the canvas point and the origin,
         // and then compute the ray's direction vector.
         // (remember that the canvas is at z=-1)
-        var pixel = inverseViewTransform.multiply(arr);
-        var origin = inverseViewTransform.multiply(Utils.ORIGIN);
+        var pixel = inverseViewTransform.multiply(Tuple.point(worldX, worldY, -1));
+        var origin = inverseViewTransform.multiply(ORIGIN);
         var direction = pixel.subtract(origin).normalize();
 
         return new Ray(origin, direction);
@@ -99,7 +98,7 @@ public class Camera {
         for (var y = 0; y < vsize; y++) {
             for (var x = 0; x < hsize; x++) {
                 var ray = rayForPixel(x, y);
-                var color = w.colorAt(ray, 5, RENDER_MODE, SHADOWS, REFLECTIONS, REFRACTIONS);
+                var color = w.colorAt(ray, RECURSIVE_REFLECTION_LIMIT, RENDER_MODE, SHADOWS, REFLECTIONS, REFRACTIONS);
                 image.writePixel(x, y, color);
             }
             if (SHOW_PREVIEW) image.repaint();

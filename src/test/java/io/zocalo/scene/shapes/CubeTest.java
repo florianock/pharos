@@ -37,7 +37,7 @@ class CubeTest {
     void aRayIntersectsACube(Tuple origin, Tuple direction, int t1, int t2) {
         var c = new Cube();
         var r = new Ray(origin, direction);
-        var xs = c.localIntersect(r);
+        var xs = c.intersect(r);
         assertEquals(2, xs.count());
         assertEquals(xs.get(0).t(), t1);
         assertEquals(xs.get(1).t(), t2);
@@ -60,7 +60,7 @@ class CubeTest {
     void aRayMissesACube(Tuple origin, Tuple direction) {
         var c = new Cube();
         var r = new Ray(origin, direction);
-        var xs = c.localIntersect(r);
+        var xs = c.intersect(r);
         assertEquals(0, xs.count());
     }
 

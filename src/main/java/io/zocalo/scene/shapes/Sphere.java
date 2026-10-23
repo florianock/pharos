@@ -27,7 +27,8 @@ public class Sphere extends Shape {
     }
 
     @Override
-    public Intersections localIntersect(Ray r) {
+    public Intersections intersect(Ray worldRay) {
+        var r = worldRay.transform(inverseTransform);
         var sphereToRay = r.origin().subtract(Utils.ORIGIN);
 
         var direction = r.direction();
@@ -48,7 +49,7 @@ public class Sphere extends Shape {
     @Override
     public Tuple localNormalAt(Tuple localPoint) {
         assert localPoint.isPoint();
-        return localPoint.subtract(Utils.ORIGIN);
+        return localPoint.subtract(Utils.ORIGIN).normalize();
     }
 
     @Override

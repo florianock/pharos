@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public final class YamlParser {
 
-    public static final String DEFAULT_FILE = "demos/cover.yml";
+    public static final String DEFAULT_FILE = "demos/groups.yml";
 
     void main(String... args) throws IOException {
         var objects = parse(Paths.get(DEFAULT_FILE));
@@ -30,7 +30,7 @@ public final class YamlParser {
         var camera = cameras.getFirst();
         var lights = objects.stream().filter(o -> o instanceof Light).map(l -> (Light) l).toList();
         var shapes = objects.stream().filter(o -> !(o instanceof Camera || o instanceof Light)).map(s -> (Shape) s).toList();
-        var c = camera.renderParallel(new World(shapes, lights));
+        var c = camera.render(new World(shapes, lights));
 //        c.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/coverHQ.png"));
     }
 

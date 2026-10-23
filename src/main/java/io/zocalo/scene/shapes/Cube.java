@@ -38,7 +38,8 @@ public class Cube extends Shape {
     }
 
     @Override
-    public Intersections localIntersect(Ray localRay) {
+    public Intersections intersect(Ray worldRay) {
+        var localRay = worldRay.transform(inverseTransform);
         var x = checkAxis(localRay.origin().x(), localRay.direction().x());
         var tmin = x.tmin();
         var tmax = x.tmax();

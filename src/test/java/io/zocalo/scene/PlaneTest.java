@@ -25,7 +25,7 @@ class PlaneTest {
     void intersectWithARayParallelToThePlane() {
         var p = new Plane();
         var r = new Ray(Tuple.point(0, 10, 0),Tuple.vector(0, 0, 1));
-        var xs = p.localIntersect(r);
+        var xs = p.intersect(r);
         assertEquals(0, xs.count());
     }
 
@@ -33,7 +33,7 @@ class PlaneTest {
     void intersectWithACoplanarRay() {
         var p = new Plane();
         var r = new Ray(Tuple.point(0, 0, 0), Tuple.vector(0, 0, 1));
-        var xs = p.localIntersect(r);
+        var xs = p.intersect(r);
         assertEquals(0, xs.count());
     }
 
@@ -41,7 +41,7 @@ class PlaneTest {
     void aRayIntersectingAPlaneFromAbove() {
         var p = new Plane();
         var r = new Ray(Tuple.point(0, 1, 0), Tuple.vector(0, -1, 0));
-        var xs = p.localIntersect(r);
+        var xs = p.intersect(r);
         assertEquals(1, xs.count());
         var x = xs.get(0);
         assertEquals(1, x.t());
@@ -52,7 +52,7 @@ class PlaneTest {
     void aRayIntersectingAPlaneFromBelow() {
         var p = new Plane();
         var r = new Ray(Tuple.point(0, -1, 0), Tuple.vector(0, 1, 0));
-        var xs = p.localIntersect(r);
+        var xs = p.intersect(r);
         assertEquals(1, xs.count());
         var x = xs.get(0);
         assertEquals(1, x.t());

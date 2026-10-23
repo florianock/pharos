@@ -30,7 +30,7 @@ void main() throws IOException {
     var rwrx = Transform.rotationOnX(HALF_PI);
     var rightWall = new Plane(rwtx.multiply(rwry).multiply(rwrx), floorMaterial);
 
-    var mtx = Transform.rotationOnX(-PI / 3).multiply(Transform.scaling(0.2, 0.2, 0.2));
+    var mtx = Transform.rotationOnX(-THIRD_PI).multiply(Transform.scaling(0.2, 0.2, 0.2));
     var ring = new Ring(new Solid(0, 0.3, 0.6), new Solid(0.1, 1, 0.8), mtx);
     var middle = new Sphere(Transform.translation(-0.5, 1, 0.5), new Material.Builder()
             .pattern(ring)
@@ -53,7 +53,7 @@ void main() throws IOException {
     var w = new World(shapes, new Light[] {light});
 
     var view = Transform.viewTransform(Tuple.point(0, 1.5, -5), Tuple.point(0, 1, 0), Tuple.vector(0, 1, 0));
-    var camera = new Camera(3840, 2160, PI / 3, view);
+    var camera = new Camera(3840, 2160, THIRD_PI, view);
 
     var canvas = camera.renderParallel(w);
     canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.png"));

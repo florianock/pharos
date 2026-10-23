@@ -28,7 +28,7 @@ class CylinderTest {
         var cyl = new Cylinder();
         var direction = dir.normalize();
         var r = new Ray(origin, direction);
-        var xs = cyl.localIntersect(r);
+        var xs = cyl.intersect(r);
         assertEquals(0, xs.count());
     }
 
@@ -46,7 +46,7 @@ class CylinderTest {
         var cyl = new Cylinder();
         var direction = dir.normalize();
         var r = new Ray(origin, direction);
-        var xs = cyl.localIntersect(r);
+        var xs = cyl.intersect(r);
         assertEquals(2, xs.count());
         assertEquals(t0, xs.get(0).t(), EPSILON);
         assertEquals(t1, xs.get(1).t(), EPSILON);
@@ -92,7 +92,7 @@ class CylinderTest {
     void intersectingAConstrainedCylinder(Tuple point, Tuple direction, int count) {
         var cyl = new Cylinder(1, 2);
         var r = new Ray(point, direction.normalize());
-        var xs = cyl.localIntersect(r);
+        var xs = cyl.intersect(r);
         assertEquals(count, xs.count());
     }
 
@@ -117,7 +117,7 @@ class CylinderTest {
     void intersectingACylindersEndCaps(Tuple point, Tuple direction, int count) {
         var cyl = new Cylinder(1, 2, true);
         var r = new Ray(point, direction.normalize());
-        var xs = cyl.localIntersect(r);
+        var xs = cyl.intersect(r);
         assertEquals(count, xs.count());
     }
 

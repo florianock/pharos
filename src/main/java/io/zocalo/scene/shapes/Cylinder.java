@@ -74,16 +74,18 @@ public class Cylinder extends Shape {
     }
 
     @Override
-    public Tuple localNormalAt(Tuple worldPoint) {
+    public Tuple localNormalAt(Tuple localPoint) {
+        assert localPoint.isPoint();
         // compute the square of the distance from the y axis
-        var dist = worldPoint.x() * worldPoint.x() + worldPoint.z() * worldPoint.z();
-        if (dist < 1 && worldPoint.y() <= minimum + EPSILON) return Tuple.vector(0, -1, 0);
-        else if (dist < 1 && worldPoint.y() >= maximum - EPSILON) return Tuple.vector(0, 1, 0);
-        return Tuple.vector(worldPoint.x(), 0, worldPoint.z());
+        var dist = localPoint.x() * localPoint.x() + localPoint.z() * localPoint.z();
+        if (dist < 1 && localPoint.y() >= maximum - EPSILON) return Tuple.vector(0, 1, 0);
+        else if (dist < 1 && localPoint.y() <= minimum + EPSILON) return Tuple.vector(0, -1, 0);
+        return Tuple.vector(localPoint.x(), 0, localPoint.z()).normalize();
     }
 
     @Override
-    public Intersections localIntersect(Ray localRay) {
+    public Intersections intersect(Ray worldRay) {
+        var localRay = worldRay.transform(inverseTransform);
         var a = localRay.direction().x() * localRay.direction().x() + localRay.direction().z() * localRay.direction().z();
 
         // ray is parallel to the y axis
