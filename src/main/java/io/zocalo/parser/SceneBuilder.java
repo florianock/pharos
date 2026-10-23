@@ -2,6 +2,7 @@ package io.zocalo.parser;
 
 import io.zocalo.base.Camera;
 import io.zocalo.base.Matrix4x4;
+import io.zocalo.base.Transform;
 import io.zocalo.base.Tuple;
 import io.zocalo.scene.Color;
 import io.zocalo.scene.Light;
@@ -53,7 +54,7 @@ public class SceneBuilder {
                 intOf(m, "width"),
                 intOf(m, "height"),
                 doubleOf(m, "field-of-view"),
-                Tuple.viewTransform(
+                Transform.viewTransform(
                         pointOf(m, "from"),
                         pointOf(m, "to"),
                         vectorOf(m, "up")
@@ -85,7 +86,7 @@ public class SceneBuilder {
         var defaultSphere = new Sphere();
         var shadow = !m.containsKey("shadow") || booleanOf(m, "shadow");
         var material = m.containsKey("material") ? materialOf(m) : defaultSphere.getMaterial();
-        var transform = m.containsKey("transform") ? transformOf(m, defs) : Matrix4x4.identity();
+        var transform = m.containsKey("transform") ? transformOf(m, defs) : Transform.identity();
         return new Sphere(transform, material, shadow);
     }
 
@@ -93,7 +94,7 @@ public class SceneBuilder {
         var defaultCube = new Cube();
         var shadow = !m.containsKey("shadow") || booleanOf(m, "shadow");
         var material = m.containsKey("material") ? materialOf(m) : defaultCube.getMaterial();
-        var transform = m.containsKey("transform") ? transformOf(m, defs) : Matrix4x4.identity();
+        var transform = m.containsKey("transform") ? transformOf(m, defs) : Transform.identity();
         return new Cube(transform, material, shadow);
     }
 
@@ -101,7 +102,7 @@ public class SceneBuilder {
         var defaultPlane = new Plane();
         var shadow = !m.containsKey("shadow") || booleanOf(m, "shadow");
         var material = m.containsKey("material") ? materialOf(m) : defaultPlane.getMaterial();
-        var transform = m.containsKey("transform") ? transformOf(m, defs) : Matrix4x4.identity();
+        var transform = m.containsKey("transform") ? transformOf(m, defs) : Transform.identity();
         return new Plane(transform, material, shadow);
     }
 
@@ -109,7 +110,7 @@ public class SceneBuilder {
         var defaultCylinder = new Cylinder();
         var shadow = !m.containsKey("shadow") || booleanOf(m, "shadow");
         var material = m.containsKey("material") ? materialOf(m) : defaultCylinder.getMaterial();
-        var transform = m.containsKey("transform") ? transformOf(m, defs) : Matrix4x4.identity();
+        var transform = m.containsKey("transform") ? transformOf(m, defs) : Transform.identity();
         var minimum = m.containsKey("min") ? doubleOf(m, "min") : defaultCylinder.minimum();
         var maximum = m.containsKey("max") ? doubleOf(m, "max") : defaultCylinder.maximum();
         var closed = m.containsKey("closed") ? booleanOf(m, "closed") : defaultCylinder.closed();
@@ -126,7 +127,7 @@ public class SceneBuilder {
         var defaultCone = new Cone();
         var shadow = !m.containsKey("shadow") || booleanOf(m, "shadow");
         var material = m.containsKey("material") ? materialOf(m) : defaultCone.getMaterial();
-        var transform = m.containsKey("transform") ? transformOf(m, defs) : Matrix4x4.identity();
+        var transform = m.containsKey("transform") ? transformOf(m, defs) : Transform.identity();
         var minimum = m.containsKey("min") ? doubleOf(m, "min") : defaultCone.minimum();
         var maximum = m.containsKey("max") ? doubleOf(m, "max") : defaultCone.maximum();
         var closed = m.containsKey("closed") ? booleanOf(m, "closed") : defaultCone.closed();
@@ -227,7 +228,7 @@ public class SceneBuilder {
 
         String type = strOf(require(p, "type"));
 
-        var transform = p.containsKey("transform") ? transformOf(p, defs) : Matrix4x4.identity();
+        var transform = p.containsKey("transform") ? transformOf(p, defs) : Transform.identity();
 
         // FIXME Add support for perturbed, nested and blended patterns
         return switch (type) {
@@ -341,7 +342,7 @@ public class SceneBuilder {
 
         ops = result;
 
-        Matrix4x4 acc = Matrix4x4.identity();
+        Matrix4x4 acc = Transform.identity();
         for (Object op : ops) {
             List<?> parts = asList(op);
             if (parts.isEmpty()) continue;
@@ -355,12 +356,12 @@ public class SceneBuilder {
         List<Double> a = parts.stream().skip(1).map(SceneBuilder::asDouble).toList();
 
         return switch (op) {
-            case "translate" -> Matrix4x4.translation(check(a, 3));
-            case "scale" -> Matrix4x4.scaling(check(a, 3));
-            case "rotate-x" -> Matrix4x4.rotationOnX(check(a, 1).getFirst());
-            case "rotate-y" -> Matrix4x4.rotationOnY(check(a, 1).getFirst());
-            case "rotate-z" -> Matrix4x4.rotationOnZ(check(a, 1).getFirst());
-            case "shear" -> Matrix4x4.shearing(check(a, 6));
+            case "translate" -> Transform.translation(check(a, 3));
+            case "scale" -> Transform.scaling(check(a, 3));
+            case "rotate-x" -> Transform.rotationOnX(check(a, 1).getFirst());
+            case "rotate-y" -> Transform.rotationOnY(check(a, 1).getFirst());
+            case "rotate-z" -> Transform.rotationOnZ(check(a, 1).getFirst());
+            case "shear" -> Transform.shearing(check(a, 6));
             default -> throw new IllegalArgumentException(
                     "unknown transform op '" + op + "' (expected translate, scale, rotate-x/y/z, shear)");
         };

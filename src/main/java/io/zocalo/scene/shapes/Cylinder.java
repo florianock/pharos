@@ -14,15 +14,15 @@ public class Cylinder extends Shape {
     private final boolean closed;
 
     public Cylinder() {
-        this(Matrix4x4.identity());
+        this(Transform.identity());
     }
 
     public Cylinder(double minimum, double maximum) {
-        this(Matrix4x4.identity(), Material.create(), minimum, maximum, false, true);
+        this(Transform.identity(), Material.create(), minimum, maximum, false, true);
     }
 
     public Cylinder(double minimum, double maximum, boolean closed) {
-        this(Matrix4x4.identity(), Material.create(), minimum, maximum, closed, true);
+        this(Transform.identity(), Material.create(), minimum, maximum, closed, true);
     }
 
     public Cylinder(Matrix4x4 t) {
@@ -30,7 +30,7 @@ public class Cylinder extends Shape {
     }
 
     public Cylinder(Material m) {
-        this(Matrix4x4.identity(), m, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false, true);
+        this(Transform.identity(), m, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false, true);
     }
 
     public Cylinder(Matrix4x4 transform, Material material) {

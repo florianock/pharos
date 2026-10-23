@@ -49,7 +49,7 @@ public record World(Shape[] objects, Light[] lights) {
     private static Shape[] getDefaultObjects() {
         return new Shape[]{
                 new Sphere(getDefaultMaterial()),
-                new Sphere(Matrix4x4.scaling(0.5, 0.5, 0.5)),
+                new Sphere(Transform.scaling(0.5, 0.5, 0.5)),
         };
     }
 

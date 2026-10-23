@@ -38,7 +38,7 @@ class RayTest {
     @Test
     void translating_ray() {
         var r = new Ray(Tuple.point(1, 2, 3), Tuple.vector(0, 1, 0));
-        var m = Matrix4x4.translation(3, 4, 5);
+        var m = Transform.translation(3, 4, 5);
 
         var r2 = r.transform(m);
 
@@ -49,7 +49,7 @@ class RayTest {
     @Test
     void scaling_ray() {
         var r = new Ray(Tuple.point(1, 2, 3), Tuple.vector(0, 1, 0));
-        var m = Matrix4x4.scaling(2, 3, 4);
+        var m = Transform.scaling(2, 3, 4);
 
         var r2 = r.transform(m);
 

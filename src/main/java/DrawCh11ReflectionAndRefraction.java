@@ -1,5 +1,5 @@
 import io.zocalo.base.Camera;
-import io.zocalo.base.Matrix4x4;
+import io.zocalo.base.Transform;
 import io.zocalo.base.Tuple;
 import io.zocalo.scene.*;
 import io.zocalo.scene.patterns.*;
@@ -24,7 +24,7 @@ void main() throws IOException {
 SceneSetup drawScene(int h, int v) {
     var c1 = new Solid(0.45, 0.45, 0.45);
     var c2 = new Solid(0.55, 0.55, 0.55);
-    var transform = Matrix4x4.rotationOnY(1.5708).multiply(Matrix4x4.scaling(0.25, 0.25, 0.25));
+    var transform = Transform.rotationOnY(1.5708).multiply(Transform.scaling(0.25, 0.25, 0.25));
     var p = new Stripe(c1, c2, transform);
     var wallMaterial = new Material.Builder().pattern(p).ambient(0).diffuse(0.4).specular(0).reflective(0.3).build();
 
@@ -33,47 +33,47 @@ SceneSetup drawScene(int h, int v) {
             .specular(0)
             .reflective(0.4)
             .build();
-    var floor = new Plane(Matrix4x4.rotationOnY(0.31415), checkers);
+    var floor = new Plane(Transform.rotationOnY(0.31415), checkers);
 
-    var ceiling = new Plane(Matrix4x4.translation(0, 5, 0), new Material.Builder()
+    var ceiling = new Plane(Transform.translation(0, 5, 0), new Material.Builder()
             .color(0.8, 0.8, 0.8)
             .ambient(0.3)
             .specular(0)
             .build());
 
-    var westWall = new Plane(Matrix4x4.translation(-5, 0, 0)
-            .multiply(Matrix4x4.rotationOnZ(1.5708))
-            .multiply(Matrix4x4.rotationOnY(1.5708)),
+    var westWall = new Plane(Transform.translation(-5, 0, 0)
+            .multiply(Transform.rotationOnZ(1.5708))
+            .multiply(Transform.rotationOnY(1.5708)),
             wallMaterial);
 
-    var eastWall = new Plane(Matrix4x4.translation(5, 0, 0)
-            .multiply(Matrix4x4.rotationOnZ(1.5708))
-            .multiply(Matrix4x4.rotationOnY(1.5708)),
+    var eastWall = new Plane(Transform.translation(5, 0, 0)
+            .multiply(Transform.rotationOnZ(1.5708))
+            .multiply(Transform.rotationOnY(1.5708)),
             wallMaterial);
 
-    var northWall = new Plane(Matrix4x4.translation(0, 0, 5)
-            .multiply(Matrix4x4.rotationOnX(1.5708)),
+    var northWall = new Plane(Transform.translation(0, 0, 5)
+            .multiply(Transform.rotationOnX(1.5708)),
             wallMaterial);
 
-    var southWall = new Plane(Matrix4x4.translation(0, 0, -5)
-            .multiply(Matrix4x4.rotationOnX(1.5708)),
+    var southWall = new Plane(Transform.translation(0, 0, -5)
+            .multiply(Transform.rotationOnX(1.5708)),
             wallMaterial);
 
-    var bgBall1 = new Sphere(Matrix4x4.translation(4.6, 0.4, 1).multiply(Matrix4x4.scaling(0.4, 0.4, 0.4)),
+    var bgBall1 = new Sphere(Transform.translation(4.6, 0.4, 1).multiply(Transform.scaling(0.4, 0.4, 0.4)),
             new Material.Builder().color(0.8, 0.5, 0.3).shininess(50).build());
-    var bgBall2 = new Sphere(Matrix4x4.translation(4.7, 0.3, 0.4).multiply(Matrix4x4.scaling(0.3, 0.3, 0.3)),
+    var bgBall2 = new Sphere(Transform.translation(4.7, 0.3, 0.4).multiply(Transform.scaling(0.3, 0.3, 0.3)),
             new Material.Builder().color(0.9, 0.4, 0.5).shininess(50).build());
-    var bgBall3 = new Sphere(Matrix4x4.translation(-1, 0.5, 4.5).multiply(Matrix4x4.scaling(0.5, 0.5, 0.5)),
+    var bgBall3 = new Sphere(Transform.translation(-1, 0.5, 4.5).multiply(Transform.scaling(0.5, 0.5, 0.5)),
             new Material.Builder().color(0.4, 0.9, 0.6).shininess(50).build());
-    var bgBall4 = new Sphere(Matrix4x4.translation(-1.7, 0.3, 4.7).multiply(Matrix4x4.scaling(0.3, 0.3, 0.3)),
+    var bgBall4 = new Sphere(Transform.translation(-1.7, 0.3, 4.7).multiply(Transform.scaling(0.3, 0.3, 0.3)),
             new Material.Builder().color(0.4, 0.6, 0.9).shininess(50).build());
 
-    var redSphere = new Sphere(Matrix4x4.translation(-0.6, 1, 0.6),
+    var redSphere = new Sphere(Transform.translation(-0.6, 1, 0.6),
             new Material.Builder().color(1, 0.3, 0.2).specular(0.4).shininess(5).build());
-    var blueGlassSphere = new Sphere(Matrix4x4.translation(0.6, 0.7, -0.6).multiply(Matrix4x4.scaling(0.7, 0.7, 0.7)),
+    var blueGlassSphere = new Sphere(Transform.translation(0.6, 0.7, -0.6).multiply(Transform.scaling(0.7, 0.7, 0.7)),
             new Material.Builder().color(0, 0, 0.2).ambient(0).diffuse(0.4).specular(0.9).shininess(300)
                     .reflective(0.9).transparency(0.9).refractiveIndex(GLASS.refractiveIndex()).build());
-    var greenGlassSphere = new Sphere(Matrix4x4.translation(-0.7, 0.5, -0.8).multiply(Matrix4x4.scaling(0.5, 0.5, 0.5)),
+    var greenGlassSphere = new Sphere(Transform.translation(-0.7, 0.5, -0.8).multiply(Transform.scaling(0.5, 0.5, 0.5)),
             new Material.Builder().color(0, 0.2, 0).ambient(0).diffuse(0.4).specular(0.9).shininess(300)
                     .reflective(0.9).transparency(0.9).refractiveIndex(GLASS.refractiveIndex()).build());
 
@@ -83,7 +83,7 @@ SceneSetup drawScene(int h, int v) {
             redSphere, blueGlassSphere, greenGlassSphere
     };
     var world = new World(shapes, new Light[]{light});
-    var view = Tuple.viewTransform(
+    var view = Transform.viewTransform(
             Tuple.point(-2.6, 1.5, -3.9),
             Tuple.point(-0.6, 1, -0.8),
             Tuple.vector(0, 1, 0)
@@ -92,19 +92,19 @@ SceneSetup drawScene(int h, int v) {
 }
 
 SceneSetup drawAirBubble(int h, int v) {
-    var wall = new Plane(Matrix4x4.translation(0, 0, 10).multiply(Matrix4x4.rotationOnX(1.5708)),
+    var wall = new Plane(Transform.translation(0, 0, 10).multiply(Transform.rotationOnX(1.5708)),
             new Material.Builder()
                     .pattern(new Checkers(new Solid(0.15, 0.15, 0.15), new Solid(0.85, 0.85, 0.85)))
                     .ambient(0.8).diffuse(0.2).specular(0).build());
     var glassBall = new Sphere(new Material.Builder().ambient(0).diffuse(0).specular(0.9)
             .shininess(300).reflective(0.9).transparency(0.9).refractiveIndex(GLASS.refractiveIndex()).build());
-    var hollowCenter = new Sphere(Matrix4x4.scaling(0.5, 0.5, 0.5),
+    var hollowCenter = new Sphere(Transform.scaling(0.5, 0.5, 0.5),
             new Material.Builder().ambient(0).diffuse(0).specular(0.9).shininess(300)
                     .reflective(0.9).transparency(0.9).refractiveIndex(AIR.refractiveIndex()).build());
     var light = Light.pointLight(Tuple.point(-20, 80, -20), new Color(1, 1, 1));
     var shapes = new Shape[] { wall, glassBall, hollowCenter };
     var world = new World(shapes, new Light[]{light});
-    var view = Tuple.viewTransform(
+    var view = Transform.viewTransform(
             Tuple.point(0, 0, -5),
             Tuple.point(0, 0, 0),
             Tuple.vector(0, 1, 0)

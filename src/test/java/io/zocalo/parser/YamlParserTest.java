@@ -1,7 +1,7 @@
 package io.zocalo.parser;
 
 import io.zocalo.base.Camera;
-import io.zocalo.base.Matrix4x4;
+import io.zocalo.base.Transform;
 import io.zocalo.base.Tuple;
 import io.zocalo.scene.Color;
 import io.zocalo.scene.Light;
@@ -110,8 +110,8 @@ class YamlParserTest {
         assertEquals(new Color(1, 0.2, 0.3), cube.getMaterial().color());
         assertEquals(0.12, cube.getMaterial().diffuse());
         assertEquals(0.345, cube.getMaterial().ambient());
-        assertEquals(Matrix4x4.translation(4, 5, 6), cube.getTransform());
-        assertEquals(Matrix4x4.translation(4, 5, 6).invert(), cube.getInverseTransform());
+        assertEquals(Transform.translation(4, 5, 6), cube.getTransform());
+        assertEquals(Transform.translation(4, 5, 6).invert(), cube.getInverseTransform());
         assertFalse(cube.hasShadow());
     }
 
@@ -146,7 +146,7 @@ class YamlParserTest {
         assertEquals(0.1, cube.getMaterial().ambient());
         assertEquals(0.0, cube.getMaterial().specular());
         assertEquals(0.1, cube.getMaterial().reflective());
-        assertEquals(Matrix4x4.translation(8.5, 1.5, -0.5), cube.getTransform());
+        assertEquals(Transform.translation(8.5, 1.5, -0.5), cube.getTransform());
     }
 
     @Test
@@ -172,10 +172,10 @@ class YamlParserTest {
         var obj = result.stream().findFirst().get();
         assertInstanceOf(Cube.class, obj);
         var cube = (Cube) obj;
-        var expectedTransform = Matrix4x4.translation(8.5, 1.5, -0.5)
-                .multiply(Matrix4x4.scaling(3.5, 3.5, 3.5))
-                .multiply(Matrix4x4.scaling(0.5, 0.5, 0.5))
-                .multiply(Matrix4x4.translation(1, -1, 1));
+        var expectedTransform = Transform.translation(8.5, 1.5, -0.5)
+                .multiply(Transform.scaling(3.5, 3.5, 3.5))
+                .multiply(Transform.scaling(0.5, 0.5, 0.5))
+                .multiply(Transform.translation(1, -1, 1));
         assertEquals(expectedTransform, cube.getTransform());
     }
 }

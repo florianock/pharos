@@ -25,7 +25,7 @@ public class Camera {
 
     public Camera(int hsize, int vsize, double fov, Tuple from, Tuple to, Tuple up) {
         assert from.isPoint() && to.isPoint() && up.isVector();
-        var viewTransform = Tuple.viewTransform(from, to, up);
+        var viewTransform = Transform.viewTransform(from, to, up);
         this(hsize, vsize, fov, viewTransform);
     }
     public Camera(int hsize, int vsize, double fov, Matrix4x4 viewTransform) {
@@ -47,7 +47,7 @@ public class Camera {
     }
 
     public Camera(int hsize, int vsize, double fov) {
-        this(hsize, vsize, fov, Matrix4x4.identity());
+        this(hsize, vsize, fov, Transform.identity());
     }
 
     public Matrix4x4 transform() {

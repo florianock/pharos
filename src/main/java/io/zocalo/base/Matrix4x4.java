@@ -3,7 +3,6 @@ package io.zocalo.base;
 import io.zocalo.Utils;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.StringJoiner;
 
 public class Matrix4x4 {
@@ -109,106 +108,28 @@ public class Matrix4x4 {
     }
 
     public Matrix4x4 translate(double x, double y, double z) {
-        return translation(x, y, z).multiply(this);
+        return Transform.translation(x, y, z).multiply(this);
     }
 
     public Matrix4x4 scale(double x, double y, double z) {
-        return scaling(x, y, z).multiply(this);
+        return Transform.scaling(x, y, z).multiply(this);
     }
 
     public Matrix4x4 rotateOnX(double r) {
-        return rotationOnX(r).multiply(this);
+        return Transform.rotationOnX(r).multiply(this);
     }
 
     public Matrix4x4 rotateOnY(double r) {
-        return rotationOnY(r).multiply(this);
+        return Transform.rotationOnY(r).multiply(this);
     }
 
     public Matrix4x4 rotateOnZ(double r) {
-        return rotationOnZ(r).multiply(this);
+        return Transform.rotationOnZ(r).multiply(this);
     }
 
     public Matrix4x4 shear(double xInProportionToY, double xInProportionToZ, double yInProportionToX,
                            double yInProportionToZ, double zInProportionToX, double zInProportionToY) {
-        return shearing(xInProportionToY, xInProportionToZ, yInProportionToX, yInProportionToZ, zInProportionToX, zInProportionToY).multiply(this);
-    }
-
-    // transformations
-
-    public static Matrix4x4 identity() {
-        return new Matrix4x4(new double[] {
-                1, 0, 0, 0,
-                0, 1, 0, 0,
-                0, 0, 1, 0,
-                0, 0, 0, 1
-        });
-    }
-
-    public static Matrix4x4 translation(List<Double> a) {
-        assert a.size() == 3;
-        return translation(a.get(0), a.get(1), a.get(2));
-    }
-    public static Matrix4x4 translation(double x, double y, double z) {
-        return new Matrix4x4(new double[] {
-                1, 0, 0, x,
-                0, 1, 0, y,
-                0, 0, 1, z,
-                0, 0, 0, 1
-        });
-    }
-
-    public static Matrix4x4 scaling(List<Double> a) {
-        assert a.size() == 3;
-        return scaling(a.get(0), a.get(1), a.get(2));
-    }
-    public static Matrix4x4 scaling(double x, double y, double z) {
-        return new Matrix4x4(new double[] {
-                x, 0, 0, 0,
-                0, y, 0, 0,
-                0, 0, z, 0,
-                0, 0, 0, 1
-        });
-    }
-
-    public static Matrix4x4 rotationOnX(double r) {
-        return new Matrix4x4(new double[] {
-                1, 0, 0, 0,
-                0, Math.cos(r), -Math.sin(r), 0,
-                0, Math.sin(r), Math.cos(r), 0,
-                0, 0, 0, 1
-        });
-    }
-
-    public static Matrix4x4 rotationOnY(double r) {
-        return new Matrix4x4(new double[] {
-                Math.cos(r), 0, Math.sin(r), 0,
-                0, 1, 0, 0,
-                -Math.sin(r), 0, Math.cos(r), 0,
-                0, 0, 0, 1
-        });
-    }
-
-    public static Matrix4x4 rotationOnZ(double r) {
-        return new Matrix4x4(new double[] {
-                Math.cos(r), -Math.sin(r), 0, 0,
-                Math.sin(r), Math.cos(r), 0, 0,
-                0, 0, 1, 0,
-                0, 0, 0, 1
-        });
-    }
-
-    public static Matrix4x4 shearing(List<Double> a) {
-        assert a.size() == 6;
-        return shearing(a.get(0), a.get(1), a.get(2), a.get(3), a.get(4), a.get(5));
-    }
-    public static Matrix4x4 shearing(double xInProportionToY, double xInProportionToZ, double yInProportionToX,
-                                     double yInProportionToZ, double zInProportionToX, double zInProportionToY) {
-        return new Matrix4x4(new double[] {
-                1, xInProportionToY, xInProportionToZ, 0,
-                yInProportionToX, 1, yInProportionToZ, 0,
-                zInProportionToX, zInProportionToY, 1, 0,
-                0, 0, 0, 1
-        });
+        return Transform.shearing(xInProportionToY, xInProportionToZ, yInProportionToX, yInProportionToZ, zInProportionToX, zInProportionToY).multiply(this);
     }
 
     @Override
@@ -234,11 +155,12 @@ public class Matrix4x4 {
 
     @Override
     public String toString() {
-        var result = new StringJoiner(" | ");
+        var result = new StringJoiner(" | ", " | ", "");
         for (var r = 0; r < 4; r++) {
             for (var c = 0; c < 4; c++) {
                 result.add(String.valueOf(get(r, c)));
             }
+            result.add("\n");
         }
         return result.toString();
     }

@@ -145,7 +145,7 @@ class Matrix4x4Test {
                 {4, 8, 16, 32}
         });
 
-        assertEquals(a, a.multiply(Matrix4x4.identity()));
+        assertEquals(a, a.multiply(Transform.identity()));
     }
 
     @Test
@@ -170,7 +170,7 @@ class Matrix4x4Test {
 
     @Test
     void transpose_identity() {
-        assertEquals(Matrix4x4.identity(), Matrix4x4.identity().transpose());
+        assertEquals(Transform.identity(), Transform.identity().transpose());
     }
 
     @Test
@@ -320,20 +320,20 @@ class Matrix4x4Test {
                 {-4, 4, 4, 1},
                 {-6, 5, -1, 1}
         });
-        assertEquals(Matrix4x4.identity(), Matrix4x4.identity().transpose());
+        assertEquals(Transform.identity(), Transform.identity().transpose());
 
-        assertEquals(Matrix4x4.identity(), a.multiply(a.invert()));
+        assertEquals(Transform.identity(), a.multiply(a.invert()));
         assertEquals(a.transpose().invert(), a.invert().transpose());
 
         var t = new Tuple(1, 2, 3, 4);
-        assertEquals(t, Matrix4x4.identity().multiply(t));
+        assertEquals(t, Transform.identity().multiply(t));
 
-        assertEquals(new Tuple(1, 4, 3, 12), Matrix4x4.identity().set(1, 1, 2).set(3, 3, 3).multiply(t));
+        assertEquals(new Tuple(1, 4, 3, 12), Transform.identity().set(1, 1, 2).set(3, 3, 3).multiply(t));
     }
 
     @Test
     void multiplying_translation() {
-        var transform = Matrix4x4.translation(5, -3, 2);
+        var transform = Transform.translation(5, -3, 2);
         var p = Tuple.point(-3, 4, 5);
 
         assertEquals(Tuple.point(2, 1, 7), transform.multiply(p));
@@ -341,7 +341,7 @@ class Matrix4x4Test {
 
     @Test
     void multiplying_inverseOfTranslation() {
-        var transform = Matrix4x4.translation(5, -3, 2);
+        var transform = Transform.translation(5, -3, 2);
         var p = Tuple.point(-3, 4, 5);
 
         assertEquals(Tuple.point(-8, 7, 3), transform.invert().multiply(p));
@@ -349,7 +349,7 @@ class Matrix4x4Test {
 
     @Test
     void multiplying_translationDoesNotAffectVectors() {
-        var transform = Matrix4x4.translation(5, -3, 2);
+        var transform = Transform.translation(5, -3, 2);
         var v = Tuple.vector(-3, 4, 5);
 
         assertEquals(v, transform.multiply(v));
@@ -357,7 +357,7 @@ class Matrix4x4Test {
 
     @Test
     void scaling_point() {
-        var transform = Matrix4x4.scaling(2, 3, 4);
+        var transform = Transform.scaling(2, 3, 4);
         var p = Tuple.point(-4, 6, 8);
 
         assertEquals(Tuple.point(-8, 18, 32), transform.multiply(p));
@@ -365,7 +365,7 @@ class Matrix4x4Test {
 
     @Test
     void scaling_vector() {
-        var transform = Matrix4x4.scaling(2, 3, 4);
+        var transform = Transform.scaling(2, 3, 4);
         var v = Tuple.vector(-4, 6, 8);
 
         assertEquals(Tuple.vector(-8, 18, 32), transform.multiply(v));
@@ -373,7 +373,7 @@ class Matrix4x4Test {
 
     @Test
     void scaling_vector_by_inverse() {
-        var transform = Matrix4x4.scaling(2, 3, 4);
+        var transform = Transform.scaling(2, 3, 4);
         var v = Tuple.vector(-4, 6, 8);
 
         assertEquals(Tuple.vector(-2, 2, 2), transform.invert().multiply(v));
@@ -381,7 +381,7 @@ class Matrix4x4Test {
 
     @Test
     void reflection_is_scaling_by_a_negative_value() {
-        var transform = Matrix4x4.scaling(-1, 1, 1);
+        var transform = Transform.scaling(-1, 1, 1);
         var p = Tuple.point(2, 3, 4);
 
         assertEquals(Tuple.point(-2, 3, 4), transform.multiply(p));
@@ -390,8 +390,8 @@ class Matrix4x4Test {
     @Test
     void rotation_on_x_axis() {
         var p = Tuple.point(0, 1, 0);
-        var halfQuarter = Matrix4x4.rotationOnX(Utils.QTR_PI);
-        var fullQuarter = Matrix4x4.rotationOnX(Utils.HALF_PI);
+        var halfQuarter = Transform.rotationOnX(Utils.QTR_PI);
+        var fullQuarter = Transform.rotationOnX(Utils.HALF_PI);
 
         assertEquals(Tuple.point(0, Math.sqrt(2) / 2, Math.sqrt(2) / 2), halfQuarter.multiply(p));
         assertEquals(Tuple.point(0, 0, 1), fullQuarter.multiply(p));
@@ -400,7 +400,7 @@ class Matrix4x4Test {
     @Test
     void rotation_on_x_axis_inverse_rotates_in_opposite_direction() {
         var p = Tuple.point(0, 1, 0);
-        var halfQuarter = Matrix4x4.rotationOnX(Utils.QTR_PI);
+        var halfQuarter = Transform.rotationOnX(Utils.QTR_PI);
 
         assertEquals(Tuple.point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2), halfQuarter.invert().multiply(p));
     }
@@ -408,8 +408,8 @@ class Matrix4x4Test {
     @Test
     void rotation_on_y_axis() {
         var p = Tuple.point(0, 0, 1);
-        var halfQuarter = Matrix4x4.rotationOnY(Utils.QTR_PI);
-        var fullQuarter = Matrix4x4.rotationOnY(Utils.HALF_PI);
+        var halfQuarter = Transform.rotationOnY(Utils.QTR_PI);
+        var fullQuarter = Transform.rotationOnY(Utils.HALF_PI);
 
         assertEquals(Tuple.point(Math.sqrt(2) / 2, 0, Math.sqrt(2) / 2), halfQuarter.multiply(p));
         assertEquals(Tuple.point(1, 0, 0), fullQuarter.multiply(p));
@@ -418,8 +418,8 @@ class Matrix4x4Test {
     @Test
     void rotation_on_z_axis() {
         var p = Tuple.point(0, 1, 0);
-        var halfQuarter = Matrix4x4.rotationOnZ(Utils.QTR_PI);
-        var fullQuarter = Matrix4x4.rotationOnZ(Utils.HALF_PI);
+        var halfQuarter = Transform.rotationOnZ(Utils.QTR_PI);
+        var fullQuarter = Transform.rotationOnZ(Utils.HALF_PI);
 
         assertEquals(Tuple.point(-Math.sqrt(2) / 2, Math.sqrt(2) / 2, 0), halfQuarter.multiply(p));
         assertEquals(Tuple.point(-1, 0, 0), fullQuarter.multiply(p));
@@ -427,7 +427,7 @@ class Matrix4x4Test {
 
     @Test
     void shearing_moves_x_in_proportion_to_y() {
-        var transform = Matrix4x4.shearing(1, 0, 0, 0, 0, 0);
+        var transform = Transform.shearing(1, 0, 0, 0, 0, 0);
         var p = Tuple.point(2, 3, 4);
 
         assertEquals(Tuple.point(5, 3, 4), transform.multiply(p));
@@ -435,7 +435,7 @@ class Matrix4x4Test {
 
     @Test
     void shearing_moves_x_in_proportion_to_z() {
-        var transform = Matrix4x4.shearing(0, 1, 0, 0, 0, 0);
+        var transform = Transform.shearing(0, 1, 0, 0, 0, 0);
         var p = Tuple.point(2, 3, 4);
 
         assertEquals(Tuple.point(6, 3, 4), transform.multiply(p));
@@ -443,7 +443,7 @@ class Matrix4x4Test {
 
     @Test
     void shearing_moves_y_in_proportion_to_x() {
-        var transform = Matrix4x4.shearing(0, 0, 1, 0, 0, 0);
+        var transform = Transform.shearing(0, 0, 1, 0, 0, 0);
         var p = Tuple.point(2, 3, 4);
 
         assertEquals(Tuple.point(2, 5, 4), transform.multiply(p));
@@ -451,7 +451,7 @@ class Matrix4x4Test {
 
     @Test
     void shearing_moves_y_in_proportion_to_z() {
-        var transform = Matrix4x4.shearing(0, 0, 0, 1, 0, 0);
+        var transform = Transform.shearing(0, 0, 0, 1, 0, 0);
         var p = Tuple.point(2, 3, 4);
 
         assertEquals(Tuple.point(2, 7, 4), transform.multiply(p));
@@ -459,7 +459,7 @@ class Matrix4x4Test {
 
     @Test
     void shearing_moves_z_in_proportion_to_x() {
-        var transform = Matrix4x4.shearing(0, 0, 0, 0, 1, 0);
+        var transform = Transform.shearing(0, 0, 0, 0, 1, 0);
         var p = Tuple.point(2, 3, 4);
 
         assertEquals(Tuple.point(2, 3, 6), transform.multiply(p));
@@ -467,7 +467,7 @@ class Matrix4x4Test {
 
     @Test
     void shearing_moves_z_in_proportion_to_y() {
-        var transform = Matrix4x4.shearing(0, 0, 0, 0, 0, 1);
+        var transform = Transform.shearing(0, 0, 0, 0, 0, 1);
         var p = Tuple.point(2, 3, 4);
 
         assertEquals(Tuple.point(2, 3, 7), transform.multiply(p));
@@ -476,9 +476,9 @@ class Matrix4x4Test {
     @Test
     void transformations_in_sequence() {
         var p = Tuple.point(1, 0, 1);
-        var a = Matrix4x4.rotationOnX(Utils.HALF_PI);
-        var b = Matrix4x4.scaling(5, 5, 5);
-        var c = Matrix4x4.translation(10, 5, 7);
+        var a = Transform.rotationOnX(Utils.HALF_PI);
+        var b = Transform.scaling(5, 5, 5);
+        var c = Transform.translation(10, 5, 7);
 
         // apply rotation first
         var p2 = a.multiply(p);
@@ -496,9 +496,9 @@ class Matrix4x4Test {
     @Test
     void transformations_must_be_applied_in_reverse_order() {
         var p = Tuple.point(1, 0, 1);
-        var a = Matrix4x4.rotationOnX(Utils.HALF_PI);
-        var b = Matrix4x4.scaling(5, 5, 5);
-        var c = Matrix4x4.translation(10, 5, 7);
+        var a = Transform.rotationOnX(Utils.HALF_PI);
+        var b = Transform.scaling(5, 5, 5);
+        var c = Transform.translation(10, 5, 7);
 
         var t = c.multiply(b.multiply(a));
 
@@ -508,7 +508,7 @@ class Matrix4x4Test {
     @Test
     void transformations_can_be_chained_fluently_in_intuitive_order() {
         var p = Tuple.point(1, 0, 1);
-        var transform = Matrix4x4.identity()
+        var transform = Transform.identity()
                 .rotateOnX(Utils.HALF_PI)
                 .scale(5, 5, 5)
                 .translate(10, 5, 7);

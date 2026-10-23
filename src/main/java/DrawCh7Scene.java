@@ -1,6 +1,6 @@
 import io.zocalo.base.Camera;
+import io.zocalo.base.Transform;
 import io.zocalo.scene.Material;
-import io.zocalo.base.Matrix4x4;
 import io.zocalo.base.Tuple;
 import io.zocalo.scene.*;
 import io.zocalo.scene.shapes.Shape;
@@ -10,7 +10,7 @@ import static io.zocalo.Utils.*;
 
 void main() throws IOException {
 
-    var floor = new Sphere(Matrix4x4.scaling(10,0.01f, 10),
+    var floor = new Sphere(Transform.scaling(10,0.01f, 10),
             new Material.Builder()
                     .color(new Color(1, 0.9f, 0.9f))
                     .specular(0)
@@ -18,23 +18,23 @@ void main() throws IOException {
     );
 
     var left_wall = new Sphere(
-            Matrix4x4.translation(0, 0, 5)
-                    .multiply(Matrix4x4.rotationOnY(-QTR_PI))
-                    .multiply(Matrix4x4.rotationOnX(HALF_PI))
-                    .multiply(Matrix4x4.scaling(10, 0.01f, 10)),
+            Transform.translation(0, 0, 5)
+                    .multiply(Transform.rotationOnY(-QTR_PI))
+                    .multiply(Transform.rotationOnX(HALF_PI))
+                    .multiply(Transform.scaling(10, 0.01f, 10)),
             floor.getMaterial()
     );
 
     var right_wall = new Sphere(
-            Matrix4x4.translation(0, 0, 5)
-                    .multiply(Matrix4x4.rotationOnY(QTR_PI))
-                    .multiply(Matrix4x4.rotationOnX(HALF_PI))
-                    .multiply(Matrix4x4.scaling(10, 0.01f, 10)),
+            Transform.translation(0, 0, 5)
+                    .multiply(Transform.rotationOnY(QTR_PI))
+                    .multiply(Transform.rotationOnX(HALF_PI))
+                    .multiply(Transform.scaling(10, 0.01f, 10)),
             floor.getMaterial()
     );
 
     var middle = new Sphere(
-            Matrix4x4.translation(-0.5f, 1, 0.5f),
+            Transform.translation(-0.5f, 1, 0.5f),
             new Material.Builder()
                     .color(new Color(0.1f, 1, 0.5f))
                     .diffuse(0.7f)
@@ -43,8 +43,8 @@ void main() throws IOException {
     );
 
     var right = new Sphere(
-            Matrix4x4.translation(1.5f, 0.5f, -0.5f)
-                    .multiply(Matrix4x4.scaling(0.5f, 0.5f, 0.5f)),
+            Transform.translation(1.5f, 0.5f, -0.5f)
+                    .multiply(Transform.scaling(0.5f, 0.5f, 0.5f)),
             new Material.Builder()
                     .color(new Color(0.5f, 1, 0.1f))
                     .diffuse(0.7f)
@@ -53,8 +53,8 @@ void main() throws IOException {
     );
 
     var left = new Sphere(
-            Matrix4x4.translation(-1.5f, 0.33f, -0.75f)
-                    .multiply(Matrix4x4.scaling(0.33f, 0.33f, 0.33f)),
+            Transform.translation(-1.5f, 0.33f, -0.75f)
+                    .multiply(Transform.scaling(0.33f, 0.33f, 0.33f)),
             new Material.Builder()
                     .color(new Color(1, 0.8f, 0.1f))
                     .diffuse(0.7f)
@@ -66,7 +66,7 @@ void main() throws IOException {
     var light = Light.pointLight(Tuple.point(-10, 10, -10), Color.WHITE);
     var world = new World(objects, new Light[]{light});
 
-    var camera = new Camera(1280, 1024, PI / 3, Tuple.viewTransform(
+    var camera = new Camera(1280, 1024, PI / 3, Transform.viewTransform(
             Tuple.point(0, 1.5f, -5),
             Tuple.point(0,    1,  0),
             Tuple.vector(0,    1,  0)

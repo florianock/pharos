@@ -3,7 +3,7 @@ package io.zocalo;
 import io.zocalo.base.Tuple;
 import io.zocalo.scene.Color;
 
-public class Utils {
+public final class Utils {
 
     public static final double EPSILON       = 1e-4f;
     public static final double SHADOW_OFFSET = EPSILON;

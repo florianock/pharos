@@ -11,12 +11,12 @@ public class Group extends Shape {
     private final Shape[] children;
 
     public Group() {
-        super(Matrix4x4.identity(), Material.create(), false);
+        super(Transform.identity(), Material.create(), false);
         children = new Shape[0];
     }
 
     public Group(Shape[] children) {
-        super(Matrix4x4.identity(), Material.create(), false);
+        super(Transform.identity(), Material.create(), false);
         this.children = children;
         for (var child : children) child.setParent(this);
     }
@@ -62,7 +62,7 @@ public class Group extends Shape {
     }
 
     public static class Builder {
-        private Matrix4x4 transform = Matrix4x4.identity();
+        private Matrix4x4 transform = Transform.identity();
         private Material material = Material.create();
         private boolean shadow = false;
         private final ArrayList<Shape> children = new ArrayList<>();

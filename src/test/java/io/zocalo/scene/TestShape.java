@@ -1,9 +1,6 @@
 package io.zocalo.scene;
 
-import io.zocalo.base.Intersections;
-import io.zocalo.base.Matrix4x4;
-import io.zocalo.base.Ray;
-import io.zocalo.base.Tuple;
+import io.zocalo.base.*;
 import io.zocalo.scene.shapes.Shape;
 
 public class TestShape extends Shape {
@@ -11,7 +8,7 @@ public class TestShape extends Shape {
     private Ray savedRay;
 
     public TestShape() {
-        super(Matrix4x4.identity(), new Material());
+        super(Transform.identity(), new Material());
     }
 
     public TestShape(Matrix4x4 transform) {
@@ -19,7 +16,7 @@ public class TestShape extends Shape {
     }
 
     public TestShape(Material material) {
-        super(Matrix4x4.identity(), material);
+        super(Transform.identity(), material);
     }
 
     public TestShape(Matrix4x4 transform, Material material) {

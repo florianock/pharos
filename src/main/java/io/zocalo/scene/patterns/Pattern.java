@@ -1,6 +1,7 @@
 package io.zocalo.scene.patterns;
 
 import io.zocalo.base.Matrix4x4;
+import io.zocalo.base.Transform;
 import io.zocalo.base.Tuple;
 import io.zocalo.scene.Color;
 import io.zocalo.scene.shapes.Shape;
@@ -11,8 +12,8 @@ public abstract class Pattern {
     public final Matrix4x4 inverseTransform;
 
     public Pattern() {
-        transform = Matrix4x4.identity();
-        inverseTransform = Matrix4x4.identity();
+        transform = Transform.identity();
+        inverseTransform = Transform.identity();
     }
 
     public Pattern(final Matrix4x4 transform) {

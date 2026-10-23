@@ -14,15 +14,15 @@ public class Cone extends Shape {
     private final boolean closed;
 
     public Cone() {
-        this(Matrix4x4.identity());
+        this(Transform.identity());
     }
 
     public Cone(double minimum, double maximum) {
-        this(Matrix4x4.identity(), Material.create(), minimum, maximum, false, true);
+        this(Transform.identity(), Material.create(), minimum, maximum, false, true);
     }
 
     public Cone(double minimum, double maximum, boolean closed) {
-        this(Matrix4x4.identity(), Material.create(), minimum, maximum, closed, true);
+        this(Transform.identity(), Material.create(), minimum, maximum, closed, true);
     }
 
     public Cone(Matrix4x4 t) {
@@ -30,7 +30,7 @@ public class Cone extends Shape {
     }
 
     public Cone(Material m) {
-        this(Matrix4x4.identity(), m, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false, true);
+        this(Transform.identity(), m, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false, true);
     }
 
     public Cone(Matrix4x4 transform, Material material) {

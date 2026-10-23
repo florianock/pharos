@@ -1,7 +1,7 @@
 package io.zocalo.scene.shapes;
 
-import io.zocalo.base.Matrix4x4;
 import io.zocalo.base.Ray;
+import io.zocalo.base.Transform;
 import io.zocalo.base.Tuple;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,7 +17,7 @@ class CubeTest {
     @Test
     void defaultCube() {
         var c = new Cube();
-        assertEquals(Matrix4x4.identity(), c.getInverseTransform());
+        assertEquals(Transform.identity(), c.getInverseTransform());
     }
 
     public static Stream<Arguments> intersectExamples() {

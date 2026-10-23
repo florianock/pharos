@@ -1,6 +1,6 @@
 import io.zocalo.*;
 import io.zocalo.base.Canvas;
-import io.zocalo.base.Matrix4x4;
+import io.zocalo.base.Transform;
 import io.zocalo.base.Tuple;
 import io.zocalo.scene.Color;
 
@@ -13,7 +13,7 @@ void main() throws IOException {
 
     var hours = new Tuple[12];
     hours[0] = Tuple.point(0, 0, 1);
-    var r = Matrix4x4.rotationOnY(Utils.PI / 6);
+    var r = Transform.rotationOnY(Utils.PI / 6);
 
     for (var i = 1; i < 12; i++) {
         hours[i] = r.multiply(hours[i-1]);

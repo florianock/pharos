@@ -85,19 +85,4 @@ public record Tuple(double x, double y, double z, double w) {
         if (!(other instanceof Tuple(double x1, double y1, double z1, double w1))) return false;
         return (equalEnough(x1, this.x()) && equalEnough(y1, this.y()) && equalEnough(z1, this.z()) && equalEnough(w1, this.w()));
     }
-
-    public static Matrix4x4 viewTransform(Tuple from, Tuple to, Tuple up) {
-        assert from.isPoint() && to.isPoint() && up.isVector();
-        var forward = to.subtract(from).normalize();
-        var upn = up.normalize();
-        var left = forward.cross(upn);
-        var trueUp = left.cross(forward);
-        var orientation = new Matrix4x4(new double[]{
-                    left.x(),     left.y(),     left.z(), 0,
-                  trueUp.x(),   trueUp.y(),   trueUp.z(), 0,
-                -forward.x(), -forward.y(), -forward.z(), 0,
-                           0,            0,            0, 1
-        });
-        return orientation.multiply(Matrix4x4.translation(-from.x(), -from.y(), -from.z()));
-    }
 }

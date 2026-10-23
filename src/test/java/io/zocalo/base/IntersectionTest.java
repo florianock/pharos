@@ -130,7 +130,7 @@ class IntersectionTest {
     @Test
     void the_hit_should_offset_the_point() {
         var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
-        var shape = new Sphere(Matrix4x4.translation(0, 0, 1));
+        var shape = new Sphere(Transform.translation(0, 0, 1));
         var i = new Intersection(5, shape);
         var comps = i.prepareComputations(r, new Intersections(i));
         assertTrue(comps.overPoint().z() < -Utils.EPSILON / 2);
@@ -160,9 +160,9 @@ class IntersectionTest {
     @ParameterizedTest
     @MethodSource("intersectionRefractionExamples")
     void findingN1AndN2AtVariousIntersections(int index, double n1, double n2) {
-        var A = Sphere.glassSphere(Matrix4x4.scaling(2, 2, 2), 1.5);
-        var B = Sphere.glassSphere(Matrix4x4.translation(0, 0, -0.25), 2.0);
-        var C = Sphere.glassSphere(Matrix4x4.translation(0, 0, 0.25), 2.5);
+        var A = Sphere.glassSphere(Transform.scaling(2, 2, 2), 1.5);
+        var B = Sphere.glassSphere(Transform.translation(0, 0, -0.25), 2.0);
+        var C = Sphere.glassSphere(Transform.translation(0, 0, 0.25), 2.5);
 
         var r = new Ray(Tuple.point(0, 0, -4), Tuple.vector(0, 0, 1));
         var xs = new Intersections(new Intersection(2, A), new Intersection(2.75, B), new Intersection(3.25, C),
@@ -175,7 +175,7 @@ class IntersectionTest {
     @Test
     void theUnderPointIsOffsetBelowTheSurface() {
         var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
-        var shape = Sphere.glassSphere(Matrix4x4.translation(0, 0, 1));
+        var shape = Sphere.glassSphere(Transform.translation(0, 0, 1));
         var i = new Intersection(5, shape);
         var xs = new Intersections(i);
         var comps = i.prepareComputations(r, xs);

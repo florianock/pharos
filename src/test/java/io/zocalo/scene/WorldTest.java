@@ -30,7 +30,7 @@ class WorldTest {
                 .diffuse(0.7)
                 .specular(0.2)
                 .build());
-        var s2 = new Sphere(Matrix4x4.scaling(0.5, 0.5, 0.5));
+        var s2 = new Sphere(Transform.scaling(0.5, 0.5, 0.5));
         var w = World.defaultWorld();
         assertEquals(light, (w.lights())[0]);
         assertTrue(Arrays.asList(w.objects()).contains(s1));
@@ -108,7 +108,7 @@ class WorldTest {
     void shadeHitIsGivenAnIntersectionInShadow() {
         var light = Light.pointLight(Tuple.point(0, 0, -10), Color.WHITE);
         var s1 = new Sphere();
-        var s2 = new Sphere(Matrix4x4.translation(0, 0, 10));
+        var s2 = new Sphere(Transform.translation(0, 0, 10));
         var w = new World(new Shape[]{s1, s2}, new Light[]{light});
         var r = new Ray(Tuple.point(0, 0, 5), Tuple.vector(0, 0, 1));
         var i = new Intersection(4, s2);
@@ -151,7 +151,7 @@ class WorldTest {
 
     @Test
     void theReflectedColorForAReflectiveMaterial() {
-        var shape = new Plane(Matrix4x4.translation(0, -1, 0), new Material.Builder().reflective(0.5).build());
+        var shape = new Plane(Transform.translation(0, -1, 0), new Material.Builder().reflective(0.5).build());
         var w1 = World.defaultWorld();
         var w = new World(new Shape[]{w1.objects()[0], w1.objects()[1], shape});
         var r = new Ray(Tuple.point(0, 0, -3), Tuple.vector(0, -Math.sqrt(2) / 2, Math.sqrt(2) / 2));
@@ -163,7 +163,7 @@ class WorldTest {
 
     @Test
     void shadeHitWithAReflectiveMaterial() {
-        var shape = new Plane(Matrix4x4.translation(0, -1, 0), new Material.Builder().reflective(0.5).build());
+        var shape = new Plane(Transform.translation(0, -1, 0), new Material.Builder().reflective(0.5).build());
         var w1 = World.defaultWorld();
         var w = new World(new Shape[]{w1.objects()[0], w1.objects()[1], shape});
         var r = new Ray(Tuple.point(0, 0, -3), Tuple.vector(0, -Math.sqrt(2) / 2, Math.sqrt(2) / 2));
@@ -176,8 +176,8 @@ class WorldTest {
     @Test
     void colorAtWithMutuallyReflectiveSurfaces() {
         var light = Light.pointLight(Tuple.point(0, 0, 0), Color.WHITE);
-        var lower = new Plane(Matrix4x4.translation(0, -1, 0), new Material.Builder().reflective(1).build());
-        var upper = new Plane(Matrix4x4.translation(0, 1, 0), new Material.Builder().reflective(1).build());
+        var lower = new Plane(Transform.translation(0, -1, 0), new Material.Builder().reflective(1).build());
+        var upper = new Plane(Transform.translation(0, 1, 0), new Material.Builder().reflective(1).build());
         var w = new World(new Shape[]{lower, upper}, new Light[]{light});
         var r = new Ray(Tuple.point(0, 0, 0), Tuple.vector(0, 1, 0));
         assertDoesNotThrow(() -> w.colorAt(r, 5));
@@ -186,7 +186,7 @@ class WorldTest {
     @Test
     void theReflectedColorAtTheMaximumRecursiveDepth() {
         var w1 = World.defaultWorld();
-        var shape = new Plane(Matrix4x4.translation(0, -1, 0), new Material.Builder().reflective(0.5).build());
+        var shape = new Plane(Transform.translation(0, -1, 0), new Material.Builder().reflective(0.5).build());
         var w = new World(new Shape[]{w1.objects()[0], w1.objects()[1], shape});
         var r = new Ray(Tuple.point(0, 0, 0), Tuple.vector(0, 1, 0));
         var i = new Intersection(Math.sqrt(2), shape);
@@ -254,8 +254,8 @@ class WorldTest {
     @Test
     void shadeHitWithATransparentMaterial() {
         var dw = World.defaultWorld();
-        var floor = new Plane(Matrix4x4.translation(0, -1, 0), new Material.Builder().transparency(0.5).refractiveIndex(1.5).build());
-        var ball = new Sphere(Matrix4x4.translation(0, -3.5, -0.5), new Material.Builder().color(1, 0, 0).ambient(0.5).build());
+        var floor = new Plane(Transform.translation(0, -1, 0), new Material.Builder().transparency(0.5).refractiveIndex(1.5).build());
+        var ball = new Sphere(Transform.translation(0, -3.5, -0.5), new Material.Builder().color(1, 0, 0).ambient(0.5).build());
         var wo1 = dw.objects()[0];
         var wo2 = dw.objects()[1];
         var w = new World(new Shape[]{wo1, wo2, floor, ball});
@@ -269,8 +269,8 @@ class WorldTest {
     @Test
     void shadeHitWithAReflectiveTransparentMaterial() {
         var dw = World.defaultWorld();
-        var floor = new Plane(Matrix4x4.translation(0, -1, 0), new Material.Builder().reflective(0.5).transparency(0.5).refractiveIndex(1.5).build());
-        var ball = new Sphere(Matrix4x4.translation(0, -3.5, -0.5), new Material.Builder().color(1, 0, 0).ambient(0.5).build());
+        var floor = new Plane(Transform.translation(0, -1, 0), new Material.Builder().reflective(0.5).transparency(0.5).refractiveIndex(1.5).build());
+        var ball = new Sphere(Transform.translation(0, -3.5, -0.5), new Material.Builder().color(1, 0, 0).ambient(0.5).build());
         var wo1 = dw.objects()[0];
         var wo2 = dw.objects()[1];
         var w = new World(new Shape[]{wo1, wo2, floor, ball});

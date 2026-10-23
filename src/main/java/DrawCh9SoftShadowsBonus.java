@@ -1,6 +1,6 @@
 import io.zocalo.base.Camera;
+import io.zocalo.base.Transform;
 import io.zocalo.scene.Material;
-import io.zocalo.base.Matrix4x4;
 import io.zocalo.base.Tuple;
 import io.zocalo.scene.*;
 import io.zocalo.scene.shapes.Cube;
@@ -12,7 +12,7 @@ import static io.zocalo.Utils.*;
 
 void main() throws IOException {
 
-    var floor = new Plane(Matrix4x4.identity(),
+    var floor = new Plane(Transform.identity(),
             new Material.Builder()
                     .color(new Color(1, 1, 1))
                     .ambient(0.025)
@@ -22,8 +22,8 @@ void main() throws IOException {
     );
 
     var right = new Sphere(
-            Matrix4x4.translation(0.5, 0.5, 0)
-                    .multiply(Matrix4x4.scaling(0.5, 0.5, 0.5)),
+            Transform.translation(0.5, 0.5, 0)
+                    .multiply(Transform.scaling(0.5, 0.5, 0.5)),
             new Material.Builder()
                     .color(new Color(1, 0, 0))
                     .ambient(0.1)
@@ -34,8 +34,8 @@ void main() throws IOException {
     );
 
     var left = new Sphere(
-            Matrix4x4.translation(-0.25, 0.33, 0)
-                    .multiply(Matrix4x4.scaling(0.33, 0.33, 0.33)),
+            Transform.translation(-0.25, 0.33, 0)
+                    .multiply(Transform.scaling(0.33, 0.33, 0.33)),
             new Material.Builder()
                     .color(new Color(0.5, 0.5, 1))
                     .ambient(0.1)
@@ -46,7 +46,7 @@ void main() throws IOException {
     );
 
     var lightCube = new Cube(
-            Matrix4x4.translation(0, 3, 4).multiply(Matrix4x4.scaling(1, 1, 0.01)),
+            Transform.translation(0, 3, 4).multiply(Transform.scaling(1, 1, 0.01)),
             new Material.Builder().color(1.5, 1.5, 1.5).ambient(1).diffuse(0).specular(0).build(),
             false
     );
@@ -55,7 +55,7 @@ void main() throws IOException {
     var light = Light.areaLight(Tuple.point(-1, 2, 4), Tuple.vector(2, 0, 0), 10, Tuple.vector(0, 2, 0), 10, true, new Color(1.5, 1.5, 1.5));
     var world = new World(objects, new Light[]{light});
 
-    var camera = new Camera(3840, 2160, PI / 4, Tuple.viewTransform(
+    var camera = new Camera(3840, 2160, PI / 4, Transform.viewTransform(
             Tuple.point(-3,   1, 2.5),
             Tuple.point( 0, 0.5,   0),
             Tuple.vector(0,   1,   0)

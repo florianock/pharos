@@ -8,11 +8,11 @@ import static io.zocalo.Utils.EPSILON;
 public class Plane extends Shape {
 
     public Plane() {
-        super(Matrix4x4.identity(), new Material(), true);
+        super(Transform.identity(), new Material(), true);
     }
 
     public Plane(Material material) {
-        super(Matrix4x4.identity(), material, true);
+        super(Transform.identity(), material, true);
     }
 
     public Plane(Matrix4x4 transform, Material material) {

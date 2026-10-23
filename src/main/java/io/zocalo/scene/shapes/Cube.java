@@ -10,11 +10,11 @@ public class Cube extends Shape {
     }
 
     public Cube() {
-        this(Matrix4x4.identity());
+        this(Transform.identity());
     }
 
     public Cube(Material m) {
-        this(Matrix4x4.identity(), m, true);
+        this(Transform.identity(), m, true);
     }
 
     public Cube(Matrix4x4 transform, Material material) {

@@ -52,7 +52,7 @@ class CameraTest {
 
     @Test
     void constructingARayWhenTheCameraIsTransformed() {
-        var t = Matrix4x4.rotationOnY(Utils.QTR_PI).multiply(Matrix4x4.translation(0, -2, 5));
+        var t = Transform.rotationOnY(Utils.QTR_PI).multiply(Transform.translation(0, -2, 5));
         var c = new Camera(201, 101,  Utils.HALF_PI, t);
         var r = c.rayForPixel(100, 50);
         assertEquals(Tuple.point(0, 2, -5), r.origin());
@@ -65,7 +65,7 @@ class CameraTest {
         var from = Tuple.point(0, 0, -5);
         var to = Tuple.point(0, 0, 0);
         var up = Tuple.vector(0, 1, 0);
-        var c = new Camera(11, 11, HALF_PI, Tuple.viewTransform(from, to, up));
+        var c = new Camera(11, 11, HALF_PI, Transform.viewTransform(from, to, up));
         Canvas image = c.render(w);
         var expected = Utils.pack255(new Color(0.38066, 0.47583, 0.2855));
         assertEquals(expected, image.pixelAt(5, 5));
