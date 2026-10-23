@@ -84,8 +84,8 @@ void main() throws IOException {
     var light = Light.pointLight(Tuple.point(1, 6.9, -4.9), Color.WHITE);
     var shapes = new Shape[]{floor, c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, cone1, cone2, cone3};
     var world = new World(shapes, new Light[]{light});
-    var camera = new Camera(3840, 2160, 0.3, Tuple.point(8, 3.5, -9), Tuple.point(0, 0.3, 0), Tuple.vector(0, 1, 0));
+    var camera = new Camera(800, 400, 0.3, Tuple.point(8, 3.5, -9), Tuple.point(0, 0.3, 0), Tuple.vector(0, 1, 0));
     var canvas = camera.renderParallel(world);
-    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh13HQ.png"));
-    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh13HQ.ppm"));
+//    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh13HQ.png"));
+//    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh13HQ.ppm"));
 }

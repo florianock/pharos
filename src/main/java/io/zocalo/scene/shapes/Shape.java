@@ -11,6 +11,7 @@ import io.zocalo.scene.Material;
 // TODO Consider changing to sealed interface
 public abstract class Shape {
 
+    protected Shape parent;
     protected final Material material;
     protected final Matrix4x4 transform;
     protected final Matrix4x4 inverseTransform;
@@ -23,6 +24,7 @@ public abstract class Shape {
         inverseTransform = transform.invert();
         inverseTransformTranspose = inverseTransform.transpose();
         shadow = true;
+        parent = null;
     }
 
     public Shape(Matrix4x4 transform, Material material, boolean shadow) {
@@ -31,6 +33,7 @@ public abstract class Shape {
         inverseTransform = transform.invert();
         inverseTransformTranspose = inverseTransform.transpose();
         this.shadow = shadow;
+        parent = null;
     }
 
     public abstract Tuple localNormalAt(Tuple worldPoint);
@@ -48,6 +51,14 @@ public abstract class Shape {
     public Intersections intersect(Ray r) {
         var localRay = r.transform(inverseTransform);
         return localIntersect(localRay);
+    }
+
+    public Shape getParent() {
+        return parent;
+    }
+
+    public void setParent(Shape parent) {
+        this.parent = parent;
     }
 
     public Material getMaterial() {

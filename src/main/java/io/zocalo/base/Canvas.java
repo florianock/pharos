@@ -95,7 +95,9 @@ public class Canvas {
         if (Files.notExists(path.getParent())) {
             Files.createDirectories(path.getParent());
         }
-        ImageIO.write(image, "png", Files.newOutputStream(path));
+        try (var stream =  Files.newOutputStream(path)) {
+            ImageIO.write(image, "png", stream);
+        }
     }
 
     /**

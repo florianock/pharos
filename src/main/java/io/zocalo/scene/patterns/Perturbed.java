@@ -65,12 +65,13 @@ public final class Perturbed extends Pattern {
 //        var noiseY = perlinNoise.octavePerlin(point.x(),  point.y(), point.z(), 2, 1);
 //        perlinNoise.repeat++;
 //        var noiseZ = perlinNoise.octavePerlin(point.x(),  point.y(), point.z(), 2, 1);
-//        var noise = perlinNoise(point.x(),  point.y(), point.z());
-        var noise = SimplexNoise.noise(point.x(),  point.y(), point.z());
+        var noise = perlinNoise(point.x() * noiseFactor,  point.y() * noiseFactor, point.z() * noiseFactor);
+//        var noise = SimplexNoise.noise(point.x(),  point.y(), point.z());
+//        var noise = SimplexNoise.noise(point.x() * noiseFactor,  point.y() * noiseFactor, point.z() * noiseFactor);
         return Tuple.point(
-            point.x() + noise * noiseFactor,
-            point.y() + noise * noiseFactor,
-            point.z() + noise * noiseFactor
+            point.x() + noise,
+            point.y() + noise,
+            point.z() + noise
         );
     }
 
