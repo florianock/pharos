@@ -22,8 +22,7 @@ void main() throws IOException {
     );
 
     var right = new Sphere(
-            Transform.translation(0.5, 0.5, 0)
-                    .multiply(Transform.scaling(0.5, 0.5, 0.5)),
+            Transform.scaling(0.5, 0.5, 0.5).translate(0.5, 0.5, 0),
             new Material.Builder()
                     .color(new Color(1, 0, 0))
                     .ambient(0.1)
@@ -34,8 +33,7 @@ void main() throws IOException {
     );
 
     var left = new Sphere(
-            Transform.translation(-0.25, 0.33, 0)
-                    .multiply(Transform.scaling(0.33, 0.33, 0.33)),
+            Transform.scaling(0.33, 0.33, 0.33).translate(-0.25, 0.33, 0),
             new Material.Builder()
                     .color(new Color(0.5, 0.5, 1))
                     .ambient(0.1)
@@ -46,7 +44,7 @@ void main() throws IOException {
     );
 
     var lightCube = new Cube(
-            Transform.translation(0, 3, 4).multiply(Transform.scaling(1, 1, 0.01)),
+            Transform.scaling(1, 1, 0.01).translate(0, 3, 4),
             new Material.Builder().color(1.5, 1.5, 1.5).ambient(1).diffuse(0).specular(0).build(),
             false
     );
