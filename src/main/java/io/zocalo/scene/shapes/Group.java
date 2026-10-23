@@ -47,7 +47,7 @@ public class Group extends Shape {
 
     @Override
     public Tuple localNormalAt(Tuple worldPoint) {
-        return null;
+        throw new IllegalStateException("Groups have no normal");
     }
 
     @Override

@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public final class YamlParser {
 
-    public static final String DEFAULT_FILE = "demos/cylinders.yml";
+    public static final String DEFAULT_FILE = "demos/cover.yml";
 
     void main(String... args) throws IOException {
         var objects = parse(Paths.get(DEFAULT_FILE));

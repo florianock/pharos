@@ -8,6 +8,8 @@ import io.zocalo.scene.Color;
 import io.zocalo.scene.Light;
 import io.zocalo.scene.Material;
 
+import java.util.Optional;
+
 // TODO Consider changing to sealed interface
 public abstract class Shape {
 
@@ -42,10 +44,9 @@ public abstract class Shape {
 
     public Tuple normalAt(Tuple worldPoint) {
         assert worldPoint.isPoint();
-        var localPoint = inverseTransform.multiply(worldPoint);
+        var localPoint = worldToObject(worldPoint);
         var localNormal = localNormalAt(localPoint);
-        var worldNormal = inverseTransformTranspose.multiply(localNormal);
-        return Tuple.vector(worldNormal.x(), worldNormal.y(), worldNormal.z()).normalize();
+        return normalToWorld(localNormal);
     }
 
     public Intersections intersect(Ray r) {
@@ -77,8 +78,17 @@ public abstract class Shape {
         return shadow;
     }
 
-    public Tuple worldToObject(Tuple worldPoint) {
-        return inverseTransform.multiply(worldPoint);
+    public Tuple worldToObject(final Tuple worldPoint) {
+        assert worldPoint.isPoint();
+        var point = Optional.ofNullable(parent).map(p -> p.worldToObject(worldPoint)).orElse(worldPoint);
+        return inverseTransform.multiply(point);
+    }
+
+    public Tuple normalToWorld(Tuple normal) {
+        assert normal.isVector();
+        var n = inverseTransformTranspose.multiply(normal);
+        var localNormal = Tuple.vector(n.x(), n.y(), n.z()).normalize(); // w must be 0
+        return Optional.ofNullable(parent).map(p -> p.normalToWorld(localNormal)).orElse(localNormal);
     }
 
     public Color lighting(Light light, Tuple shadowPoint, Tuple eyev, Tuple normalv, double shadowedIntensity) {

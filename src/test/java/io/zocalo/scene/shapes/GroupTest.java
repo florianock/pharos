@@ -6,6 +6,8 @@ import io.zocalo.base.Tuple;
 import io.zocalo.scene.TestShape;
 import org.junit.jupiter.api.Test;
 
+import static io.zocalo.Utils.HALF_PI;
+import static io.zocalo.Utils.ORIGIN;
 import static org.junit.jupiter.api.Assertions.*;
 
 class GroupTest {
@@ -64,5 +66,38 @@ class GroupTest {
         var r = new Ray(Tuple.point(10, 0, -10), Tuple.vector(0, 0, 1));
         var xs = g.localIntersect(r);
         assertEquals(2, xs.count());
+    }
+
+    @Test
+    void convertingAPointFromWorldToObjectSpace() {
+        var s = new Sphere(Transform.translation(5, 0, 0));
+        var g2 = new Group.Builder().transform(Transform.scaling(2, 2, 2)).add(s).build();
+        var _ = new Group.Builder().transform(Transform.rotationOnY(HALF_PI)).add(g2).build();
+        var p = s.worldToObject(Tuple.point(-2, 0, -10));
+        assertEquals(Tuple.point(0, 0, -1), p);
+    }
+
+    @Test
+    void convertingANormalFromObjectToWorldSpace() {
+        var s = new Sphere(Transform.translation(5, 0, 0));
+        var g2 = new Group.Builder().transform(Transform.scaling(1, 2, 3)).add(s).build();
+        var _ = new Group.Builder().transform(Transform.rotationOnY(HALF_PI)).add(g2).build();
+        var n = s.normalToWorld(Tuple.vector(Math.sqrt(3)/3, Math.sqrt(3)/3, Math.sqrt(3)/3));
+        assertEquals(Tuple.vector(0.2857, 0.4286, -0.8571), n);
+    }
+
+    @Test
+    void findingTheNormalOnAChildObject() {
+        var s = new Sphere(Transform.translation(5, 0, 0));
+        var g2 = new Group.Builder().transform(Transform.scaling(1, 2, 3)).add(s).build();
+        var _ = new Group.Builder().transform(Transform.rotationOnY(HALF_PI)).add(g2).build();
+        var n = s.normalAt(Tuple.point(1.7321, 1.1547, -5.5774));
+        assertEquals(Tuple.vector(0.2857, 0.4286, -0.8571), n);
+    }
+
+    @Test
+    void findingTheNormalOfAGroupThrowsException() {
+        var g = new Group();
+        assertThrows(RuntimeException.class, () -> g.localNormalAt(ORIGIN));
     }
 }
