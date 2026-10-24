@@ -30,12 +30,17 @@ public class TestShape extends Shape {
     @Override
     public Intersections intersect(Ray worldRay) {
         savedRay = worldRay.transform(inverseTransform);
-        return new Intersections();
+        return Intersections.empty();
     }
 
     @Override
     public Tuple localNormalAt(Tuple localPoint) {
         assert localPoint.isPoint();
         return Tuple.vector(localPoint.x(), localPoint.y(), localPoint.z());
+    }
+
+    @Override
+    public BoundingBox bounds() {
+        return new BoundingBox(Tuple.point(-1, -1, -1), Tuple.point(1, 1, 1));
     }
 }

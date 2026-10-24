@@ -139,4 +139,20 @@ class CylinderTest {
         var n = cyl.localNormalAt(point);
         assertEquals(normal, n);
     }
+
+    @Test
+    void aCylinderHasABoundingBox() {
+        var shape = new Cylinder();
+        var box = shape.bounds();
+        assertEquals(Tuple.point(-1, Double.NEGATIVE_INFINITY, -1), box.min());
+        assertEquals(Tuple.point(1, Double.POSITIVE_INFINITY, 1), box.max());
+    }
+
+    @Test
+    void aBoundedCylinderHasABoundingBox() {
+        var shape = new Cylinder(-5, 3);
+        var box = shape.bounds();
+        assertEquals(Tuple.point(-1, -5, -1), box.min());
+        assertEquals(Tuple.point(1, 3, 1), box.max());
+    }
 }

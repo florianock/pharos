@@ -3,9 +3,11 @@ package io.zocalo;
 import io.zocalo.base.Tuple;
 import io.zocalo.scene.Color;
 
+import static java.lang.Double.NEGATIVE_INFINITY;
+
 public final class Utils {
 
-    public static final double EPSILON       = 1e-4f;
+    public static final double EPSILON       = 1e-4;
     public static final double SHADOW_OFFSET = EPSILON;
     public static final double PI            = 3.1415926535898;
     public static final double HALF_PI       = PI / 2;
@@ -19,6 +21,10 @@ public final class Utils {
     }
 
     public static boolean equalEnough(double a, double b) {
+        if (a == Double.POSITIVE_INFINITY || b == Double.POSITIVE_INFINITY ||
+                a == NEGATIVE_INFINITY || b  == NEGATIVE_INFINITY) {
+            return a == b;
+        }
         return Math.abs(a - b) < EPSILON;
     }
 

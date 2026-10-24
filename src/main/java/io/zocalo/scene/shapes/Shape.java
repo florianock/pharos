@@ -1,9 +1,6 @@
 package io.zocalo.scene.shapes;
 
-import io.zocalo.base.Intersections;
-import io.zocalo.base.Matrix4x4;
-import io.zocalo.base.Ray;
-import io.zocalo.base.Tuple;
+import io.zocalo.base.*;
 import io.zocalo.scene.Color;
 import io.zocalo.scene.Light;
 import io.zocalo.scene.Material;
@@ -21,12 +18,7 @@ public abstract class Shape {
     protected final boolean shadow;
 
     public Shape(Matrix4x4 transform, Material material) {
-        this.transform = transform;
-        this.material = material;
-        inverseTransform = transform.invert();
-        inverseTransformTranspose = inverseTransform.transpose();
-        shadow = true;
-        parent = null;
+        this(transform, material, true);
     }
 
     public Shape(Matrix4x4 transform, Material material, boolean shadow) {
@@ -41,6 +33,8 @@ public abstract class Shape {
     public abstract Tuple localNormalAt(Tuple localPoint);
 
     public abstract Intersections intersect(Ray worldRay);
+
+    public abstract BoundingBox bounds();
 
     public Tuple normalAt(Tuple worldPoint) {
         assert worldPoint.isPoint();
@@ -71,6 +65,10 @@ public abstract class Shape {
 
     public boolean hasShadow() {
         return shadow;
+    }
+
+    public BoundingBox parentSpaceBounds() {
+        return bounds().transform(transform);
     }
 
     public Tuple worldToObject(final Tuple worldPoint) {

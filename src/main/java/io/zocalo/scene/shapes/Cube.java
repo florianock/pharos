@@ -3,14 +3,20 @@ package io.zocalo.scene.shapes;
 import io.zocalo.base.*;
 import io.zocalo.scene.Material;
 
+import java.util.Optional;
+
 public class Cube extends Shape {
 
-    public Cube(Matrix4x4 t) {
-        this(t, Material.create(), true);
-    }
+    private static final Tuple MIN = Tuple.point(-1, -1, -1);
+    private static final Tuple MAX = Tuple.point(1, 1, 1);
+    private static final BoundingBox BOUNDING_BOX = new BoundingBox(MIN, MAX);
 
     public Cube() {
         this(Transform.identity());
+    }
+
+    public Cube(Matrix4x4 t) {
+        this(t, Material.create(), true);
     }
 
     public Cube(Material m) {
@@ -18,10 +24,15 @@ public class Cube extends Shape {
     }
 
     public Cube(Matrix4x4 transform, Material material) {
-        super(transform, material, true);
+        this(transform, material, true);
     }
     public Cube(Matrix4x4 transform, Material material, boolean shadow) {
         super(transform, material, shadow);
+    }
+
+    @Override
+    public BoundingBox bounds() {
+        return BOUNDING_BOX;
     }
 
     @Override
@@ -40,28 +51,39 @@ public class Cube extends Shape {
     @Override
     public Intersections intersect(Ray worldRay) {
         var localRay = worldRay.transform(inverseTransform);
-        var x = checkAxis(localRay.origin().x(), localRay.direction().x());
+        var result = getIntersect(localRay, MIN, MAX);
+        return result
+                .map(r -> new Intersections(
+                        new Intersection(r.tmin(), this),
+                        new Intersection(r.tmax(), this))
+                ).orElse(new Intersections());
+    }
+
+    public static Optional<IntersectResult> getIntersect(Ray localRay, Tuple min, Tuple max) {
+        var x = checkAxis(localRay.origin().x(), localRay.direction().x(), min.x(), max.x());
         var tmin = x.tmin();
         var tmax = x.tmax();
 
-        var y = checkAxis(localRay.origin().y(), localRay.direction().y());
+        if (tmin > tmax || tmax < 0) return Optional.empty();
+
+        var y = checkAxis(localRay.origin().y(), localRay.direction().y(), min.y(), max.y());
         tmin = Math.max(y.tmin(), tmin);
         tmax = Math.min(y.tmax(), tmax);
 
-        if (tmin > tmax || tmax < 0) return new Intersections();
+        if (tmin > tmax || tmax < 0) return Optional.empty();
 
-        var z = checkAxis(localRay.origin().z(), localRay.direction().z());
+        var z = checkAxis(localRay.origin().z(), localRay.direction().z(), min.z(), max.z());
         tmin = Math.max(z.tmin(), tmin);
         tmax = Math.min(z.tmax(), tmax);
 
-        if (tmin > tmax || tmax < 0) return new Intersections();
+        if (tmin > tmax || tmax < 0) return Optional.empty();
 
-        return new Intersections(new Intersection(tmin, this), new Intersection(tmax, this));
+        return Optional.of(new IntersectResult(tmin, tmax));
     }
 
-    private IntersectResult checkAxis(double origin, double direction) {
-        var tminNumerator = -1 - origin;
-        var tmaxNumerator = 1 - origin;
+    private static IntersectResult checkAxis(double origin, double direction, double min, double max) {
+        var tminNumerator = min - origin;
+        var tmaxNumerator = max - origin;
 
         var tmin = tminNumerator / direction;
         var tmax = tmaxNumerator / direction;
@@ -78,6 +100,4 @@ public class Cube extends Shape {
                 ", transform=" + transform +
                 '}';
     }
-
-    private record IntersectResult(double tmin, double tmax){}
 }

@@ -140,4 +140,12 @@ class SphereTest {
         assertEquals(1, s.getMaterial().transparency());
         assertEquals(1.5, s.getMaterial().refractiveIndex());
     }
+
+    @Test
+    void aSphereHasABoundingBox() {
+        var shape = new Sphere();
+        var box = shape.bounds();
+        assertEquals(Tuple.point(-1, -1, -1), box.min());
+        assertEquals(Tuple.point(1, 1, 1), box.max());
+    }
 }

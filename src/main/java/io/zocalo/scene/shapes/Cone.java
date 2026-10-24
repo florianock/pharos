@@ -12,6 +12,7 @@ public class Cone extends Shape {
     private final double minimum;
     private final double maximum;
     private final boolean closed;
+    private final BoundingBox boundingBox;
 
     public Cone() {
         this(Transform.identity());
@@ -34,28 +35,21 @@ public class Cone extends Shape {
     }
 
     public Cone(Matrix4x4 transform, Material material) {
-        super(transform, material, true);
-        minimum = Double.NEGATIVE_INFINITY;
-        maximum = Double.POSITIVE_INFINITY;
-        closed = false;
+        this(transform, material, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, false, true);
     }
     public Cone(Matrix4x4 transform, Material material, double minimum, double maximum) {
-        super(transform, material, true);
-        this.minimum = minimum;
-        this.maximum = maximum;
-        this.closed = false;
+        this(transform, material, minimum, maximum, false, true);
     }
     public Cone(Matrix4x4 transform, Material material, double minimum, double maximum, boolean closed) {
-        super(transform, material, true);
-        this.minimum = minimum;
-        this.maximum = maximum;
-        this.closed = closed;
+        this(transform, material, minimum, maximum, closed, true);
     }
     public Cone(Matrix4x4 transform, Material material, double minimum, double maximum, boolean closed, boolean shadow) {
         super(transform, material, shadow);
         this.minimum = minimum;
         this.maximum = maximum;
         this.closed = closed;
+        var limit = Math.max(Math.abs(minimum), Math.abs(maximum));
+        this.boundingBox = new BoundingBox(Tuple.point(-limit, minimum, -limit), Tuple.point(limit, maximum, limit));
     }
 
     public double minimum() {
@@ -68,6 +62,11 @@ public class Cone extends Shape {
 
     public boolean closed() {
         return closed;
+    }
+
+    @Override
+    public BoundingBox bounds() {
+        return boundingBox;
     }
 
     @Override
@@ -106,7 +105,7 @@ public class Cone extends Shape {
         var disc = b * b - 4 * a * c;
 
         // ray does not intersect the cylinder
-        if (disc < 0) return new Intersections();
+        if (disc < 0) return Intersections.empty();
 
         var t0 = (-b - Math.sqrt(disc)) / (2 * a);
         var t1 = (-b + Math.sqrt(disc)) / (2 * a);
@@ -125,10 +124,10 @@ public class Cone extends Shape {
         if (!closed || Math.abs(localRay.direction().y()) < EPSILON) return xs;
 
         // check for an intersection with the lower end cap by intersecting
-        // the ray with the plane at y=cyl.minimum
+        // the ray with the plane at y=cyl.min
         var tMin = (minimum - localRay.origin().y()) / localRay.direction().y();
         // check for an intersection with the upper end cap by intersecting
-        // the ray with the plane at y=cyl.maximum
+        // the ray with the plane at y=cyl.max
         var tMax = (maximum - localRay.origin().y()) / localRay.direction().y();
         var arr =  new ArrayList<Intersection>(2);
         if (checkCap(localRay, tMin, minimum)) arr.add(new Intersection(tMin, this));
@@ -148,8 +147,8 @@ public class Cone extends Shape {
     @Override
     public String toString() {
         return "Cone{" +
-                "minimum=" + minimum +
-                ", maximum=" + maximum +
+                "min=" + minimum +
+                ", max=" + maximum +
                 ", closed=" + closed +
                 ", material=" + material +
                 ", transform=" + transform +

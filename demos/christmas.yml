@@ -38,7 +38,7 @@
 #     # in a group
 #     let theta ← 2.1 * π / per_segment
 #
-#     # the maximum length of each needle
+#     # the max length of each needle
 #     let max_length ← 20.0 * radius
 #
 #     # the group that will contain the branch and all needles

@@ -4,6 +4,7 @@ import io.zocalo.Utils;
 import io.zocalo.base.Ray;
 import io.zocalo.base.Transform;
 import io.zocalo.base.Tuple;
+import io.zocalo.scene.shapes.Sphere;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -78,5 +79,21 @@ class ShapeTest {
         var n = s.normalAt(Tuple.point(0, Math.sqrt(2) / 2, -Math.sqrt(2) / 2));
 
         assertEquals(Tuple.vector(0, 0.97014, -0.24254), n);
+    }
+
+    @Test
+    void testShapeHasABoundingBox() {
+        var shape = new TestShape();
+        var box = shape.bounds();
+        assertEquals(Tuple.point(-1, -1, -1), box.min());
+        assertEquals(Tuple.point(1, 1, 1), box.max());
+    }
+
+    @Test
+    void queryingAShapesBoundingBoxInItsParentsSpace() {
+        var shape = new Sphere(Transform.scaling(0.5, 2, 4).translate(1, -3, 5));
+        var box = shape.parentSpaceBounds();
+        assertEquals(Tuple.point(0.5, -5, 1), box.min());
+        assertEquals(Tuple.point(1.5, -1, 9), box.max());
     }
 }

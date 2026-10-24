@@ -7,12 +7,14 @@ import io.zocalo.scene.Material;
 // TODO Consider making a record
 public class Sphere extends Shape {
 
-    public Sphere(Matrix4x4 t) {
-        this(t, Material.create(), true);
-    }
+    private static final BoundingBox BOUNDING_BOX = new BoundingBox(Tuple.point(-1, -1, -1), Tuple.point(1, 1, 1));
 
     public Sphere() {
         this(Transform.identity());
+    }
+
+    public Sphere(Matrix4x4 t) {
+        this(t, Material.create(), true);
     }
 
     public Sphere(Material m) {
@@ -20,7 +22,7 @@ public class Sphere extends Shape {
     }
 
     public Sphere(Matrix4x4 transform, Material material) {
-        super(transform, material, true);
+        this(transform, material, true);
     }
     public Sphere(Matrix4x4 transform, Material material, boolean shadow) {
         super(transform, material, shadow);
@@ -38,7 +40,7 @@ public class Sphere extends Shape {
 
         var discriminant = (b * b) - (4 * a * c);
 
-        if (discriminant < 0) return new Intersections();
+        if (discriminant < 0) return Intersections.empty();
 
         return new Intersections(
                 new Intersection((-b - Math.sqrt(discriminant)) / (2 * a), this),
@@ -50,6 +52,11 @@ public class Sphere extends Shape {
     public Tuple localNormalAt(Tuple localPoint) {
         assert localPoint.isPoint();
         return localPoint.subtract(Utils.ORIGIN).normalize();
+    }
+
+    @Override
+    public BoundingBox bounds() {
+        return BOUNDING_BOX;
     }
 
     @Override

@@ -3,6 +3,7 @@ package io.zocalo.scene.shapes;
 import io.zocalo.base.Ray;
 import io.zocalo.base.Transform;
 import io.zocalo.base.Tuple;
+import io.zocalo.scene.Material;
 import io.zocalo.scene.TestShape;
 import org.junit.jupiter.api.Test;
 
@@ -100,4 +101,52 @@ class GroupTest {
         var g = new Group();
         assertThrows(RuntimeException.class, () -> g.localNormalAt(ORIGIN));
     }
+
+    @Test
+    void aGroupHasABoundingBoxThatContainsItsChildren() {
+        var s = new Sphere(Transform.scaling(2, 2, 2).translate(2, 5, -3));
+        var c = new Cylinder(Transform.scaling(0.5, 1, 0.5).translate(-4, -1, 4),
+                Material.create(), -2, 2, false);
+        var shape = new Group.Builder().add(s).add(c).build();
+        var box = shape.bounds();
+        assertEquals(Tuple.point(-4.5, -3, -5), box.min());
+        assertEquals(Tuple.point(4, 7, 4.5), box.max());
+    }
+
+    @Test
+    void intersectingRayPlusGroupDoesntTestChildrenIfBoxIsMissed() {
+        var child = new TestShape();
+        var shape = new Group.Builder().add(child).build();
+        var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 1, 0));
+        var _ = shape.intersect(r);
+        assertNull(child.getSavedRay());
+    }
+
+    @Test
+    void intersectingRayPlusGroupTestsChildrenIfBoxIsHit() {
+        var child = new TestShape();
+        var shape = new Group.Builder().add(child).build();
+        var r = new Ray(Tuple.point(0, 0, -5), Tuple.vector(0, 0, 1));
+        var _ = shape.intersect(r);
+        assertNotNull(child.getSavedRay());
+    }
+
+//    @Test
+//    void testBoundingBoxWithoutTranslations() {
+//        var s = new Sphere();
+//        var g = new Group.Builder().add(s).build();
+//
+//        var r1 = new Ray(Tuple.point(0, 0, -2), Tuple.vector(0, 0, 1));
+//        assertTrue(g.intersectBounds(r1));
+//        assertEquals(2, g.intersect(r1).count());
+//
+//        var r2 = new Ray(Tuple.point(0.9, 0.9, -2), Tuple.vector(0, 0, 1));
+//        assertTrue(g.intersectBounds(r2));
+//        assertEquals(0, g.intersect(r2).count());
+//
+//        var r3 = new Ray(Tuple.point(2, 2, -2), Tuple.vector(0, 0, 1));
+//        assertFalse(g.intersectBounds(r3));
+//        assertEquals(0, g.intersect(r3).count());
+//
+//    }
 }

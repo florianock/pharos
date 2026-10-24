@@ -76,4 +76,20 @@ class ConeTest {
         var n = shape.localNormalAt(point);
         assertEquals(normal, n);
     }
+
+    @Test
+    void aConeHasABoundingBox() {
+        var shape = new Cone();
+        var box = shape.bounds();
+        assertEquals(Tuple.point(Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY), box.min());
+        assertEquals(Tuple.point(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY), box.max());
+    }
+
+    @Test
+    void aBoundedConeHasABoundingBox() {
+        var shape = new Cone(-5, 3);
+        var box = shape.bounds();
+        assertEquals(Tuple.point(-5, -5, -5), box.min());
+        assertEquals(Tuple.point(5, 3, 5), box.max());
+    }
 }

@@ -5,6 +5,7 @@ import java.util.*;
 // TODO make this behave like a collection or something
 public class Intersections {
 
+    private static final Intersections EMPTY = new Intersections();
     private final ArrayList<Intersection> hits;
 
     public Intersections(List<Intersection> is) {
@@ -27,6 +28,10 @@ public class Intersections {
 
     public int count() {
         return hits.size();
+    }
+
+    public static Intersections empty() {
+        return EMPTY;
     }
 
     public ArrayList<Intersection> intersections() {

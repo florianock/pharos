@@ -9,27 +9,26 @@ import java.util.Collection;
 public class Group extends Shape {
 
     private final Shape[] children;
+    private final BoundingBox boundingBox;
 
     public Group() {
-        super(Transform.identity(), Material.create(), false);
-        children = new Shape[0];
-    }
-
-    public Group(Shape[] children) {
-        super(Transform.identity(), Material.create(), false);
-        this.children = children;
-        for (var child : children) child.setParent(this);
+        this(Transform.identity(), Material.create(), false, new Shape[0]);
     }
 
     public Group(Builder builder) {
-        super(builder.transform, builder.material, builder.shadow);
-        this.children = builder.children.toArray(new Shape[0]);
-        for (var child : children) child.setParent(this);
+        this(builder.transform, builder.material, builder.shadow, builder.children.toArray(new Shape[0]));
     }
 
-    public Group(Matrix4x4 transform, Material material, boolean shadow) {
+    public Group(Matrix4x4 transform, Material material, boolean shadow,  Shape[] children) {
         super(transform, material, shadow);
-        children = new Shape[0];
+        this.children = children;
+        var box = new BoundingBox();
+        for (var child : children) {
+            child.setParent(this);
+            var cbox = child.parentSpaceBounds();
+            box = box.add(cbox);
+        }
+        this.boundingBox = box;
     }
 
     public boolean isEmpty() {
@@ -46,6 +45,11 @@ public class Group extends Shape {
     }
 
     @Override
+    public BoundingBox bounds() {
+        return boundingBox;
+    }
+
+    @Override
     public Tuple localNormalAt(Tuple worldPoint) {
         throw new IllegalStateException("Groups have no normal");
     }
@@ -53,12 +57,15 @@ public class Group extends Shape {
     @Override
     public Intersections intersect(Ray worldRay) {
         var localRay = worldRay.transform(inverseTransform);
-        var hits = new ArrayList<Intersection>();
-        for (var child : children) {
-            var xs = child.intersect(localRay);
-            hits.addAll(xs.intersections());
+        if (boundingBox.intersects(localRay)) {
+            var hits = new ArrayList<Intersection>();
+            for (var child : children) {
+                var xs = child.intersect(localRay);
+                hits.addAll(xs.intersections());
+            }
+            return new Intersections(hits);
         }
-        return new Intersections(hits);
+        return Intersections.empty();
     }
 
     public static class Builder {

@@ -58,4 +58,12 @@ class PlaneTest {
         assertEquals(1, x.t());
         assertEquals(p, x.object());
     }
+
+    @Test
+    void aPlaneHasABoundingBox() {
+        var shape = new Plane();
+        var box = shape.bounds();
+        assertEquals(Tuple.point(Double.NEGATIVE_INFINITY, 0, Double.NEGATIVE_INFINITY), box.min());
+        assertEquals(Tuple.point(Double.POSITIVE_INFINITY, 0, Double.POSITIVE_INFINITY), box.max());
+    }
 }

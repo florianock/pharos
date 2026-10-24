@@ -84,4 +84,12 @@ class CubeTest {
         var normal = c.localNormalAt(point);
         assertEquals(expectedNormal, normal);
     }
+
+    @Test
+    void aCubeHasABoundingBox() {
+        var shape = new Cube();
+        var box = shape.bounds();
+        assertEquals(Tuple.point(-1, -1, -1), box.min());
+        assertEquals(Tuple.point(1, 1, 1), box.max());
+    }
 }
