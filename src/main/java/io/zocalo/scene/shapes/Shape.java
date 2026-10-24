@@ -5,6 +5,7 @@ import io.zocalo.scene.Color;
 import io.zocalo.scene.Light;
 import io.zocalo.scene.Material;
 
+import java.util.Objects;
 import java.util.Optional;
 
 // TODO Consider changing to sealed interface
@@ -84,8 +85,22 @@ public abstract class Shape {
         return Optional.ofNullable(parent).map(p -> p.normalToWorld(localNormal)).orElse(localNormal);
     }
 
-    public Color lighting(Light light, Tuple shadowPoint, Tuple eyev, Tuple normalv, double shadowedIntensity) {
-        return material.lighting(this, light, shadowPoint, eyev, normalv, shadowedIntensity);
+    /**
+     * Calculate the shape's material's lighting color. If the shape has a parent group, the parent's material will take
+     * precedence over the shape's material and will be used to calculate the lighting.
+     *
+     * @param light The Light object.
+     * @param hitPoint The point where the shape was hit by a ray.
+     * @param eyev The eye vector.
+     * @param normalv The normal vector on the hit point.
+     * @param shadowedIntensity A double value between 0 and 1 denoting the intensity of the light. This enables soft shadows.
+     * @return The Color for the hit point on the object, given material, lighting, etc.
+     */
+    public Color lighting(Light light, Tuple hitPoint, Tuple eyev, Tuple normalv, double shadowedIntensity) {
+        return Optional.ofNullable(parent)
+                .flatMap(p -> Optional.ofNullable(p.getMaterial())
+                        .map(m -> m.lighting(p, light, hitPoint, eyev, normalv, shadowedIntensity)))
+                .orElse(material.lighting(this, light, hitPoint, eyev, normalv, shadowedIntensity));
     }
 
     public double getReflective() {
@@ -104,9 +119,10 @@ public abstract class Shape {
     public final boolean equals(Object o) {
         if (!(o instanceof Shape shape)) return false;
 
-        return material.equals(shape.material) && transform.equals(shape.transform);
+        return Objects.equals(material, shape.material) && transform.equals(shape.transform);
     }
 
+    // TODO generate correct hashCode and toString for all objects, also using parent, shadow, etc.
     @Override
     public int hashCode() {
         int result = material.hashCode();

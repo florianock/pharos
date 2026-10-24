@@ -1,5 +1,6 @@
 package io.zocalo.base;
 
+import io.zocalo.scene.Color;
 import io.zocalo.scene.World;
 
 import java.util.concurrent.Executors;
@@ -112,12 +113,20 @@ public class Camera {
     }
 
     public Canvas renderParallel(World w) {
-        return renderParallel(w, SHOW_PREVIEW);
+        return renderParallel(w, Color.BLACK, SHOW_PREVIEW);
     }
 
     public Canvas renderParallel(World w, boolean showPreview) {
-        var image = new Canvas(hsize, vsize);
+        return renderParallel(w, Color.BLACK, showPreview);
+    }
 
+    public Canvas renderParallel(World w, Color backgroundColor) {
+        return renderParallel(w, backgroundColor, SHOW_PREVIEW);
+    }
+
+    public Canvas renderParallel(World w, Color backgroundColor, boolean showPreview) {
+        var image = new Canvas(hsize, vsize);
+        image.initialize(backgroundColor);
         var numTilesX = (hsize + TILE_SIZE - 1) / TILE_SIZE;
         var numTilesY = (vsize + TILE_SIZE - 1) / TILE_SIZE;
 

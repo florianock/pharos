@@ -13,11 +13,57 @@ import static io.zocalo.Utils.*;
 void main() throws IOException {
     drawHexagon();
     drawLotsOfObjects();
+    drawCubeOfSpheres();
+}
+
+private void drawCubeOfSpheres() throws IOException {
+    var background = new Plane(Transform.rotationOnX(-QTR_PI).translate(0, 0, 250), new Material.Builder().color(Color.WHITE).build());
+    var groups = new ArrayList<Shape>(8);
+    for (var x = -1; x < 1; x++) {
+        for (var y = -1; y < 1; y++) {
+            for (var z = -1; z < 1; z++) {
+                var spheres = getSpheres(x, y, z);
+                var g = new Group.Builder().transform(Transform.translation(x * 7.5, y * 7.5, z * 7.5)).add(spheres).build();
+                groups.add(g);
+            }
+        }
+    }
+    var box = new Group.Builder().transform(Transform.rotationOnY(2*PI)).add(groups).build();
+    var light1 = Light.pointLight(Tuple.point(5, 9, -150), Color.WHITE);
+    var light2 = Light.pointLight(Tuple.point(-50, 25, 30), Color.WHITE);
+    var world = new World(List.of(background, box), List.of(light1, light2));
+    var view = Transform.viewTransform(
+            Tuple.point(-26, 8, -35),
+            Tuple.point(0, -7, 0),
+            Tuple.vector(0, 1, 0)
+    );
+    var camera = new Camera(1200, 600, THIRD_PI, view);
+    var canvas = camera.renderParallel(world, Color.WHITE, true);
+//    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14CHQ.ppm"));
+//    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14CHQ.png"));
+}
+
+private Collection<Shape> getSpheres(int rBlock, int gBlock, int bBlock) {
+    var redHalf = (rBlock + 1) * 0.5;
+    var greenHalf = (gBlock + 1) * 0.5;
+    var blueHalf = (bBlock + 1) * 0.5;
+    var spheres = new ArrayList<Shape>(25);
+    for (var x = -3d; x < 5; x+=1.5) {
+        for (var y = -3d; y < 5; y+=1.5) {
+            for (var z =  -3d; z < 5; z+=1.5) {
+                var color = new Color(redHalf+((x+3)/14), greenHalf+((y+3)/14), blueHalf+((z+3)/14));
+                var s = new Sphere(Transform.scaling(0.5, 0.5, 0.5).translate(x, y, z),
+                        new Material.Builder().color(color).build());
+                spheres.add(s);
+            }
+        }
+    }
+    return spheres;
 }
 
 private void drawLotsOfObjects() throws IOException {
     var random = ThreadLocalRandom.current();
-    var shapes = new ArrayList<Shape>(25);
+    var shapes = new ArrayList<Shape>(100);
     for (var x = 0; x < 10; x++) {
         for (var y = 0; y < 10; y++) {
             var spheres = new ArrayList<Shape>();
@@ -39,10 +85,10 @@ private void drawLotsOfObjects() throws IOException {
             Tuple.point(60, 35, 14),
             Tuple.vector(0, 1, 0)
     );
-    var camera = new Camera(3840, 2160, 2.0, view);
+    var camera = new Camera(1200, 600, 2.0, view);
     var canvas = camera.renderParallel(world);
-    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14BHQ.ppm"));
-    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14BHQ.png"));
+//    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14BHQ.ppm"));
+//    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14BHQ.png"));
 }
 
 private void drawHexagon() throws IOException {
@@ -53,10 +99,10 @@ private void drawHexagon() throws IOException {
             ORIGIN,
             Tuple.vector(0, 1, 0)
     );
-    var camera = new Camera(3840, 2160, 0.3, view);
+    var camera = new Camera(1200, 600, 0.3, view);
     var canvas = camera.renderParallel(world);
-    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14AHQ.ppm"));
-    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14AHQ.png"));
+//    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14AHQ.ppm"));
+//    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14AHQ.png"));
 }
 
 private Shape hexagon() {

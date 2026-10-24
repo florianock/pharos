@@ -5,6 +5,7 @@ import io.zocalo.scene.Material;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 public class Group extends Shape {
 
@@ -12,7 +13,7 @@ public class Group extends Shape {
     private final BoundingBox boundingBox;
 
     public Group() {
-        this(Transform.identity(), Material.create(), false, new Shape[0]);
+        this(Transform.identity(), null, false, new Shape[0]);
     }
 
     public Group(Builder builder) {
@@ -68,9 +69,21 @@ public class Group extends Shape {
         return Intersections.empty();
     }
 
+    /**
+     * Implement inherited material from a parent by overriding the Shape::getMaterial method and making
+     * the parent's material take precedence over the object's material. Returns null if there is no parent the parent
+     * returns null for its material, and this Group also has null for material.
+     *
+     * @return The parent's material if present, or else the Group's material or null.
+     */
+    @Override
+    public Material getMaterial() {
+        return Optional.ofNullable(parent).map(Shape::getMaterial).orElse(material);
+    }
+
     public static class Builder {
         private Matrix4x4 transform = Transform.identity();
-        private Material material = Material.create();
+        private Material material = null;
         private boolean shadow = false;
         private final ArrayList<Shape> children = new ArrayList<>();
 
