@@ -11,6 +11,41 @@ import io.zocalo.scene.shapes.*;
 import static io.zocalo.Utils.*;
 
 void main() throws IOException {
+//    drawHexagon();
+    drawLotsOfObjects();
+}
+
+private void drawLotsOfObjects() throws IOException {
+    var random = ThreadLocalRandom.current();
+    var shapes = new ArrayList<Shape>(25);
+    for (var x = 0; x < 20; x++) {
+        for (var y = 0; y < 20; y++) {
+            var spheres = new ArrayList<Shape>();
+            for (var i = 0; i < 10; i++) {
+                var s = new Sphere(
+                        Transform.translation(random.nextDouble(0, 15), random.nextDouble(0, 10), random.nextDouble(0, 10)),
+                        new Material.Builder().color(random.nextDouble(), random.nextDouble(), random.nextDouble()).build()
+                );
+                spheres.add(s);
+            }
+            var g = new Group.Builder().transform(Transform.translation(x * 15, y * 10, 0)).add(spheres).build();
+            shapes.add(g);
+        }
+    }
+    var light = Light.pointLight(Tuple.point(5, 9, -50), Color.WHITE);
+    var world = new World(shapes, List.of(light));
+    var view = Transform.viewTransform(
+            Tuple.point(30, 4, -50),
+            Tuple.point(60, 35, 14),
+            Tuple.vector(0, 1, 0)
+    );
+    var camera = new Camera(800, 400, HALF_PI, view);
+    var canvas = camera.renderParallel(world);
+//    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14B.ppm"));
+//    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14B.png"));
+}
+
+private void drawHexagon() throws IOException {
     var light = Light.pointLight(Tuple.point(5, 18, -9), Color.WHITE);
     var world = new World(new Shape[]{hexagon()}, new Light[]{light});
     var view = Transform.viewTransform(
@@ -20,8 +55,8 @@ void main() throws IOException {
     );
     var camera = new Camera(800, 400, 0.3, view);
     var canvas = camera.renderParallel(world);
-    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14.ppm"));
-    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14.png"));
+    canvas.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14A.ppm"));
+    canvas.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/sceneCh14A.png"));
 }
 
 private Shape hexagon() {
