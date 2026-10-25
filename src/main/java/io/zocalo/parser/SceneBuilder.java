@@ -24,7 +24,8 @@ public class SceneBuilder {
             "plane", this::buildPlane,
             "cube", this::buildCube,
             "cylinder", this::buildCylinder,
-            "cone", this::buildCone
+            "cone", this::buildCone,
+            "group", this::buildGroup
     );
 
     public SceneBuilder(Map<String, Map<String, Object>> defs) {
@@ -38,8 +39,14 @@ public class SceneBuilder {
         String type = strOf(require(entry, "add"));
 
         Function<Map<String, Object>, Object> builder = factories.get(type);
-        if (builder == null)
-            throw new IllegalArgumentException("unknown object type '" + type + "' in entry: " + entry);
+
+        if (builder == null) {
+            if (defs.containsKey(type)) {
+                builder = this::buildGroup; // Assumption: a defined type with "- add:" is always a group
+            } else {
+                throw new IllegalArgumentException("unknown object type '" + type + "' in entry: " + entry);
+            }
+        }
 
         return builder.apply(entry);
     }
@@ -111,14 +118,17 @@ public class SceneBuilder {
         var shadow = !m.containsKey("shadow") || booleanOf(m, "shadow");
         var material = m.containsKey("material") ? materialOf(m) : defaultCylinder.getMaterial();
         var transform = m.containsKey("transform") ? transformOf(m, defs) : Transform.identity();
-        var minimum = m.containsKey("min") ? doubleOf(m, "min") : defaultCylinder.minimum();
-        var maximum = m.containsKey("max") ? doubleOf(m, "max") : defaultCylinder.maximum();
-        var closed = m.containsKey("closed") ? booleanOf(m, "closed") : defaultCylinder.closed();
+        double minimum, maximum;
+        boolean closed;
         if (m.containsKey("args")) {
             var args = asList(m.get("args"));
             minimum = asDouble(args.get(0));
             maximum = asDouble(args.get(1));
             closed = (int)args.get(2) == 1;
+        } else {
+            minimum = m.containsKey("min") ? doubleOf(m, "min") : defaultCylinder.minimum();
+            maximum = m.containsKey("max") ? doubleOf(m, "max") : defaultCylinder.maximum();
+            closed = m.containsKey("closed") ? booleanOf(m, "closed") : defaultCylinder.closed();
         }
         return new Cylinder(transform, material, minimum, maximum, closed, shadow);
     }
@@ -128,16 +138,27 @@ public class SceneBuilder {
         var shadow = !m.containsKey("shadow") || booleanOf(m, "shadow");
         var material = m.containsKey("material") ? materialOf(m) : defaultCone.getMaterial();
         var transform = m.containsKey("transform") ? transformOf(m, defs) : Transform.identity();
-        var minimum = m.containsKey("min") ? doubleOf(m, "min") : defaultCone.minimum();
-        var maximum = m.containsKey("max") ? doubleOf(m, "max") : defaultCone.maximum();
-        var closed = m.containsKey("closed") ? booleanOf(m, "closed") : defaultCone.closed();
+        double minimum, maximum;
+        boolean closed;
         if (m.containsKey("args")) {
             var args = asList(m.get("args"));
             minimum = asDouble(args.get(0));
             maximum = asDouble(args.get(1));
             closed = (int)args.get(2) == 1;
+        } else {
+            minimum = m.containsKey("min") ? doubleOf(m, "min") : defaultCone.minimum();
+            maximum = m.containsKey("max") ? doubleOf(m, "max") : defaultCone.maximum();
+            closed = m.containsKey("closed") ? booleanOf(m, "closed") : defaultCone.closed();
         }
         return new Cone(transform, material, minimum, maximum, closed, shadow);
+    }
+
+    private Group buildGroup(Map<String, Object> m) {
+        var defaultGroup = new Group();
+        var material = m.containsKey("material") ? materialOf(m) : defaultGroup.getMaterial();
+        var transform = m.containsKey("transform") ? transformOf(m, defs) : Transform.identity();
+        var children = m.containsKey("children") ? childrenOf(m, defs) : List.<Shape>of();
+        return new Group.Builder().transform(transform).material(material).add(children).build();
     }
 
     private static int intOf(Map<String, Object> m, String key) {
@@ -222,23 +243,61 @@ public class SceneBuilder {
      */
     private Pattern patternOf(Map<String, Object> m, String key) {
         Object v = deref(require(m, key), key);
+        return patternOf(v);
+    }
+
+    private Pattern patternOf(Object v) {
         if (!(v instanceof Map<?, ?> pm))
-            throw parseError(key, v, "expected a pattern mapping or a define name");
+            throw parseError("pattern", v, "expected a pattern mapping or a define name");
         Map<String, Object> p = castMap(pm);
 
         String type = strOf(require(p, "type"));
 
         var transform = p.containsKey("transform") ? transformOf(p, defs) : Transform.identity();
 
-        // FIXME Add support for perturbed, nested and blended patterns
-        return switch (type) {
+        // FIXME Add support for nested patterns
+        var result = switch (type) {
             case "stripes" -> new Stripe(colorAt(p, "colors", 0), colorAt(p, "colors", 1), transform);
             case "gradient" -> new Gradient(colorAt(p, "colors", 0), colorAt(p, "colors", 1), transform);
             case "rings" -> new Ring(colorAt(p, "colors", 0), colorAt(p, "colors", 1), transform);
             case "checkers" -> new Checkers(colorAt(p, "colors", 0), colorAt(p, "colors", 1), transform);
             case "radial-gradient" -> new RadialGradient(colorAt(p, "colors", 0), colorAt(p, "colors", 1), transform);
+            case "blended" -> {
+                var subPatterns = asList(require(p, "patterns"));
+                if (subPatterns.size() != 2) throw parseError("blended", subPatterns, "expected 2 sub-patterns");
+                var t = p.containsKey("t") ? doubleOf(p, "t") : 0.5;
+                yield new Blended(patternOf(subPatterns.get(0)), patternOf(subPatterns.get(1)), t, transform);
+            }
+            case "perturbed" -> {
+                var subPattern = patternOf(require(p, "pattern"));
+                var noise = p.containsKey("noise") ? doubleOf(p, "noise") : 0.2;
+                yield new Perturbed(subPattern, noise);
+            }
             default -> throw new IllegalArgumentException("unknown pattern type '" + type + "'");
         };
+
+        // Any pattern can add noise using the "perturbed" parameter.
+        // It is analogous to wrapping the pattern in a Perturbed pattern.
+        if (p.containsKey("perturbed")) {
+            result = new Perturbed(result, doubleOf(p, "perturbed"));
+        }
+
+        return result;
+    }
+
+    private List<Shape> childrenOf(Map<String, Object> m, Map<String, Map<String, Object>> defs) {
+        var key = "children";
+        Object v = require(m, key);
+        var l = asList(v);
+        var children = new ArrayList<Shape>();
+        for (var c : l) {
+            if (!(c instanceof Map<?, ?> child))
+                throw parseError(key, c, "expected child to be a map for this group");
+            var s = instantiate(castMap(child));
+            var shape = (Shape)s;
+            children.add(shape);
+        }
+        return children;
     }
 
     /**

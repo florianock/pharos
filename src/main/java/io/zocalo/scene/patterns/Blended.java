@@ -6,6 +6,7 @@ import io.zocalo.scene.Color;
 
 public final class Blended extends Pattern {
 
+    // TODO make Blended accept an arbitrarily long list of Patterns instead of two
     private final Pattern a, b;
     private final double t;
 

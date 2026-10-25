@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public final class YamlParser {
 
-    public static final String DEFAULT_FILE = "demos/groups.yml";
+    public static final String DEFAULT_FILE = "demos/cover.yml";
 
     void main(String... args) throws IOException {
         var objects = parse(Paths.get(DEFAULT_FILE));
@@ -30,8 +30,9 @@ public final class YamlParser {
         var camera = cameras.getFirst();
         var lights = objects.stream().filter(o -> o instanceof Light).map(l -> (Light) l).toList();
         var shapes = objects.stream().filter(o -> !(o instanceof Camera || o instanceof Light)).map(s -> (Shape) s).toList();
-        var c = camera.render(new World(shapes, lights));
-//        c.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/coverHQ.png"));
+        var c = camera.renderParallel(new World(shapes, lights));
+//        c.toPPM(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.ppm"));
+//        c.toPNG(Paths.get(System.getProperty("user.home"),"Pictures/pharos/test.png"));
     }
 
     public Collection<Object> parse(String str) {
@@ -74,14 +75,38 @@ public final class YamlParser {
      * Recursively expands `add: <define-name>` references, merging overrides.
      */
     private Map<String, Object> expand(Map<String, Object> node, Map<String, Map<String, Object>> defs, Set<String> active) {
-        var name = strOf(node.get("add"));
-        if (!defs.containsKey(name)) return node;          // primitive type like "cube"
-        if (!active.add(name))
-            throw new IllegalStateException("circular define: " + name);
+        // Expand top-level define reference
+        String name = strOf(require(node, "add"));
+        if (defs.containsKey(name)) {
+            if (!active.add(name))
+                throw new IllegalStateException("circular define: " + name);
 
-        @SuppressWarnings("unchecked")
-        var base = expand((Map<String, Object>) deepCopy(defs.get(name)), defs, active);
-        return merge(base, node);
+            Map<String, Object> base;
+            try {
+                base = expand(castMap((Map<?, ?>)deepCopy(defs.get(name))), defs, active);
+            } finally {
+                active.remove(name);   // done expanding 'name' — allow later references
+            }
+            node = merge(base, node);
+        }
+
+        // Recursively expand children
+        if (node.containsKey("children")) {
+            List<Object> children = asList(require(node, "children"));
+            List<Object> expandedChildren = new ArrayList<>();
+            for (Object child : children) {
+                if (child instanceof Map<?, ?> cm) {
+                    // Pass the same active set — defines form one shared hierarchy
+                    expandedChildren.add(expand(castMap(cm), defs, active));
+                } else {
+                    expandedChildren.add(child);
+                }
+            }
+            node = new LinkedHashMap<>(node);
+            node.put("children", expandedChildren);
+        }
+
+        return node;
     }
 
     /**
@@ -172,5 +197,9 @@ public final class YamlParser {
         @SuppressWarnings("unchecked")
         List<Object> list = (List<Object>) l;
         return list;
+    }
+    @SuppressWarnings("unchecked")
+    private static Map<String, Object> castMap(Map<?, ?> m) {
+        return (Map<String, Object>) m;
     }
 }
